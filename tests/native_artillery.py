@@ -103,12 +103,13 @@ def run(platform):
     watch.send_packet(AppLogShippingControl(enable=True))
     def current():
         for line in reversed(logs):
-            if 'AR screen=' in line:
-                state = {k: int(v) for k, v in re.findall(r'(\w+)=(\d+)', line)}
+            if 'AR s=' in line:
+                keys={'s':'screen','st':'status','t':'ticks','sc':'score','a':'d0','b':'d1','c':'d2','d':'d3','e':'hp','f':'enemy'}
+                state = {keys.get(k,k):int(v) for k,v in re.findall(r'(\w+)=(-?\d+)',line)}
                 return state
         raise AssertionError('No native state received')
     def count():
-        return sum('AR screen=' in line for line in logs)
+        return sum('AR s=' in line for line in logs)
     def response(previous):
         deadline = time.monotonic() + 4
         while count() == previous and time.monotonic() < deadline:
@@ -193,8 +194,24 @@ def run(platform):
         time.sleep(.8)
         expect(screen=0)
         grab('resumed-shot')
+        # Start a clean match, then win through normal angle/power controls.
+        button('Back');expect(screen=1);button('Down');button('Select');expect(screen=3)
+        button('Select');expect(screen=0,d0=45,d1=70)
+        seed=int(next(re.search(r'newseed=(\d+)',s).group(1) for s in reversed(logs) if 'AR newseed=' in s))
+        oracle=Path(__file__).resolve().parent.parent/'build/artillery-oracle'
+        plan=[list(map(int,line.split())) for line in subprocess.check_output([str(oracle),str(seed)],text=True).splitlines()]
+        for angle,power,hp,enemy,status in plan:
+            if current()['d2']:button('Select')
+            while current()['d0']!=angle:button('Up' if current()['d0']<angle else 'Down')
+            button('Select')
+            while current()['d1']!=power:button('Up' if current()['d1']<power else 'Down')
+            button('Select',hold=.6)
+            deadline=time.monotonic()+20
+            while current()['d3'] and not current()['status'] and time.monotonic()<deadline:time.sleep(.1)
+            expect(hp=hp,enemy=enemy,status=status)
+        expect(status=1);grab('victory')
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','button angle and power','pause and resume','idle save/relaunch','touch aim and fire','projectile flight','paused simulation freezes','opponent turn','long-select fire','mid-flight resume'],'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','button angle and power','pause and resume','idle save/relaunch','touch aim and fire','projectile flight','paused simulation freezes','opponent turn','long-select fire','mid-flight resume','complete aimed match victory'],'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

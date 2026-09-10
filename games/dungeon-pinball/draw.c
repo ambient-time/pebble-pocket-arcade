@@ -8,8 +8,8 @@ void game_draw(const Game *g, GContext *c) {
   line(c, 166, 98, 134, 124);
   ink(c, GColorCyan);
   graphics_context_set_stroke_width(c, 4);
-  line(c, 42, 124, 82, g->d[LEFT] ? 108 : 135);
-  line(c, 134, 124, 94, g->d[RIGHT] ? 108 : 135);
+  line(c, 42, 124, 78, g->d[LEFT] ? 108 : 135);
+  line(c, 134, 124, 98, g->d[RIGHT] ? 108 : 135);
   graphics_context_set_stroke_width(c, 1);
   int alive = 0;
   for (int i = 0; i < 3; i++) {

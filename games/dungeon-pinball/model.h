@@ -13,6 +13,8 @@ enum {
   COOLDOWN,
   TOUCH_SIDE,
   STUCK,
+  LEFT_AGE,
+  RIGHT_AGE,
   BUMPERS = 40
 };
 void pinball_launch(Game *);

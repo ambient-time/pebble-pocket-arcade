@@ -103,12 +103,13 @@ def run(platform):
     watch.send_packet(AppLogShippingControl(enable=True))
     def current():
         for line in reversed(logs):
-            if 'AR screen=' in line:
-                state = {k: int(v) for k, v in re.findall(r'(\w+)=(\d+)', line)}
+            if 'AR s=' in line:
+                keys={'s':'screen','st':'status','t':'ticks','sc':'score','a':'d0','b':'d1','c':'d2','d':'d3','e':'hp','f':'enemy'}
+                state = {keys.get(k,k):int(v) for k,v in re.findall(r'(\w+)=(-?\d+)',line)}
                 return state
         raise AssertionError('No native state received')
     def count():
-        return sum('AR screen=' in line for line in logs)
+        return sum('AR s=' in line for line in logs)
     def response(previous):
         deadline = time.monotonic() + 4
         while count() == previous and time.monotonic() < deadline:

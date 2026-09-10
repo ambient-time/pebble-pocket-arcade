@@ -56,12 +56,23 @@ static bool save(void) {
   return !save_error;
 }
 static void log_state(void) {
-  APP_LOG(APP_LOG_LEVEL_INFO,
-          "AR screen=%d status=%d stage=%d ticks=%lu score=%lu d0=%ld d1=%ld "
-          "d2=%ld d3=%ld hp=%ld enemy=%ld",
-          screen, g.status, g.stage, (unsigned long)g.ticks,
-          (unsigned long)g.score, (long)g.d[0], (long)g.d[1], (long)g.d[2],
-          (long)g.d[3], (long)g.d[5], (long)g.d[6]);
+  APP_LOG(
+      APP_LOG_LEVEL_INFO,
+      "AR s=%d st=%d stage=%d t=%lu sc=%lu a=%ld b=%ld c=%ld d=%ld e=%ld f=%ld",
+      screen, g.status, g.stage, (unsigned long)g.ticks, (unsigned long)g.score,
+      (long)g.d[0], (long)g.d[1], (long)g.d[2], (long)g.d[3], (long)g.d[5],
+      (long)g.d[6]);
+  char detail[220];
+  game_debug(&g, detail, sizeof detail);
+  for (unsigned i = 0; detail[i];) {
+    char chunk[61];
+    unsigned n = 0;
+    while (detail[i] && n < 60)
+      chunk[n++] = detail[i++];
+    chunk[n] = 0;
+    APP_LOG(APP_LOG_LEVEL_INFO, "AR part %s", chunk);
+  }
+  APP_LOG(APP_LOG_LEVEL_INFO, "AR end");
 }
 static void schedule(void);
 static void sync(void) {
@@ -136,7 +147,8 @@ static void tick(void *x) {
   game_tick(&g);
   if ((before && !game_running(&g)) || status != g.status || g.ticks % 300 == 0)
     save();
-  if (g.ticks % 30 == 0 || status != g.status || (before && !game_running(&g)))
+  if (g.ticks % (game_controls ? 3 : 30) == 0 || status != g.status ||
+      (before && !game_running(&g)))
     log_state();
   layer_mark_dirty(canvas);
   schedule();
@@ -151,6 +163,11 @@ static void schedule(void) {
     timer = app_timer_register(33, tick, NULL);
 }
 static void menu_select(MenuLayer *, MenuIndex *, void *);
+static void new_game(void) {
+  uint32_t seed = (uint32_t)time(NULL);
+  APP_LOG(APP_LOG_LEVEL_INFO, "AR newseed=%lu", (unsigned long)seed);
+  game_init(&g, seed);
+}
 static void action(int a) {
   if (!focused)
     return;
@@ -180,7 +197,7 @@ static void action(int a) {
     persist_write_int(51, 1);
   } else if (screen == 3) {
     if (a == ACT_SELECT) {
-      game_init(&g, (uint32_t)time(NULL));
+      new_game();
       screen = 0;
     }
   } else if (g.status && !(game_continuous && g.status == 1)) {
@@ -188,7 +205,8 @@ static void action(int a) {
       screen = 3;
   } else
     game_input(&g, a);
-  save();
+  if (!game_controls || screen || !game_running(&g))
+    save();
   refresh();
 }
 static void up(ClickRecognizerRef r, void *x) { action(ACT_UP); }
@@ -318,7 +336,7 @@ static void init(void) {
   menu_layer_set_highlight_colors(menu, GColorDarkGray, GColorCyan);
   layer_add_child(window_get_root_layer(win), menu_layer_get_layer(menu));
   if (!save_load(&io, &g))
-    game_init(&g, (uint32_t)time(NULL));
+    new_game();
   if (persist_read_int(51))
     screen = 0;
   WatchInfoVersion v = watch_info_get_firmware_version();

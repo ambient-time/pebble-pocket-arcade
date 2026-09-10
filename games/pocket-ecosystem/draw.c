@@ -33,7 +33,7 @@ void game_draw(const Game *g, GContext *c) {
   }
   ink(c, GColorWhite);
   box(c, 4 + g->d[CURSOR] % 6 * 28, 1 + g->d[CURSOR] / 6 * 28, 27, 27, false);
-  const char *names[] = {"Leaf $2", "Graze $3", "Hunt $5", "Rain $3"};
+  const char *names[] = {"Leaf", "Graze", "Hunt", "Rain"};
   for (int i = 0; i < 4; i++) {
     ink(c, g->d[TOOL] == i ? GColorWhite : GColorDarkGray);
     box(c, i * 44, 116, 43, 27, false);

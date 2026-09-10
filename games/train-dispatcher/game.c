@@ -185,3 +185,20 @@ void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
 const int game_controls = 0;
 
 const int game_continuous = 0;
+
+void game_debug(const Game *g, char *out, size_t n) {
+  size_t used = 0;
+  for (int i = 0; i < 8; i++) {
+    int b = TRAINS + i * TRAIN_WORDS;
+    if (g->d[b]) {
+      int wrote =
+          snprintf(out + used, n - used, "%d,%ld,%ld,%ld;", i,
+                   (long)g->d[b + 1], (long)g->d[b + 2], (long)g->d[b + 3]);
+      if (wrote < 0 || (size_t)wrote >= n - used)
+        break;
+      used += wrote;
+    }
+  }
+  if (!used && n)
+    out[0] = 0;
+}

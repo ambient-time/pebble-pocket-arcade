@@ -5,7 +5,7 @@
 #include <stdint.h>
 #define FIELD_W 176
 #define FIELD_H 144
-#define GAME_WORDS 900
+#define GAME_WORDS 240
 typedef struct {
   uint32_t seed, ticks, score;
   int16_t status, stage;
@@ -37,3 +37,4 @@ static inline uint32_t rnd(Game *g) {
 static inline int limit(int x, int low, int high) {
   return x < low ? low : x > high ? high : x;
 }
+void game_debug(const Game *, char *, size_t);

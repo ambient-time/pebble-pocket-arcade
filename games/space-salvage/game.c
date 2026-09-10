@@ -173,3 +173,19 @@ void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
 const int game_controls = 0;
 
 const int game_continuous = 0;
+
+void game_debug(const Game *g, char *out, size_t n) {
+  snprintf(
+      out, n,
+      "x=%ld y=%ld carry=%ld bank=%ld hull=%ld time=%ld auto=%ld "
+      "cargo=%ld,%ld,%ld,%ld,%ld pos=%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld,%ld",
+      (long)g->d[X] / 100, (long)g->d[Y] / 100, (long)g->d[CARRY],
+      (long)g->d[BANKED], (long)g->d[HULL], (long)g->d[DEADLINE],
+      (long)g->d[AUTO], (long)g->d[CARGO + 2], (long)g->d[CARGO + 5],
+      (long)g->d[CARGO + 8], (long)g->d[CARGO + 11], (long)g->d[CARGO + 14],
+      (long)g->d[CARGO] / 100, (long)g->d[CARGO + 1] / 100,
+      (long)g->d[CARGO + 3] / 100, (long)g->d[CARGO + 4] / 100,
+      (long)g->d[CARGO + 6] / 100, (long)g->d[CARGO + 7] / 100,
+      (long)g->d[CARGO + 9] / 100, (long)g->d[CARGO + 10] / 100,
+      (long)g->d[CARGO + 12] / 100, (long)g->d[CARGO + 13] / 100);
+}

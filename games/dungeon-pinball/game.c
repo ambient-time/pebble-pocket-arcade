@@ -44,10 +44,16 @@ void pinball_launch(Game *g) {
 void game_input(Game *g, int a) {
   if (g->status)
     return;
-  if (a == ACT_UP)
+  if (a == ACT_UP) {
+    if (!g->d[LEFT])
+      g->d[LEFT_AGE] = 5;
     g->d[LEFT] = 1;
-  if (a == ACT_DOWN)
+  }
+  if (a == ACT_DOWN) {
+    if (!g->d[RIGHT])
+      g->d[RIGHT_AGE] = 5;
     g->d[RIGHT] = 1;
+  }
   if (a == ACT_RELEASE_UP)
     g->d[LEFT] = 0;
   if (a == ACT_RELEASE_DOWN)
@@ -65,8 +71,8 @@ void game_touch(Game *g, int x, int y, int type) {
   }
   if (g->d[WAITING])
     pinball_launch(g);
-  g->d[LEFT] = x < 100;
-  g->d[RIGHT] = x > 76;
+  game_input(g, x < 100 ? ACT_UP : ACT_RELEASE_UP);
+  game_input(g, x > 76 ? ACT_DOWN : ACT_RELEASE_DOWN);
 }
 static void rail(Game *g, int ax, int ay, int bx, int by, int active,
                  int left) {
@@ -76,7 +82,7 @@ static void rail(Game *g, int ax, int ay, int bx, int by, int active,
                 1000),
       xx = ax + dx * t / 1000, yy = ay + dy * t / 1000, nx = px - xx,
       ny = py - yy, dist = nx * nx + ny * ny;
-  if (dist >= 490000)
+  if (dist >= 250000)
     return;
   if (!dist) {
     ny = -100;
@@ -87,12 +93,18 @@ static void rail(Game *g, int ax, int ay, int bx, int by, int active,
     g->d[BALL_VX] -= (int64_t)2 * dot * nx / dist;
     g->d[BALL_VY] -= (int64_t)2 * dot * ny / dist;
   }
-  g->d[BALL_Y] -= 150;
+  int distance = 1;
+  while ((int64_t)distance * distance < dist)
+    distance++;
+  g->d[BALL_X] += nx * (501 - distance) / distance;
+  g->d[BALL_Y] += ny * (501 - distance) / distance;
   if (active && py > 10500) {
     g->d[BALL_VY] = -480 - (int)(rnd(g) % 80);
     g->d[BALL_VX] = (left ? 1 : -1) * (80 + (int)(rnd(g) % 200));
-  } else if (g->d[BALL_VY] > -60)
-    g->d[BALL_VY] = -80;
+  } else if (dot < 0) {
+    g->d[BALL_VX] = g->d[BALL_VX] * 80 / 100;
+    g->d[BALL_VY] = g->d[BALL_VY] * 80 / 100;
+  }
 }
 static bool bumper(Game *g, int x, int y, int radius) {
   int dx = g->d[BALL_X] - x, dy = g->d[BALL_Y] - y, dist = dx * dx + dy * dy;
@@ -111,6 +123,10 @@ void game_tick(Game *g) {
   if (g->status || g->d[WAITING])
     return;
   g->ticks++;
+  if (g->d[LEFT_AGE])
+    g->d[LEFT_AGE]--;
+  if (g->d[RIGHT_AGE])
+    g->d[RIGHT_AGE]--;
   if (g->d[COOLDOWN])
     g->d[COOLDOWN]--;
   for (int i = 0; i < 3; i++)
@@ -162,8 +178,9 @@ void game_tick(Game *g) {
     }
     rail(g, 1000, 9800, 4200, 12400, 0, 1);
     rail(g, 16600, 9800, 13400, 12400, 0, 0);
-    rail(g, 4200, 12400, 8200, g->d[LEFT] ? 10800 : 13500, g->d[LEFT], 1);
-    rail(g, 13400, 12400, 9400, g->d[RIGHT] ? 10800 : 13500, g->d[RIGHT], 0);
+    rail(g, 4200, 12400, 7800, g->d[LEFT] ? 10800 : 13500, g->d[LEFT_AGE], 1);
+    rail(g, 13400, 12400, 9800, g->d[RIGHT] ? 10800 : 13500, g->d[RIGHT_AGE],
+         0);
     if (g->d[BALL_Y] > 14500) {
       g->d[LIVES]--;
       if (!g->d[LIVES])
@@ -206,3 +223,8 @@ void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
 }
 
 const int game_continuous = 0;
+
+void game_debug(const Game *g, char *out, size_t n) {
+  snprintf(out, n, "wait=%ld lives=%ld", (long)g->d[WAITING],
+           (long)g->d[LIVES]);
+}

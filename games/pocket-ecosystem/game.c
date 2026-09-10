@@ -223,9 +223,21 @@ bool game_valid(const Game *g) {
 void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
   int pl, h, p;
   ecosystem_counts(g, &pl, &h, &p);
-  snprintf(a, n, "Leaf %d  Graze %d  Hunt %d", pl, h, p);
-  snprintf(b, m, "Water %ld  %ld/60s  $%ld", (long)g->d[WATER],
-           (long)g->d[BALANCE], (long)g->d[BUDGET]);
+  const char *seasons[] = {"Spring", "Summer", "Autumn", "Winter"};
+  const char *tools[] = {"Leaf 2", "Graze 3", "Hunt 5", "Rain 3"};
+  snprintf(a, n, "%s L%d G%d P%d", seasons[g->stage], pl, h, p);
+  if (g->status == 1)
+    snprintf(b, m, "Balanced! Water %ld  $%ld", (long)g->d[WATER],
+             (long)g->d[BUDGET]);
+  else
+    snprintf(b, m, "%s $%ld  W%ld  %ld/60", tools[g->d[TOOL]],
+             (long)g->d[BUDGET], (long)g->d[WATER], (long)g->d[BALANCE]);
 }
 
 const int game_continuous = 1;
+
+void game_debug(const Game *g, char *out, size_t n) {
+  (void)g;
+  if (n)
+    out[0] = 0;
+}

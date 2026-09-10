@@ -10,8 +10,9 @@ int main(void) {
     for (int t = 0; t < 24000 && !g.status; t++) {
       if (g.d[WAITING])
         pinball_launch(&g);
-      game_input(&g, t % 18 < 12 ? ACT_UP : ACT_RELEASE_UP);
-      game_input(&g, t % 21 < 14 ? ACT_DOWN : ACT_RELEASE_DOWN);
+      int ready = g.d[BALL_Y] > 10500 && g.d[BALL_VY] > 0;
+      game_input(&g, ready && g.d[BALL_X] < 9000 ? ACT_UP : ACT_RELEASE_UP);
+      game_input(&g, ready && g.d[BALL_X] > 8600 ? ACT_DOWN : ACT_RELEASE_DOWN);
       game_tick(&g);
       assert(game_valid(&g));
     }
@@ -21,11 +22,21 @@ int main(void) {
     if (g.stage > maxstage)
       maxstage = g.stage;
   }
-  printf(
-      "Pinball alternating flipper policy: %d wins/100, furthest chamber %d\n",
-      wins, maxstage);
+  printf("Pinball reactive flipper policy: %d wins/100, furthest chamber %d\n",
+         wins, maxstage);
   printf("Mean winning run: %u seconds\n", total / (wins ? wins : 1) / 30);
-  assert(maxstage >= 1);
+  assert(wins >= 30 && maxstage == 3);
+  for (int seed = 0; seed < 100; seed++) {
+    Game passive;
+    game_init(&passive, seed);
+    for (int t = 0; t < 24000 && !passive.status; t++) {
+      if (passive.d[WAITING])
+        pinball_launch(&passive);
+      game_tick(&passive);
+    }
+    assert(passive.status == 2);
+  }
+  puts("100/100 hands-off runs lose: flipper timing is required");
   Game g;
   game_init(&g, 3);
   pinball_launch(&g);

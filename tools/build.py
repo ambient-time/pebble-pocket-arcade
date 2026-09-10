@@ -15,6 +15,8 @@ for folder in [root/'common',source]:
     for path in folder.iterdir():
         if path.suffix in ['.h','.c']:shutil.copy2(path,src/path.name)
 meta={'name':name,'version':'0.1.0','author':'Luke Steuber','private':True,'dependencies':{},'pebble':{'displayName':name.replace('-',' ').title(),'uuid':str(uuid.uuid5(uuid.NAMESPACE_URL,'https://lukesteuber.com/pebble/'+name)),'sdkVersion':'3','enableMultiJS':False,'targetPlatforms':['emery','gabbro'],'watchapp':{'watchface':False},'messageKeys':[],'resources':{'media':[]}}}
+shutil.copytree(source/'resources',project/'resources',dirs_exist_ok=True)
+meta['pebble']['resources']['media']=[{'type':'bitmap','name':'MENU_ICON','file':'menu.png','menuIcon':True}]
 (project/'package.json').write_text(json.dumps(meta,indent=2)+'\n')
 shutil.copy2(root/'tools/wscript',project/'wscript')
 subprocess.run(['/Users/luke/.local/bin/pebble','build'],cwd=project,check=True)

@@ -169,3 +169,9 @@ void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
 const int game_controls = 0;
 
 const int game_continuous = 0;
+
+void game_debug(const Game *g, char *out, size_t n) {
+  (void)g;
+  if (n)
+    out[0] = 0;
+}
