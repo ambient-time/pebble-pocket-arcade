@@ -1,0 +1,14 @@
+{
+  "game": "space-salvage",
+  "passed": true,
+  "checks": [
+    "all release checksums",
+    "standalone source extraction",
+    "standalone SDK build",
+    "both native targets and resources"
+  ],
+  "releasePBWSHA256": "ded8b0405f17f17f2130a57b78470b151699d5e2b3174915852c37139a988cc4",
+  "sourceZIPSHA256": "5f7d69aa90b8c431856918ee310e77cbacd03917ce397cb599d06d8c6a9d3544",
+  "rebuiltPBWSHA256": "9c1c9e66fb0212889f13c80f1459af5429c079d471309880eb0504b12ca29c78",
+  "note": "SDK rebuild metadata may change binary hashes; native gameplay reports cover the release PBW."
+}

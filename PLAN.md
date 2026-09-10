@@ -59,3 +59,27 @@ ZIP containing all six games. Source is in the private canonical repository
 
 Physical-watch validation remains unclaimed. Native emulator timing and policy
 success rates are engineering checks, not measurements of human play difficulty.
+
+## 0.2.0 result and replay pass — 2026-09-10
+
+Done: each game now explains its outcome and round totals. Finished rounds replay
+with one Select press or one intentional tap on the outlined row. Unfinished
+restarts still ask before discarding progress; a balanced Ecosystem remains live.
+The result uses a stronger title and a single replay control, with Back reserved
+for the menu.
+
+Measured: all 12 native target runs pass for the new PBWs, all six standalone
+source ZIPs rebuild, and release checksums verify. Tactics checks outside taps,
+drags into/out of the replay row, one-action replay, unfinished restart
+cancellation, and reopening a finished save. Pinball holds Select across the last
+drain, releases after the result appears, verifies no restart, then verifies one
+fresh press replays. Ecosystem verifies continued balanced play, its extinction
+result, and direct replay. Core and 2.88 million randomized checks still pass.
+
+Observed: screenshots show distinct result titles and readable totals on both
+shapes. Design review identified terminal click-config and held-Select provenance
+gaps; both were fixed and checked. App UUIDs and the saved Game layout are unchanged.
+
+Open: physical-watch testing. No store publication. Original 0.1.0 release
+folders and bundle remain intact. Current artifacts are under each game's
+`release/<game>/0.2.0/` folder and `release/pocket-arcade-0.2.0.zip`.

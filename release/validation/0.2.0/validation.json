@@ -1,0 +1,20 @@
+{
+  "version": "0.2.0",
+  "checkedAt": "2026-09-10T21:37:49.795878+00:00",
+  "sourceCommit": "a456db7f8467a6cf0a11a9f1aeddcda8cb172b17",
+  "passed": true,
+  "nativeTargetChecks": 12,
+  "randomizedInputTickChecks": 2880000,
+  "saveLayoutUnchanged": true,
+  "appUUIDsUnchanged": true,
+  "physicalWatchValidated": false,
+  "additionalNativeChecks": [
+    "one-press replay",
+    "intentional replay-row taps",
+    "outside and dragged taps ignored",
+    "finished save restored",
+    "unfinished restart cancellation",
+    "Select held across pinball loss ignored until a fresh press",
+    "ecosystem continues after balance and shows extinction result"
+  ]
+}

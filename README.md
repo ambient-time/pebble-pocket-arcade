@@ -4,16 +4,16 @@ Six native games by Luke Steuber for Pebble Time 2 and Pebble Round 2. Each is a
 separate app with buttons, touch, a pause menu, and saved progress.
 
 [Open the local install page](release/index.html) ·
-[Download the complete bundle](release/pocket-arcade-0.1.0.zip)
+[Download the complete bundle](release/pocket-arcade-0.2.0.zip)
 
 | Game | Objective | Session | Rules and controls |
 | --- | --- | --- | --- |
-| [Space Salvage](release/space-salvage/0.1.0/space-salvage-0.1.0.pbw) | Bank five crates, then reach the exit with hull remaining | 150-second limit | [Guide](games/space-salvage/README.md) |
-| [Pocket Artillery](release/pocket-artillery/0.1.0/pocket-artillery-0.1.0.pbw) | Destroy the opposing tank across destructible terrain | A few minutes; no aiming timer | [Guide](games/pocket-artillery/README.md) |
-| [Dungeon Pinball](release/dungeon-pinball/0.1.0/dungeon-pinball-0.1.0.pbw) | Defeat three chambers of skull targets and bosses with three balls | About 1–3 minutes | [Guide](games/dungeon-pinball/README.md) |
-| [Train Dispatcher](release/train-dispatcher/0.1.0/train-dispatcher-0.1.0.pbw) | Deliver 18 trains before three mistakes | About two minutes | [Guide](games/train-dispatcher/README.md) |
-| [Pocket Ecosystem](release/pocket-ecosystem/0.1.0/pocket-ecosystem-0.1.0.pbw) | Maintain plants, grazers, hunters, and water for 60 consecutive seconds | Continues after the balance milestone | [Guide](games/pocket-ecosystem/README.md) |
-| [One-Screen Tactics](release/one-screen-tactics/0.1.0/one-screen-tactics-0.1.0.pbw) | Keep yourself and the beacon alive through five enemy turns | Five turns; no timer | [Guide](games/one-screen-tactics/README.md) |
+| [Space Salvage](release/space-salvage/0.2.0/space-salvage-0.2.0.pbw) | Bank five crates, then reach the exit with hull remaining | 150-second limit | [Guide](games/space-salvage/README.md) |
+| [Pocket Artillery](release/pocket-artillery/0.2.0/pocket-artillery-0.2.0.pbw) | Destroy the opposing tank across destructible terrain | A few minutes; no aiming timer | [Guide](games/pocket-artillery/README.md) |
+| [Dungeon Pinball](release/dungeon-pinball/0.2.0/dungeon-pinball-0.2.0.pbw) | Defeat three chambers of skull targets and bosses with three balls | About 1–3 minutes | [Guide](games/dungeon-pinball/README.md) |
+| [Train Dispatcher](release/train-dispatcher/0.2.0/train-dispatcher-0.2.0.pbw) | Deliver 18 trains before three mistakes | About two minutes | [Guide](games/train-dispatcher/README.md) |
+| [Pocket Ecosystem](release/pocket-ecosystem/0.2.0/pocket-ecosystem-0.2.0.pbw) | Maintain plants, grazers, hunters, and water for 60 consecutive seconds | Continues after the balance milestone | [Guide](games/pocket-ecosystem/README.md) |
+| [One-Screen Tactics](release/one-screen-tactics/0.2.0/one-screen-tactics-0.2.0.pbw) | Keep yourself and the beacon alive through five enemy turns | Five turns; no timer | [Guide](games/one-screen-tactics/README.md) |
 
 ## Installation and saves
 
@@ -22,7 +22,10 @@ packages include only emery and gabbro targets. Touch requires firmware 4.33.2
 or later; buttons remain available.
 
 Back pauses and opens Resume, Restart, How to play, and Save and exit. Restart
-asks before replacing progress. Launching again resumes the game. Timed play
+asks before replacing an unfinished game. Finished rounds show their outcome
+and totals, then one Select press or a tap on the replay row starts again.
+A held button or continuing drag cannot dismiss a new result. Launching again
+resumes the game, including a finished result. Timed play
 saves roughly every ten seconds and at important transitions; an unexpected
 interruption may lose the last few seconds. Closed-app time does not advance.
 Saves use two checksum-verified snapshots, retaining the preceding intact copy
