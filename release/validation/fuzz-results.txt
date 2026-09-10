@@ -1,0 +1,6 @@
+Dungeon Pinball: 480000 randomized input/tick invariants passed
+One-Screen Tactics: 480000 randomized input/tick invariants passed
+Pocket Artillery: 480000 randomized input/tick invariants passed
+Pocket Ecosystem: 480000 randomized input/tick invariants passed
+Space Salvage: 480000 randomized input/tick invariants passed
+Train Dispatcher: 480000 randomized input/tick invariants passed

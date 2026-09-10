@@ -1,0 +1,14 @@
+{
+  "game": "pocket-ecosystem",
+  "passed": true,
+  "checks": [
+    "all release checksums",
+    "standalone source extraction",
+    "standalone SDK build",
+    "both native targets and resources"
+  ],
+  "releasePBWSHA256": "4fbf1bec55eb3d2dea29e88c02f485d299d477119e6ed4b6e0e65b363e464e71",
+  "sourceZIPSHA256": "55a347299e4754d6a6519fbc1acab8e3e1ff56e6346c4449d85d821126145fac",
+  "rebuiltPBWSHA256": "df2ac7fd4b88ce473682ccdf6f0a5befa8000c90476325d6f499b36c375e0eba",
+  "note": "SDK rebuild metadata may change binary hashes; native gameplay reports cover the release PBW."
+}

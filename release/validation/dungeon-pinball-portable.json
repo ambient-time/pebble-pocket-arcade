@@ -1,0 +1,14 @@
+{
+  "game": "dungeon-pinball",
+  "passed": true,
+  "checks": [
+    "all release checksums",
+    "standalone source extraction",
+    "standalone SDK build",
+    "both native targets and resources"
+  ],
+  "releasePBWSHA256": "20aed468a6569ed25aa8208b47bf0f1afaac7d551d5df2ea349cdee0d4aeef71",
+  "sourceZIPSHA256": "3daac661e17ccdb419f79a5d90dbe79e39c81f2be09ac0da8e6b6111b4914b6d",
+  "rebuiltPBWSHA256": "fa96fea7a0bbd4c1fc15a15eb795bc16906ed29b621790cc2db715318802928e",
+  "note": "SDK rebuild metadata may change binary hashes; native gameplay reports cover the release PBW."
+}

@@ -266,20 +266,26 @@ def run(platform):
             button('Select',hold=.6);expect(d1=1)
             direct_tap(fx+22,fy+130);expect(d1=0)
             direct_tap(fx+18,fy+15);grab('seeded-cell')
-            for tool in [1,2]:
-                direct_tap(fx+22+44*tool,fy+130)
-                budget=current()['d3'];cost=3 if tool==1 else 5
-                for cell in range(24):
-                    direct_tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
-                    if current()['d3']<=budget-cost:break
-                assert current()['d3']<=budget-cost
-            grab('introduced-species')
-            deadline=time.monotonic()+200;season=-1
-            while current()['status']==0 and time.monotonic()<deadline:
-                if current()['d2']<30 and current()['d3']>=3:
-                    direct_tap(fx+154,fy+130)
-                if current()['stage']!=season:season=current()['stage'];grab('season-'+str(season))
-                time.sleep(.15)
+            for attempt in range(4):
+                for tool, preferred in [(1,15),(2,5)]:
+                    direct_tap(fx+22+44*tool,fy+130)
+                    budget=current()['d3'];cost=3 if tool==1 else 5
+                    while budget < cost:
+                        time.sleep(.2);budget=current()['d3']
+                    for offset in range(24):
+                        cell=(preferred+offset)%24
+                        direct_tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
+                        if current()['d3']<=budget-cost:break
+                    assert current()['d3']<=budget-cost
+                grab('introduced-species-'+str(attempt))
+                deadline=time.monotonic()+200;season=-1
+                while current()['status']==0 and time.monotonic()<deadline:
+                    if current()['d2']<30 and current()['d3']>=3:
+                        direct_tap(fx+154,fy+130)
+                    if current()['stage']!=season:season=current()['stage'];grab('attempt-'+str(attempt)+'-season-'+str(season))
+                    time.sleep(.15)
+                if current()['status']==1:break
+                grab('habitat-ended-'+str(attempt));restart()
             expect(status=1);grab('balanced')
             before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
             checks+=['button cursor and tool','touch tool and planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']

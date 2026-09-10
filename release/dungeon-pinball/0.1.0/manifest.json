@@ -1,0 +1,44 @@
+{
+  "game": "dungeon-pinball",
+  "version": "0.1.0",
+  "author": "Luke Steuber",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "pbwSHA256": "20aed468a6569ed25aa8208b47bf0f1afaac7d551d5df2ea349cdee0d4aeef71",
+  "sourceCommit": "418019b141383d67f5eb3caa8dfdb1424ef6b81e",
+  "nativeChecks": {
+    "emery": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "flippers released after resume",
+      "launch",
+      "simultaneous physical flippers",
+      "independent held touch flippers",
+      "reactive flipper timing",
+      "three distinct chambers",
+      "monster targets and bosses",
+      "complete dungeon"
+    ],
+    "gabbro": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "flippers released after resume",
+      "launch",
+      "simultaneous physical flippers",
+      "independent held touch flippers",
+      "reactive flipper timing",
+      "three distinct chambers",
+      "monster targets and bosses",
+      "complete dungeon"
+    ]
+  },
+  "physicalWatchValidated": false
+}

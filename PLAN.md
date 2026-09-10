@@ -32,11 +32,30 @@ apps are the intended deliverables, with buttons and touch on emery/gabbro.
    moving/pushing into hazards, protect an objective for five turns, wins/losses
    and multiple solvable layouts.
 
-## Sequence and status
+## Verified completion — 2026-09-10
 
-- Shared shell, persistence, native tooling: in progress.
-- Pocket Artillery: next implementation.
-- Space Salvage, Dungeon Pinball, Train Dispatcher, Pocket Ecosystem,
-  One-Screen Tactics: planned; none complete yet.
+All six 0.1.0 games are implemented, packaged, and checked. The release PBWs
+were installed and driven on emery and gabbro; reports bind each run to the exact
+PBW SHA-256. Every standalone source ZIP was extracted and rebuilt independently.
 
-Final completion requires every row above to have current authoritative evidence.
+| Game | Core rules | Native emery + gabbro | Versioned PBW + source rebuild |
+| --- | --- | --- | --- |
+| Pocket Artillery | 200 aimed wins; 50 deliberate-miss losses; crater bounds; score clamp | Pass: controls, flight, opponent, win/loss, mid-flight resume | Pass |
+| Space Salvage | 100 direct-route trials, 62 wins; collision, quota and deadline checks | Pass: buttons, touch navigation, cargo and escape | Pass |
+| Dungeon Pinball | 47/100 reactive wins; 100/100 hands-off losses; bounded physics | Pass: independent touch and physical flippers, three chambers, bosses, resume | Pass |
+| Train Dispatcher | 100 complete shifts; 50 unattended failures; junction locking | Pass: touch routing, 18 deliveries and misrouting loss | Pass |
+| Pocket Ecosystem | 89/100 balanced introduction/rain trials; collapse and costs | Pass: planting, introductions, seasons, balance and continued simulation | Pass |
+| One-Screen Tactics | All eight orientations solvable; idle losses; shove and bounds checks | Pass: five-turn win, touch wait loss, restart and resume | Pass |
+
+The randomized suite ran 480,000 input/tick checks per engine under AddressSanitizer
+and UndefinedBehaviorSanitizer. Persistence tests cover every interrupted write,
+corrupt-selected-bank recovery with an intact fallback, and exact mid-flight
+restore. Shared menu drag, pause, and relaunch were exercised natively. Watch
+screenshots were visually inspected for layout and legibility on both shapes.
+
+Artifacts and evidence are under `release/`, with a local install page and one
+ZIP containing all six games. Source is in the private canonical repository
+`lukeslp/pebble-pocket-arcade`. No public discovery or store publication was done.
+
+Physical-watch validation remains unclaimed. Native emulator timing and policy
+success rates are engineering checks, not measurements of human play difficulty.

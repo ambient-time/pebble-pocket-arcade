@@ -1,0 +1,42 @@
+{
+  "game": "pocket-artillery",
+  "version": "0.1.0",
+  "author": "Luke Steuber",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "pbwSHA256": "7ba321585d20e1351a5e972ef3f3616ea77f106730f63dae2bd5ece514a29097",
+  "sourceCommit": "418019b141383d67f5eb3caa8dfdb1424ef6b81e",
+  "nativeChecks": {
+    "emery": [
+      "rules",
+      "button angle and power",
+      "pause and resume",
+      "idle save/relaunch",
+      "touch aim and fire",
+      "projectile flight",
+      "paused simulation freezes",
+      "opponent turn",
+      "long-select fire",
+      "mid-flight resume",
+      "complete aimed match victory",
+      "deliberate-miss defeat"
+    ],
+    "gabbro": [
+      "rules",
+      "button angle and power",
+      "pause and resume",
+      "idle save/relaunch",
+      "touch aim and fire",
+      "projectile flight",
+      "paused simulation freezes",
+      "opponent turn",
+      "long-select fire",
+      "mid-flight resume",
+      "complete aimed match victory",
+      "deliberate-miss defeat"
+    ]
+  },
+  "physicalWatchValidated": false
+}
