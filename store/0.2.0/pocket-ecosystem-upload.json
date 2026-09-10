@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "app": {
+    "id": "62e07532be45454185e1fa3c",
+    "app_uuid": "28118ddd-5774-592c-92f3-1cd55e250d86",
+    "category_id": "5261a8fb3b773043d5000012",
+    "created_at": "2026-09-10T23:26:19.265",
+    "developer_id": "3a9986a63073f9f293be7e14",
+    "hearts": 0,
+    "icon_large": "/api/assets/icons/62e07532be45454185e1fa3c/large/978eb867-8500-48ad-b54d-62d3c16dc2dd.png",
+    "icon_small": "/api/assets/icons/62e07532be45454185e1fa3c/small/46064bd0-f790-44dc-ae42-0e859537d2fd.png",
+    "published_date": null,
+    "source": null,
+    "title": "Pocket Ecosystem",
+    "timeline_enabled": false,
+    "type": "watchapp",
+    "website": null,
+    "visible": false,
+    "description": "A small habitat with hungry animals and changing seasons. Plant leaves, introduce grazers and hunters, and bring rain when the ground dries out. Keep the food chain and water in balance for 60 consecutive seconds to earn Balanced, then see how long it lasts. Your habitat pauses while the app is closed.\n\nSave and exit to continue later.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2 or later; buttons remain available. By Luke Steuber.",
+    "updated_at": "2026-09-10T23:26:19.265",
+    "ia_archive_url": null,
+    "ia_archived_at": null,
+    "ia_bucket": null,
+    "latest_release_date": null,
+    "project_type": null,
+    "dmca_takedown": false
+  },
+  "release": {
+    "id": "bf14c8adc57246debab36e2e",
+    "app_id": "62e07532be45454185e1fa3c",
+    "has_pbw": true,
+    "capabilities": [],
+    "js_md5": null,
+    "published_date": null,
+    "release_notes": "Round results now explain the outcome and show totals. Replay takes one deliberate press or tap; unfinished games still ask before restarting.",
+    "version": "0.2.0",
+    "compatibility": [
+      "emery",
+      "gabbro"
+    ],
+    "is_published": false,
+    "pbw_url": "/api/assets/pbw/62e07532be45454185e1fa3c/0.2.0/7a9062aa-8aa3-4401-b9bb-3aac2a28e1f6.pbw",
+    "pbw_size": 30236,
+    "created_at": "2026-09-10T23:26:19.327",
+    "settings_page_url": null,
+    "settings_page_final_url": null,
+    "settings_page_http_status": null,
+    "settings_page_check_status": null,
+    "settings_page_last_error": null,
+    "settings_page_checked_at": null,
+    "companion_ios_url": null,
+    "companion_ios_final_url": null,
+    "companion_ios_http_status": null,
+    "companion_ios_check_status": null,
+    "companion_ios_last_error": null,
+    "companion_ios_checked_at": null,
+    "companion_android_url": null,
+    "companion_android_final_url": null,
+    "companion_android_http_status": null,
+    "companion_android_check_status": null,
+    "companion_android_last_error": null,
+    "companion_android_checked_at": null,
+    "appinfo_json": {
+      "name": "pocket-ecosystem",
+      "uuid": "28118ddd-5774-592c-92f3-1cd55e250d86",
+      "appKeys": {},
+      "longName": "Pocket Ecosystem",
+      "watchapp": {
+        "watchface": false
+      },
+      "resources": {
+        "media": [
+          {
+            "file": "menu.png",
+            "name": "MENU_ICON",
+            "type": "bitmap",
+            "menuIcon": true
+          }
+        ]
+      },
+      "shortName": "Pocket Ecosystem",
+      "sdkVersion": "3",
+      "companyName": "Luke Steuber",
+      "displayName": "Pocket Ecosystem",
+      "messageKeys": {},
+      "capabilities": [],
+      "versionLabel": "0.2.0",
+      "enableMultiJS": false,
+      "targetPlatforms": [
+        "emery",
+        "gabbro"
+      ]
+    }
+  },
+  "message": "App submitted successfully"
+}

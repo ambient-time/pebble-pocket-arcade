@@ -53,7 +53,9 @@ reports, and checksum manifests. `release/validation/` holds core results,
 randomized invariant results, and independent source rebuild reports.
 `PLAN.md` records the acceptance checklist.
 
-Emulator checks do not replace physical-watch testing. These are private local
-release bundles; no Pebble Store listing has been published for them.
+Emulator checks do not replace physical-watch testing. Version 0.2.0 is also uploaded to the Pebble developer account as six
+unlisted apps with draft releases. None is publicly published. See the
+[store receipts](store/0.2.0/publication.json) and
+[listing notes](store/0.2.0/README.md).
 
 MIT license. Original code and launcher art by Luke Steuber.

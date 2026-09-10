@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "app": {
+    "id": "7740b7c3376d451ba5e451bb",
+    "app_uuid": "91758b31-5a15-5295-9e8c-f30720ae9cc6",
+    "category_id": "5261a8fb3b773043d5000012",
+    "created_at": "2026-09-10T23:26:13.212",
+    "developer_id": "3a9986a63073f9f293be7e14",
+    "hearts": 0,
+    "icon_large": "/api/assets/icons/7740b7c3376d451ba5e451bb/large/fe818ea2-e498-4ceb-8beb-292235581038.png",
+    "icon_small": "/api/assets/icons/7740b7c3376d451ba5e451bb/small/9e4dd4d4-5f09-4dc3-a9ee-be1bfb9bd698.png",
+    "published_date": null,
+    "source": null,
+    "title": "Train Dispatcher",
+    "timeline_enabled": false,
+    "type": "watchapp",
+    "website": null,
+    "visible": false,
+    "description": "Keep the railway moving through an increasingly busy shift. Switch junctions to send each train to its matching station. Letters and shapes help you follow the routes as traffic picks up. Deliver 18 trains before three mistakes end the shift. Tap a junction or select it with the buttons. A shift takes about two minutes.\n\nSave and exit to continue later.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2 or later; buttons remain available. By Luke Steuber.",
+    "updated_at": "2026-09-10T23:26:13.212",
+    "ia_archive_url": null,
+    "ia_archived_at": null,
+    "ia_bucket": null,
+    "latest_release_date": null,
+    "project_type": null,
+    "dmca_takedown": false
+  },
+  "release": {
+    "id": "1a1f9c83ee8748dbbc36d19a",
+    "app_id": "7740b7c3376d451ba5e451bb",
+    "has_pbw": true,
+    "capabilities": [],
+    "js_md5": null,
+    "published_date": null,
+    "release_notes": "Round results now explain the outcome and show totals. Replay takes one deliberate press or tap; unfinished games still ask before restarting.",
+    "version": "0.2.0",
+    "compatibility": [
+      "emery",
+      "gabbro"
+    ],
+    "is_published": false,
+    "pbw_url": "/api/assets/pbw/7740b7c3376d451ba5e451bb/0.2.0/48d6414a-1e8d-46ca-bf0f-7e90fc32f6f7.pbw",
+    "pbw_size": 29010,
+    "created_at": "2026-09-10T23:26:13.262",
+    "settings_page_url": null,
+    "settings_page_final_url": null,
+    "settings_page_http_status": null,
+    "settings_page_check_status": null,
+    "settings_page_last_error": null,
+    "settings_page_checked_at": null,
+    "companion_ios_url": null,
+    "companion_ios_final_url": null,
+    "companion_ios_http_status": null,
+    "companion_ios_check_status": null,
+    "companion_ios_last_error": null,
+    "companion_ios_checked_at": null,
+    "companion_android_url": null,
+    "companion_android_final_url": null,
+    "companion_android_http_status": null,
+    "companion_android_check_status": null,
+    "companion_android_last_error": null,
+    "companion_android_checked_at": null,
+    "appinfo_json": {
+      "name": "train-dispatcher",
+      "uuid": "91758b31-5a15-5295-9e8c-f30720ae9cc6",
+      "appKeys": {},
+      "longName": "Train Dispatcher",
+      "watchapp": {
+        "watchface": false
+      },
+      "resources": {
+        "media": [
+          {
+            "file": "menu.png",
+            "name": "MENU_ICON",
+            "type": "bitmap",
+            "menuIcon": true
+          }
+        ]
+      },
+      "shortName": "Train Dispatcher",
+      "sdkVersion": "3",
+      "companyName": "Luke Steuber",
+      "displayName": "Train Dispatcher",
+      "messageKeys": {},
+      "capabilities": [],
+      "versionLabel": "0.2.0",
+      "enableMultiJS": false,
+      "targetPlatforms": [
+        "emery",
+        "gabbro"
+      ]
+    }
+  },
+  "message": "App submitted successfully"
+}

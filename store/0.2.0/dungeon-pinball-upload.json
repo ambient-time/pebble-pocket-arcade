@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "app": {
+    "id": "af9f35b5deee4c228f985ee6",
+    "app_uuid": "d5e62be8-ca14-548b-9406-d8e701ef275e",
+    "category_id": "5261a8fb3b773043d5000012",
+    "created_at": "2026-09-10T23:26:07.715",
+    "developer_id": "3a9986a63073f9f293be7e14",
+    "hearts": 0,
+    "icon_large": "/api/assets/icons/af9f35b5deee4c228f985ee6/large/d712d5c4-2b11-4c86-abfe-2a70a0803112.png",
+    "icon_small": "/api/assets/icons/af9f35b5deee4c228f985ee6/small/ac99e345-b864-4e3f-b4c1-218836b8fc09.png",
+    "published_date": null,
+    "source": null,
+    "title": "Dungeon Pinball",
+    "timeline_enabled": false,
+    "type": "watchapp",
+    "website": null,
+    "visible": false,
+    "description": "Three dungeon chambers, two flippers, three balls. Break the skull bumpers, open each gate, and hit the boss to reach the next chamber. Time your flipper strikes to keep the ball alive. Use Up and Down, or touch the left and right sides. Clear all three chambers before your balls run out.\n\nSave and exit to continue later.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2 or later; buttons remain available. By Luke Steuber.",
+    "updated_at": "2026-09-10T23:26:07.715",
+    "ia_archive_url": null,
+    "ia_archived_at": null,
+    "ia_bucket": null,
+    "latest_release_date": null,
+    "project_type": null,
+    "dmca_takedown": false
+  },
+  "release": {
+    "id": "6a9217635ae849468c237ead",
+    "app_id": "af9f35b5deee4c228f985ee6",
+    "has_pbw": true,
+    "capabilities": [],
+    "js_md5": null,
+    "published_date": null,
+    "release_notes": "Round results now explain the outcome and show totals. Replay takes one deliberate press or tap; unfinished games still ask before restarting.",
+    "version": "0.2.0",
+    "compatibility": [
+      "emery",
+      "gabbro"
+    ],
+    "is_published": false,
+    "pbw_url": "/api/assets/pbw/af9f35b5deee4c228f985ee6/0.2.0/8ae1a515-95bb-4fc4-b222-6c8ff7a7a259.pbw",
+    "pbw_size": 31344,
+    "created_at": "2026-09-10T23:26:07.762",
+    "settings_page_url": null,
+    "settings_page_final_url": null,
+    "settings_page_http_status": null,
+    "settings_page_check_status": null,
+    "settings_page_last_error": null,
+    "settings_page_checked_at": null,
+    "companion_ios_url": null,
+    "companion_ios_final_url": null,
+    "companion_ios_http_status": null,
+    "companion_ios_check_status": null,
+    "companion_ios_last_error": null,
+    "companion_ios_checked_at": null,
+    "companion_android_url": null,
+    "companion_android_final_url": null,
+    "companion_android_http_status": null,
+    "companion_android_check_status": null,
+    "companion_android_last_error": null,
+    "companion_android_checked_at": null,
+    "appinfo_json": {
+      "name": "dungeon-pinball",
+      "uuid": "d5e62be8-ca14-548b-9406-d8e701ef275e",
+      "appKeys": {},
+      "longName": "Dungeon Pinball",
+      "watchapp": {
+        "watchface": false
+      },
+      "resources": {
+        "media": [
+          {
+            "file": "menu.png",
+            "name": "MENU_ICON",
+            "type": "bitmap",
+            "menuIcon": true
+          }
+        ]
+      },
+      "shortName": "Dungeon Pinball",
+      "sdkVersion": "3",
+      "companyName": "Luke Steuber",
+      "displayName": "Dungeon Pinball",
+      "messageKeys": {},
+      "capabilities": [],
+      "versionLabel": "0.2.0",
+      "enableMultiJS": false,
+      "targetPlatforms": [
+        "emery",
+        "gabbro"
+      ]
+    }
+  },
+  "message": "App submitted successfully"
+}

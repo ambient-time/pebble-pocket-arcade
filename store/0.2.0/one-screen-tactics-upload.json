@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "app": {
+    "id": "bd8c735ad2e5423db857d736",
+    "app_uuid": "cff5b6fa-bd63-578c-ab4a-10548d0d7b74",
+    "category_id": "5261a8fb3b773043d5000012",
+    "created_at": "2026-09-10T23:26:24.839",
+    "developer_id": "3a9986a63073f9f293be7e14",
+    "hearts": 0,
+    "icon_large": "/api/assets/icons/bd8c735ad2e5423db857d736/large/a1eab9a2-8dec-4350-a907-0cc35876f6de.png",
+    "icon_small": "/api/assets/icons/bd8c735ad2e5423db857d736/small/3758ff51-fea2-474d-9ae7-7346004ec783.png",
+    "published_date": null,
+    "source": null,
+    "title": "One-Screen Tactics",
+    "timeline_enabled": false,
+    "type": "watchapp",
+    "website": null,
+    "visible": false,
+    "description": "Five turns. Keep yourself and the beacon alive. Enemies show where they will strike, so study the marks, move out of danger, or shove an attacker into a pit. Tap a neighboring tile or choose a move with the buttons. Nothing moves until you act, and the whole battlefield fits on one screen.\n\nSave and exit to continue later.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2 or later; buttons remain available. By Luke Steuber.",
+    "updated_at": "2026-09-10T23:26:24.839",
+    "ia_archive_url": null,
+    "ia_archived_at": null,
+    "ia_bucket": null,
+    "latest_release_date": null,
+    "project_type": null,
+    "dmca_takedown": false
+  },
+  "release": {
+    "id": "149ab4f3b23d4b05a63292d8",
+    "app_id": "bd8c735ad2e5423db857d736",
+    "has_pbw": true,
+    "capabilities": [],
+    "js_md5": null,
+    "published_date": null,
+    "release_notes": "Round results now explain the outcome and show totals. Replay takes one deliberate press or tap; unfinished games still ask before restarting.",
+    "version": "0.2.0",
+    "compatibility": [
+      "emery",
+      "gabbro"
+    ],
+    "is_published": false,
+    "pbw_url": "/api/assets/pbw/bd8c735ad2e5423db857d736/0.2.0/1df60f65-4a75-47c5-9e74-a33b730dfa64.pbw",
+    "pbw_size": 28531,
+    "created_at": "2026-09-10T23:26:24.887",
+    "settings_page_url": null,
+    "settings_page_final_url": null,
+    "settings_page_http_status": null,
+    "settings_page_check_status": null,
+    "settings_page_last_error": null,
+    "settings_page_checked_at": null,
+    "companion_ios_url": null,
+    "companion_ios_final_url": null,
+    "companion_ios_http_status": null,
+    "companion_ios_check_status": null,
+    "companion_ios_last_error": null,
+    "companion_ios_checked_at": null,
+    "companion_android_url": null,
+    "companion_android_final_url": null,
+    "companion_android_http_status": null,
+    "companion_android_check_status": null,
+    "companion_android_last_error": null,
+    "companion_android_checked_at": null,
+    "appinfo_json": {
+      "name": "one-screen-tactics",
+      "uuid": "cff5b6fa-bd63-578c-ab4a-10548d0d7b74",
+      "appKeys": {},
+      "longName": "One Screen Tactics",
+      "watchapp": {
+        "watchface": false
+      },
+      "resources": {
+        "media": [
+          {
+            "file": "menu.png",
+            "name": "MENU_ICON",
+            "type": "bitmap",
+            "menuIcon": true
+          }
+        ]
+      },
+      "shortName": "One Screen Tactics",
+      "sdkVersion": "3",
+      "companyName": "Luke Steuber",
+      "displayName": "One Screen Tactics",
+      "messageKeys": {},
+      "capabilities": [],
+      "versionLabel": "0.2.0",
+      "enableMultiJS": false,
+      "targetPlatforms": [
+        "emery",
+        "gabbro"
+      ]
+    }
+  },
+  "message": "App submitted successfully"
+}

@@ -1,0 +1,64 @@
+{
+  "name": "Space Salvage",
+  "slug": "space-salvage",
+  "version": "0.2.0",
+  "uuid": "1d97a4de-8e1a-543c-b6cc-42ed84749aa6",
+  "category": "games",
+  "description": "Five crates. One battered tug. Bring the cargo home, then reach the exit before the clock or your hull runs out. Steer through drifting rocks, catch crates with your tether, and return them to the dock. Tap a destination or use the buttons to steer and thrust. A run has a 150-second limit.\n\nSave and exit to continue later.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2 or later; buttons remain available. By Luke Steuber.",
+  "releaseNotes": "Round results now explain the outcome and show totals. Replay takes one deliberate press or tap; unfinished games still ask before restarting.",
+  "pbw": "release/space-salvage/0.2.0/space-salvage-0.2.0.pbw",
+  "pbwSHA256": "ded8b0405f17f17f2130a57b78470b151699d5e2b3174915852c37139a988cc4",
+  "visible": false,
+  "isPublished": false,
+  "icons": {
+    "small": "games/space-salvage/resources/menu.png",
+    "large": "games/space-salvage/resources/menu.png"
+  },
+  "screenshots": {
+    "emery": [
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/emery-play.png",
+        "sha256": "fb24a0c589651df4908df8a0c0ca94320d821b4e1d770c88e671a17d1e08ce9f"
+      },
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/emery-tether.png",
+        "sha256": "cda07deee9c356a36e52d3aa951c2dacdfe63ad013ad48260ff18691eaed918a"
+      },
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/emery-first-delivery.png",
+        "sha256": "6b710ed235db6a7503a2211de005af727370f12c3ed518ac172a5471e39c86ac"
+      },
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/emery-escaped.png",
+        "sha256": "f4fa12c72cdd670a2b927564c2c46e8140a698bb3cd0f3f3f403680a01ed3965"
+      },
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/emery-rules.png",
+        "sha256": "b34629755a1c155f445d9427c192cc8c5e9566ec0f508f0786fd8327b59c28bd"
+      }
+    ],
+    "gabbro": [
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/gabbro-play.png",
+        "sha256": "bf139824a0147d412428281b42c67e5d934a71d63695e72962f5b31edd17b2cd"
+      },
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/gabbro-tether.png",
+        "sha256": "83306933152966df730a65194088de17cd1951ad19e51f9ee3ddea2b44abec03"
+      },
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/gabbro-first-delivery.png",
+        "sha256": "da54335046944c30eecc3d346e7c81f95c66ec06df3aa97c91c91e1a7e5212a4"
+      },
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/gabbro-escaped.png",
+        "sha256": "3708b15942e1bf6d5a5af506e653d90ad79c69731cf5617e3737fda938a40699"
+      },
+      {
+        "path": "release/space-salvage/0.2.0/screenshots/gabbro-rules.png",
+        "sha256": "75e804a47a929d1911d5c154b83bf5d59b977d130583e2113672a6f6c357ae92"
+      }
+    ]
+  },
+  "physicalValidation": "Not performed"
+}

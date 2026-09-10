@@ -1,0 +1,64 @@
+{
+  "name": "Dungeon Pinball",
+  "slug": "dungeon-pinball",
+  "version": "0.2.0",
+  "uuid": "d5e62be8-ca14-548b-9406-d8e701ef275e",
+  "category": "games",
+  "description": "Three dungeon chambers, two flippers, three balls. Break the skull bumpers, open each gate, and hit the boss to reach the next chamber. Time your flipper strikes to keep the ball alive. Use Up and Down, or touch the left and right sides. Clear all three chambers before your balls run out.\n\nSave and exit to continue later.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2 or later; buttons remain available. By Luke Steuber.",
+  "releaseNotes": "Round results now explain the outcome and show totals. Replay takes one deliberate press or tap; unfinished games still ask before restarting.",
+  "pbw": "release/dungeon-pinball/0.2.0/dungeon-pinball-0.2.0.pbw",
+  "pbwSHA256": "621f595902717aae35d894ee2185e4c7fbc1a2d156ca44899e539ef1716f719f",
+  "visible": false,
+  "isPublished": false,
+  "icons": {
+    "small": "games/dungeon-pinball/resources/menu.png",
+    "large": "games/dungeon-pinball/resources/menu.png"
+  },
+  "screenshots": {
+    "emery": [
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/emery-play.png",
+        "sha256": "7d87911d051ce73279de7b2bbab8eff9502a989d75421d7f2ea33a81fc1f24d9"
+      },
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/emery-both-flippers.png",
+        "sha256": "da5ba4919a84f67c5bfafe3d3337b008264b25d72bbb3de2163e20521dd26632"
+      },
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/emery-touch-left.png",
+        "sha256": "8df3b09790e29b4b9a98c54f79f1488f95a88ab35afba352458699b65da0d465"
+      },
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/emery-dungeon-cleared.png",
+        "sha256": "9429d7cca3acaec9b4099fb28b1806d7e26f5ce8bdf949f7a8643880d864b7ac"
+      },
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/emery-rules.png",
+        "sha256": "0d41f26c022e08d8d67e2b6f464af908c9ed67ad91ef4a9af68cc438e3d1e30d"
+      }
+    ],
+    "gabbro": [
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/gabbro-play.png",
+        "sha256": "d115a3ee8756887d1b99b0e336503f168106f1c252a957813a22e8b5006f409e"
+      },
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/gabbro-both-flippers.png",
+        "sha256": "05dec3676611271935a03b6c6b812e9550ce8ea3b6651708655cd11610076a9b"
+      },
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/gabbro-touch-left.png",
+        "sha256": "a83fc955d18fc281d5d466063b6847eeb1b0c7c40440ca56a315ae0294c4f2c8"
+      },
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/gabbro-dungeon-cleared.png",
+        "sha256": "954f8367e1f8ee1e5f69c9cdae0cf3af1a17c1522f2e1ae46f5bd25569c4663d"
+      },
+      {
+        "path": "release/dungeon-pinball/0.2.0/screenshots/gabbro-rules.png",
+        "sha256": "e370d92758c47ec871ac5b2bfb8e1e7d0bf03eed86e9ab8b9238f3ee68d63df6"
+      }
+    ]
+  },
+  "physicalValidation": "Not performed"
+}

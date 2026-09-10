@@ -1,0 +1,64 @@
+{
+  "name": "Pocket Ecosystem",
+  "slug": "pocket-ecosystem",
+  "version": "0.2.0",
+  "uuid": "28118ddd-5774-592c-92f3-1cd55e250d86",
+  "category": "games",
+  "description": "A small habitat with hungry animals and changing seasons. Plant leaves, introduce grazers and hunters, and bring rain when the ground dries out. Keep the food chain and water in balance for 60 consecutive seconds to earn Balanced, then see how long it lasts. Your habitat pauses while the app is closed.\n\nSave and exit to continue later.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2 or later; buttons remain available. By Luke Steuber.",
+  "releaseNotes": "Round results now explain the outcome and show totals. Replay takes one deliberate press or tap; unfinished games still ask before restarting.",
+  "pbw": "release/pocket-ecosystem/0.2.0/pocket-ecosystem-0.2.0.pbw",
+  "pbwSHA256": "9f2650c973630106673ab77d6d22b3c5f92cfa4e5bc1fb934b3d4d322e6bb719",
+  "visible": false,
+  "isPublished": false,
+  "icons": {
+    "small": "games/pocket-ecosystem/resources/menu.png",
+    "large": "games/pocket-ecosystem/resources/menu.png"
+  },
+  "screenshots": {
+    "emery": [
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/emery-play.png",
+        "sha256": "bf7ddc7b124cf9988f04ccfdaca71443a091ad3998b0d74786d5f1f922301f96"
+      },
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/emery-introduced-species-0.png",
+        "sha256": "15f154989407805f90639f81153f35108a33cea2078b68bc5e32fa988d527934"
+      },
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/emery-attempt-0-season-1.png",
+        "sha256": "b61d617c8faf4b1a097882555360e46b3ebcd092ac3639d268ec4d8544a5f4f0"
+      },
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/emery-balanced.png",
+        "sha256": "ae0a80c5f871c4ac9b8e2a661be9638e6a9f0707a0a49f87ed6fc508fee36f38"
+      },
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/emery-rules.png",
+        "sha256": "4e69f18257b4102396766ef3cbcaaee9d78e853d399c423d4998bb0ff4c9dd6e"
+      }
+    ],
+    "gabbro": [
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/gabbro-play.png",
+        "sha256": "cb0afe753af51997c3feef9bd01a1557bf9081494537ed2a7dd79e8fe9102666"
+      },
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/gabbro-introduced-species-0.png",
+        "sha256": "9c1c99a4e086ce32ceefdf5a05c747145bde279f64a58faebdabf6b100062f31"
+      },
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/gabbro-attempt-0-season-1.png",
+        "sha256": "34de38a38c09a5a4965d8ea45aced47a98b3727fc897b7551d03bdc9d1f8af2f"
+      },
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/gabbro-balanced.png",
+        "sha256": "d15a54fee3f85fe0c9700be45ab78bf8b8a6661de51a9bab7b7be23d7a8a829e"
+      },
+      {
+        "path": "release/pocket-ecosystem/0.2.0/screenshots/gabbro-rules.png",
+        "sha256": "0390d48aacac6ea58d55aceaaac6bb8686afb48bdaff153306454aea1dcd2539"
+      }
+    ]
+  },
+  "physicalValidation": "Not performed"
+}

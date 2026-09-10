@@ -1,0 +1,64 @@
+{
+  "name": "Train Dispatcher",
+  "slug": "train-dispatcher",
+  "version": "0.2.0",
+  "uuid": "91758b31-5a15-5295-9e8c-f30720ae9cc6",
+  "category": "games",
+  "description": "Keep the railway moving through an increasingly busy shift. Switch junctions to send each train to its matching station. Letters and shapes help you follow the routes as traffic picks up. Deliver 18 trains before three mistakes end the shift. Tap a junction or select it with the buttons. A shift takes about two minutes.\n\nSave and exit to continue later.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2 or later; buttons remain available. By Luke Steuber.",
+  "releaseNotes": "Round results now explain the outcome and show totals. Replay takes one deliberate press or tap; unfinished games still ask before restarting.",
+  "pbw": "release/train-dispatcher/0.2.0/train-dispatcher-0.2.0.pbw",
+  "pbwSHA256": "baa7296465f847c7a8f665d08aef59405c836d68a20e89c50ca9e138eac6eed3",
+  "visible": false,
+  "isPublished": false,
+  "icons": {
+    "small": "games/train-dispatcher/resources/menu.png",
+    "large": "games/train-dispatcher/resources/menu.png"
+  },
+  "screenshots": {
+    "emery": [
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/emery-play.png",
+        "sha256": "7c160d795b8014acecbaa887445918f182f9dc0e9401a0023f38005b67007ab3"
+      },
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/emery-traffic.png",
+        "sha256": "1569d3f6fcc45353899ff47e88e14a20525fc726530265aaf91fba8ebf08b4b1"
+      },
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/emery-completed-shift.png",
+        "sha256": "c8882d59a7ee6319ef10152d175d65da29cfc5e8850f7702f1320b5cb3124bab"
+      },
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/emery-failed-shift.png",
+        "sha256": "d37f6e82c57ed0d21cebc476e68ff8e31bd79a851a0835364e775ef02efe62c7"
+      },
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/emery-rules.png",
+        "sha256": "dc07bc8ebfd91723b3ca10a5a6ea801081573285b0a1f26385f175fd6f98815b"
+      }
+    ],
+    "gabbro": [
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/gabbro-play.png",
+        "sha256": "800a07188c2cdbb85637fbc052f889703f3ceb3ce566e9e2aeadaf3f8f2b09f5"
+      },
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/gabbro-traffic.png",
+        "sha256": "0450893f3126cf904ee81489c89c866c0de3d5732317e449f49084f384c96706"
+      },
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/gabbro-completed-shift.png",
+        "sha256": "4aa01a4289835ef0079c5cca76d6987aaded18133a9fc6397cab565905c038f0"
+      },
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/gabbro-failed-shift.png",
+        "sha256": "228bcf69e70ca5415d0884f1a9f34258ed056db58c0cb0486dbe5371ad05ddcc"
+      },
+      {
+        "path": "release/train-dispatcher/0.2.0/screenshots/gabbro-rules.png",
+        "sha256": "97e0fd8e003afdafb13cb82b2031274af5f4be7c82730e556ebc8196f5b9cf2a"
+      }
+    ]
+  },
+  "physicalValidation": "Not performed"
+}

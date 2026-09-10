@@ -1,0 +1,96 @@
+{
+  "success": true,
+  "app": {
+    "id": "f3f15b3aa8e84a9ba94799c2",
+    "app_uuid": "8ad36591-5850-582c-9c98-ea606979cf4b",
+    "category_id": "5261a8fb3b773043d5000012",
+    "created_at": "2026-09-10T23:26:02.251",
+    "developer_id": "3a9986a63073f9f293be7e14",
+    "hearts": 0,
+    "icon_large": "/api/assets/icons/f3f15b3aa8e84a9ba94799c2/large/a1796f45-4c03-4f58-adbc-1ed1ae84cd43.png",
+    "icon_small": "/api/assets/icons/f3f15b3aa8e84a9ba94799c2/small/8e631ae3-6dc1-4732-8768-c6f4df53e88a.png",
+    "published_date": null,
+    "source": null,
+    "title": "Pocket Artillery",
+    "timeline_enabled": false,
+    "type": "watchapp",
+    "website": null,
+    "visible": false,
+    "description": "A tank duel across a hillside that changes with every explosion. Set your angle and power, allow for the wind, and try to land a shot before the other tank gets you. Drag to aim and tap FIRE, or adjust with the buttons and hold Select to fire. Take your time: there is no aiming timer.\n\nSave and exit to continue later.\n\nFor Pebble Time 2 and Round 2. Touch requires firmware 4.33.2 or later; buttons remain available. By Luke Steuber.",
+    "updated_at": "2026-09-10T23:26:02.251",
+    "ia_archive_url": null,
+    "ia_archived_at": null,
+    "ia_bucket": null,
+    "latest_release_date": null,
+    "project_type": null,
+    "dmca_takedown": false
+  },
+  "release": {
+    "id": "069839caf3c14410834edd62",
+    "app_id": "f3f15b3aa8e84a9ba94799c2",
+    "has_pbw": true,
+    "capabilities": [],
+    "js_md5": null,
+    "published_date": null,
+    "release_notes": "Round results now explain the outcome and show totals. Replay takes one deliberate press or tap; unfinished games still ask before restarting.",
+    "version": "0.2.0",
+    "compatibility": [
+      "emery",
+      "gabbro"
+    ],
+    "is_published": false,
+    "pbw_url": "/api/assets/pbw/f3f15b3aa8e84a9ba94799c2/0.2.0/6278e73e-ce8c-4bbe-9a3d-c92b73c0548a.pbw",
+    "pbw_size": 30754,
+    "created_at": "2026-09-10T23:26:02.316",
+    "settings_page_url": null,
+    "settings_page_final_url": null,
+    "settings_page_http_status": null,
+    "settings_page_check_status": null,
+    "settings_page_last_error": null,
+    "settings_page_checked_at": null,
+    "companion_ios_url": null,
+    "companion_ios_final_url": null,
+    "companion_ios_http_status": null,
+    "companion_ios_check_status": null,
+    "companion_ios_last_error": null,
+    "companion_ios_checked_at": null,
+    "companion_android_url": null,
+    "companion_android_final_url": null,
+    "companion_android_http_status": null,
+    "companion_android_check_status": null,
+    "companion_android_last_error": null,
+    "companion_android_checked_at": null,
+    "appinfo_json": {
+      "name": "pocket-artillery",
+      "uuid": "8ad36591-5850-582c-9c98-ea606979cf4b",
+      "appKeys": {},
+      "longName": "Pocket Artillery",
+      "watchapp": {
+        "watchface": false
+      },
+      "resources": {
+        "media": [
+          {
+            "file": "menu.png",
+            "name": "MENU_ICON",
+            "type": "bitmap",
+            "menuIcon": true
+          }
+        ]
+      },
+      "shortName": "Pocket Artillery",
+      "sdkVersion": "3",
+      "companyName": "Luke Steuber",
+      "displayName": "Pocket Artillery",
+      "messageKeys": {},
+      "capabilities": [],
+      "versionLabel": "0.2.0",
+      "enableMultiJS": false,
+      "targetPlatforms": [
+        "emery",
+        "gabbro"
+      ]
+    }
+  },
+  "message": "App submitted successfully"
+}
