@@ -29,6 +29,14 @@ int main(void) {
   }
   Game g;
   game_init(&g, 0);
+  for (int x = -10; x < 176; x++)
+    for (int y = -10; y < 160; y++) {
+      if (x >= 18 && x < 158 && y >= 2 && y < 142)
+        continue;
+      Game outside = g;
+      game_touch(&outside, x, y, 2);
+      assert(!memcmp(&outside, &g, sizeof g));
+    }
   tactics_act(&g, 3);
   assert(!g.d[ENEMIES + 2]);
   assert(g.score == 100);

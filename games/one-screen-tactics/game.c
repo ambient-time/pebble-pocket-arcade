@@ -134,7 +134,7 @@ void game_input(Game *g, int a) {
     tactics_act(g, g->d[CHOICE]);
 }
 void game_touch(Game *g, int x, int y, int type) {
-  if (type != 2)
+  if (type != 2 || x < 18 || x >= 158 || y < 2 || y >= 142)
     return;
   x = (x - 18) / 28;
   y = (y - 2) / 28;

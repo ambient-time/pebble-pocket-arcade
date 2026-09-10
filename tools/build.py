@@ -19,4 +19,4 @@ shutil.copytree(source/'resources',project/'resources',dirs_exist_ok=True)
 meta['pebble']['resources']['media']=[{'type':'bitmap','name':'MENU_ICON','file':'menu.png','menuIcon':True}]
 (project/'package.json').write_text(json.dumps(meta,indent=2)+'\n')
 shutil.copy2(root/'tools/wscript',project/'wscript')
-subprocess.run(['/Users/luke/.local/bin/pebble','build'],cwd=project,check=True)
+subprocess.run([shutil.which('pebble') or 'pebble','build'],cwd=project,check=True)

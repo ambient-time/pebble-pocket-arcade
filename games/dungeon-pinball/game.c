@@ -55,9 +55,9 @@ void game_input(Game *g, int a) {
     g->d[RIGHT] = 1;
   }
   if (a == ACT_RELEASE_UP)
-    g->d[LEFT] = 0;
+    g->d[LEFT] = g->d[LEFT_AGE] = 0;
   if (a == ACT_RELEASE_DOWN)
-    g->d[RIGHT] = 0;
+    g->d[RIGHT] = g->d[RIGHT_AGE] = 0;
   if (a == ACT_SELECT)
     pinball_launch(g);
 }
@@ -66,7 +66,7 @@ void game_touch(Game *g, int x, int y, int type) {
   if (g->status)
     return;
   if (type == 2) {
-    g->d[LEFT] = g->d[RIGHT] = 0;
+    g->d[LEFT] = g->d[RIGHT] = g->d[LEFT_AGE] = g->d[RIGHT_AGE] = 0;
     return;
   }
   if (g->d[WAITING])

@@ -240,6 +240,11 @@ def run(platform):
             send_data_to_qemu(watch.transport,QemuButton(state=QemuButton.Button.Up|QemuButton.Button.Down))
             time.sleep(.3);grab('both-flippers')
             send_data_to_qemu(watch.transport,QemuButton(state=0))
+            pointer(fx+45,fy+122,True);time.sleep(.3);expect(hp=1,enemy=0);grab('touch-left');pointer(fx+45,fy+122,False);time.sleep(.15)
+            pointer(fx+135,fy+122,True);time.sleep(.3);expect(hp=0,enemy=1);grab('touch-right');pointer(fx+135,fy+122,False);time.sleep(.15)
+            watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
+            watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
+            expect(screen=0,hp=0,enemy=0);checks+=['flippers released after resume']
             for attempt in range(8):
                 deadline=time.monotonic()+180;mask=-1;stage=-1;last_launch=0
                 while not current()['status'] and time.monotonic()<deadline:
@@ -255,21 +260,29 @@ def run(platform):
                 send_data_to_qemu(watch.transport,QemuButton(state=0))
                 if current()['status']==1:break
                 grab('lost-run-'+str(attempt));restart()
-            expect(status=1);grab('dungeon-cleared');checks+=['launch','simultaneous physical flippers','reactive flipper timing','three distinct chambers','monster targets and bosses','complete dungeon']
+            expect(status=1);grab('dungeon-cleared');checks+=['launch','simultaneous physical flippers','independent held touch flippers','reactive flipper timing','three distinct chambers','monster targets and bosses','complete dungeon']
         elif game=='pocket-ecosystem':
             button('Down');expect(d0=1)
             button('Select',hold=.6);expect(d1=1)
             direct_tap(fx+22,fy+130);expect(d1=0)
             direct_tap(fx+18,fy+15);grab('seeded-cell')
+            for tool in [1,2]:
+                direct_tap(fx+22+44*tool,fy+130)
+                budget=current()['d3'];cost=3 if tool==1 else 5
+                for cell in range(24):
+                    direct_tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
+                    if current()['d3']<=budget-cost:break
+                assert current()['d3']<=budget-cost
+            grab('introduced-species')
             deadline=time.monotonic()+200;season=-1
             while current()['status']==0 and time.monotonic()<deadline:
                 if current()['d2']<30 and current()['d3']>=3:
-                    direct_tap(fx+154,fy+130);direct_tap(fx+18,fy+15)
+                    direct_tap(fx+154,fy+130)
                 if current()['stage']!=season:season=current()['stage'];grab('season-'+str(season))
                 time.sleep(.15)
             expect(status=1);grab('balanced')
             before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
-            checks+=['button cursor and tool','touch tool and planting','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
+            checks+=['button cursor and tool','touch tool and planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
         report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2));print('PASS',game,platform)

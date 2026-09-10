@@ -63,7 +63,7 @@ void artillery_impact(Game *g, int x, int y) {
     g->status = 2;
   else if (!g->d[ENEMY_HP]) {
     g->status = 1;
-    g->score = 1000 - g->d[SHOTS] * 10;
+    g->score = g->d[SHOTS] >= 100 ? 0 : 1000 - g->d[SHOTS] * 10;
   }
   g->d[PHASE] = 2;
   g->d[DELAY] = 20;

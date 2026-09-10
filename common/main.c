@@ -270,7 +270,18 @@ static void menu_select(MenuLayer *m, MenuIndex *i, void *x) {
   refresh();
 }
 static void touch(const TouchEvent *e, void *x) {
-  if (!focused || screen == 1)
+  if (!focused)
+    return;
+  if (save_error) {
+    if (e->type == TouchEvent_Touchdown)
+      touching = true;
+    else if (e->type != TouchEvent_PositionUpdate && touching) {
+      touching = false;
+      action(ACT_SELECT);
+    }
+    return;
+  }
+  if (screen == 1)
     return;
   if (e->type == TouchEvent_Touchdown) {
     touching = true;
@@ -337,6 +348,9 @@ static void init(void) {
   layer_add_child(window_get_root_layer(win), menu_layer_get_layer(menu));
   if (!save_load(&io, &g))
     new_game();
+  game_input(&g, ACT_RELEASE_UP);
+  game_input(&g, ACT_RELEASE_DOWN);
+  game_input(&g, ACT_RELEASE_SELECT);
   if (persist_read_int(51))
     screen = 0;
   WatchInfoVersion v = watch_info_get_firmware_version();

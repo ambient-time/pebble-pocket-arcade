@@ -60,9 +60,10 @@ int main(void) {
     assert(artillery_y(&g, 0) == g.d[TERRAIN + 18] - 4);
   }
   game_init(&g, 7);
+  g.d[SHOTS] = 101;
   g.d[ENEMY_HP] = 1;
   artillery_impact(&g, 157, artillery_y(&g, 1));
-  assert(g.status == 1);
+  assert(g.status == 1 && g.score == 0);
   h = g;
   for (int i = 0; i < 200; i++)
     game_tick(&g);
@@ -94,6 +95,26 @@ int main(void) {
   settle(&h);
   settle(&next);
   assert(!memcmp(&h, &next, sizeof h));
+  // The selected bank is corrupt; preserve the intact fallback through another
+  // interrupted save, including the selector repair write.
+  game_init(&g, 99);
+  assert(save_store(&io, &g));
+  int32_t active;
+  memcpy(&active, store[50], sizeof active);
+  store[100 + active * 32][0] ^= 1;
+  assert(save_load(&io, &h));
+  Game fallback = h;
+  memcpy(backup, store, sizeof store);
+  memcpy(sizes, lengths, sizeof sizes);
+  for (int f = 0; f < 9; f++) {
+    memcpy(store, backup, sizeof store);
+    memcpy(lengths, sizes, sizeof sizes);
+    writes = 0;
+    fail = f;
+    bool ok = save_store(&io, &g);
+    assert(save_load(&io, &h));
+    assert(!memcmp(&h, ok ? &g : &fallback, sizeof h));
+  }
   puts("PASS: terrain bounds, terminal freeze, atomic saves at every write and "
        "exact mid-flight resume");
 }

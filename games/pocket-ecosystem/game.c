@@ -4,9 +4,8 @@
 #include <string.h>
 const char *game_name = "Pocket Ecosystem";
 const char *game_rules =
-    "Keep plants, grazers and\npredators balanced for 60s.\nUP/DOWN move the "
-    "cursor.\nSELECT adds the chosen life.\nHold SELECT changes tools.\nOr tap "
-    "a tool and a cell.";
+    "Add a hunter.\nKeep 3 grazers + plants\nbalanced for 60 seconds.\nUP/DOWN "
+    "cursor; SEL place.\nHold SEL changes tool.\nTap a tool, then a cell.";
 const int game_controls = 0;
 static int occupied(const Game *g, int cell) {
   for (int i = 0; i < SLOTS; i++)
@@ -47,9 +46,6 @@ void game_init(Game *g, uint32_t seed) {
     g->d[PLANTS + i] = 3 + rnd(g) % 4;
   add(g, 1, 1);
   add(g, 1, 8);
-  add(g, 1, 15);
-  add(g, 1, 22);
-  add(g, 2, 5);
 }
 void game_input(Game *g, int a) {
   if (g->status == 2)
@@ -83,6 +79,8 @@ void game_touch(Game *g, int x, int y, int type) {
     return;
   if (y >= 114) {
     g->d[TOOL] = limit(x / 44, 0, 3);
+    if (g->d[TOOL] == 3)
+      game_input(g, ACT_SELECT);
     return;
   }
   if (x < 4 || x >= 172 || y < 1 || y >= 113)
@@ -226,7 +224,13 @@ void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
   const char *seasons[] = {"Spring", "Summer", "Autumn", "Winter"};
   const char *tools[] = {"Leaf 2", "Graze 3", "Hunt 5", "Rain 3"};
   snprintf(a, n, "%s L%d G%d P%d", seasons[g->stage], pl, h, p);
-  if (g->status == 1)
+  if (g->status == 2)
+    snprintf(b, m, !h ? "Grazers extinct" : "Hunters extinct");
+  else if (!p)
+    snprintf(b, m, "Add a hunter! Budget $%ld", (long)g->d[BUDGET]);
+  else if (h < 3)
+    snprintf(b, m, "Need 3 grazers. Budget $%ld", (long)g->d[BUDGET]);
+  else if (g->status == 1)
     snprintf(b, m, "Balanced! Water %ld  $%ld", (long)g->d[WATER],
              (long)g->d[BUDGET]);
   else
