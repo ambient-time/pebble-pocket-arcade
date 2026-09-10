@@ -176,9 +176,17 @@ def run(platform):
                 button('Back');expect(screen=1);grab('pause')
                 button('Back');expect(screen=0)
         expect(status=1);grab('victory')
-        button('Select');expect(screen=3)
-        button('Back');expect(status=1,screen=0)
-        button('Select');button('Select');expect(status=0,screen=0)
+        time.sleep(.6)
+        # Finished saves stay on their result until an explicit replay.
+        before=current()
+        watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
+        watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.8)
+        assert current()==before
+        button('Select');expect(status=0,screen=0)
+        # Restarting an unfinished game still asks and can be cancelled.
+        before=current()
+        button('Back');button('Down');button('Select');expect(screen=3)
+        button('Back');assert current()==before
         # Touch the player to wait, allowing the beacon to be destroyed.
         for _ in range(5):
             if current()['status']:break
@@ -186,8 +194,16 @@ def run(platform):
             py=(height-144)//2+2+current()['d1']*28+14
             touch([(px,py)])
         expect(status=2);grab('defeat')
+        time.sleep(.6)
+        fx=(width-176)//2;fy=(height-144)//2
+        # A tap outside the replay row or a drag into it must keep the result.
+        touch([(fx+10,fy+45)]);expect(status=2)
+        touch([(fx+10,fy+45),(fx+88,fy+115)]);expect(status=2)
+        touch([(fx+88,fy+115),(fx+108,fy+115),(fx+88,fy+115)]);expect(status=2)
+        touch([(fx+88,fy+115)]);expect(status=0,screen=0)
+        grab('touch-replayed')
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','board','button solution across five turns','first action save/relaunch','pause','victory','cancel restart','restart','touch wait','beacon loss'],'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','board','button solution across five turns','first action save/relaunch','pause','victory','cancel restart','restart','touch wait','beacon loss','finished save restored','one-press replay','outside and dragged touches ignored','one-tap replay'],'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

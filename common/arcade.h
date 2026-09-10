@@ -38,3 +38,5 @@ static inline int limit(int x, int low, int high) {
   return x < low ? low : x > high ? high : x;
 }
 void game_debug(const Game *, char *, size_t);
+
+void game_result(const Game *, char *, size_t, char *, size_t);

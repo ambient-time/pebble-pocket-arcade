@@ -245,3 +245,11 @@ void game_debug(const Game *g, char *out, size_t n) {
   if (n)
     out[0] = 0;
 }
+
+void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
+  int plants, grazers, hunters;
+  ecosystem_counts(g, &plants, &grazers, &hunters);
+  snprintf(title, n, "%s", !grazers ? "Grazers extinct" : "Hunters extinct");
+  snprintf(detail, m, "Habitat lasted %ldm %lds", (long)g->d[SECONDS] / 60,
+           (long)g->d[SECONDS] % 60);
+}

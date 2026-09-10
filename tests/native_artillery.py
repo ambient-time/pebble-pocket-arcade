@@ -210,7 +210,7 @@ def run(platform):
             while current()['d3'] and not current()['status'] and time.monotonic()<deadline:time.sleep(.1)
             expect(hp=hp,enemy=enemy,status=status)
         expect(status=1);grab('victory')
-        button('Select');expect(screen=3);button('Select');expect(screen=0,status=0)
+        time.sleep(.6);button('Select');expect(screen=0,status=0)
         while current()['d0']>10:button('Down')
         button('Select')
         while current()['d1']>10:button('Down')
@@ -221,7 +221,7 @@ def run(platform):
             while current()['d3'] and not current()['status'] and time.monotonic()<deadline:time.sleep(.1)
         expect(status=2);grab('defeat')
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','button angle and power','pause and resume','idle save/relaunch','touch aim and fire','projectile flight','paused simulation freezes','opponent turn','long-select fire','mid-flight resume','complete aimed match victory','deliberate-miss defeat'],'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','button angle and power','pause and resume','idle save/relaunch','touch aim and fire','projectile flight','paused simulation freezes','opponent turn','long-select fire','mid-flight resume','complete aimed match victory','deliberate-miss defeat','one-press rematch'],'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

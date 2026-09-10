@@ -54,6 +54,12 @@ int main(void) {
   assert(!g.d[LEFT] && !g.d[LEFT_AGE] && g.d[RIGHT]);
   game_touch(&g, 88, 120, 2);
   assert(!g.d[LEFT] && !g.d[RIGHT] && !g.d[LEFT_AGE] && !g.d[RIGHT_AGE]);
+  game_input(&g, ACT_UP);
+  game_input(&g, ACT_DOWN);
+  g.status = 2;
+  game_input(&g, ACT_RELEASE_UP);
+  game_input(&g, ACT_RELEASE_DOWN);
+  assert(!g.d[LEFT] && !g.d[RIGHT] && !g.d[LEFT_AGE] && !g.d[RIGHT_AGE]);
   puts("PASS: bounded substep physics, drain counted once, independently held "
        "flippers");
 }

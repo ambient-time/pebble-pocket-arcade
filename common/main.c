@@ -6,7 +6,9 @@ static Game g;
 static Window *win;
 static Layer *canvas;
 static MenuLayer *menu;
-static AppTimer *timer;
+static AppTimer *timer, *replay_timer;
+static bool result_visible, replay_ready, replay_touch, replay_select;
+static int replay_x, replay_y;
 static bool touch_on, focused = true, save_error, touching;
 static int screen = 2, view_w, view_h;
 static bool menu_visible, config_set;
@@ -91,9 +93,39 @@ static void sync(void) {
   }
 }
 static void clicks(void *);
+static bool ended(void) {
+  return g.status && !(game_continuous && g.status == 1);
+}
+static bool replay_hit(int x, int y) {
+  return x >= field_x + 22 && x < field_x + 154 && y >= field_y + 100 &&
+         y < field_y + 132;
+}
+static void ready_to_replay(void *context) {
+  replay_timer = NULL;
+  replay_ready = result_visible;
+  layer_mark_dirty(canvas);
+}
+static void sync_result(void) {
+  bool finished = ended();
+  if (finished == result_visible)
+    return;
+  result_visible = finished;
+  touching = replay_touch = replay_ready = replay_select = false;
+  if (replay_timer) {
+    app_timer_cancel(replay_timer);
+    replay_timer = NULL;
+  }
+  if (finished) {
+    game_input(&g, ACT_RELEASE_UP);
+    game_input(&g, ACT_RELEASE_DOWN);
+    game_input(&g, ACT_RELEASE_SELECT);
+    replay_timer = app_timer_register(550, ready_to_replay, NULL);
+  }
+}
 static void refresh(void) {
+  sync_result();
   sync();
-  int kind = game_controls && !screen && !g.status;
+  int kind = !screen && ended() ? 2 : game_controls && !screen && !g.status;
   if (!config_set || kind != config_kind) {
     window_set_click_config_provider(win, clicks);
     config_set = true;
@@ -128,14 +160,24 @@ static void draw(Layer *l, GContext *c) {
   game_hud(&g, a, sizeof a, b, sizeof b);
   text(c, a, top, 28, false);
   game_draw(&g, c);
-  text(c, b, field_y + FIELD_H + 1, 36, false);
-  if (g.status && !(game_continuous && g.status == 1)) {
+  text(c, ended() ? "BACK: menu" : b, field_y + FIELD_H + 1, 36, false);
+  if (ended()) {
+    char title[32], detail[64];
+    game_result(&g, title, sizeof title, detail, sizeof detail);
     ink(c, GColorBlack);
-    box(c, 8, 43, 160, 56, true);
+    box(c, 6, 28, 164, 108, true);
+    ink(c, g.status == 1 ? GColorCyan : GColorWhite);
+    box(c, 6, 28, 164, 108, false);
+    graphics_draw_text(c, title, fonts_get_system_font(FONT_KEY_GOTHIC_18_BOLD),
+                       GRect(field_x + 12, field_y + 34, 152, 26),
+                       GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
     ink(c, GColorWhite);
-    box(c, 8, 43, 160, 56, false);
-    label(c, g.status == 1 ? "OBJECTIVE COMPLETE" : "GAME OVER", 12, 47, 152);
-    label(c, "SELECT: play again", 12, 72, 152);
+    graphics_draw_text(c, detail, fonts_get_system_font(FONT_KEY_GOTHIC_14),
+                       GRect(field_x + 14, field_y + 62, 148, 34),
+                       GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
+    ink(c, replay_ready ? GColorWhite : GColorDarkGray);
+    box(c, 22, 100, 132, 32, false);
+    label(c, "SELECT / tap: again", 24, 104, 128);
   }
 }
 static void tick(void *x) {
@@ -150,8 +192,12 @@ static void tick(void *x) {
   if (g.ticks % (game_controls ? 3 : 30) == 0 || status != g.status ||
       (before && !game_running(&g)))
     log_state();
-  layer_mark_dirty(canvas);
-  schedule();
+  if (status != g.status)
+    refresh();
+  else {
+    layer_mark_dirty(canvas);
+    schedule();
+  }
 }
 static void schedule(void) {
   bool run = focused && !screen && !save_error && game_running(&g);
@@ -201,8 +247,8 @@ static void action(int a) {
       screen = 0;
     }
   } else if (g.status && !(game_continuous && g.status == 1)) {
-    if (a == ACT_SELECT)
-      screen = 3;
+    if (a == ACT_SELECT && replay_ready)
+      new_game();
   } else
     game_input(&g, a);
   if (!game_controls || screen || !game_running(&g))
@@ -234,7 +280,22 @@ static void right_press(ClickRecognizerRef r, void *x) { action(ACT_DOWN); }
 static void right_release(ClickRecognizerRef r, void *x) {
   game_input(&g, ACT_RELEASE_DOWN);
 }
+static void replay_press(ClickRecognizerRef r, void *x) {
+  replay_select = replay_ready && ended() && !screen;
+}
+static void replay_release(ClickRecognizerRef r, void *x) {
+  bool fresh_press = replay_select;
+  replay_select = false;
+  if (fresh_press)
+    action(ACT_SELECT);
+}
 static void clicks(void *x) {
+  if (!screen && ended()) {
+    window_raw_click_subscribe(BUTTON_ID_SELECT, replay_press, replay_release,
+                               NULL);
+    window_single_click_subscribe(BUTTON_ID_BACK, back);
+    return;
+  }
   if (game_controls && !screen &&
       (!g.status || (game_continuous && g.status == 1))) {
     window_raw_click_subscribe(BUTTON_ID_UP, left_press, left_release, NULL);
@@ -285,12 +346,17 @@ static void touch(const TouchEvent *e, void *x) {
     return;
   if (e->type == TouchEvent_Touchdown) {
     touching = true;
+    replay_x = e->x;
+    replay_y = e->y;
+    replay_touch = !screen && ended() && replay_ready && replay_hit(e->x, e->y);
     if (!screen && (!g.status || (game_continuous && g.status == 1))) {
       game_touch(&g, e->x - field_x, e->y - field_y, 0);
       schedule();
       layer_mark_dirty(canvas);
     }
   } else if (e->type == TouchEvent_PositionUpdate) {
+    if (abs(e->x - replay_x) > 8 || abs(e->y - replay_y) > 8)
+      replay_touch = false;
     if (touching && !screen &&
         (!g.status || (game_continuous && g.status == 1)))
       game_touch(&g, e->x - field_x, e->y - field_y, 1);
@@ -302,8 +368,13 @@ static void touch(const TouchEvent *e, void *x) {
       if (e->y > view_h / 2)
         action(ACT_SELECT);
     } else if (g.status && !(game_continuous && g.status == 1)) {
-      screen = 3;
-      refresh();
+      bool intentional = replay_touch && replay_hit(e->x, e->y) &&
+                         abs(e->x - replay_x) <= 8 && abs(e->y - replay_y) <= 8;
+      replay_touch = false;
+      if (intentional)
+        action(ACT_SELECT);
+      else
+        refresh();
     } else {
       game_touch(&g, e->x - field_x, e->y - field_y, 2);
       save();
@@ -313,7 +384,7 @@ static void touch(const TouchEvent *e, void *x) {
 }
 static void focus(bool active) {
   focused = active;
-  touching = false;
+  touching = replay_select = false;
   if (!active) {
     game_input(&g, ACT_RELEASE_UP);
     game_input(&g, ACT_RELEASE_DOWN);
@@ -367,6 +438,8 @@ static void init(void) {
   refresh();
 }
 static void deinit(void) {
+  if (replay_timer)
+    app_timer_cancel(replay_timer);
   if (timer)
     app_timer_cancel(timer);
   save();

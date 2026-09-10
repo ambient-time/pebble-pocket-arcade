@@ -209,3 +209,9 @@ void game_debug(const Game *g, char *out, size_t n) {
   if (n)
     out[0] = 0;
 }
+
+void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
+  snprintf(title, n, "%s", g->status == 1 ? "Tank defeated" : "Tank lost");
+  snprintf(detail, m, "%ld shots | Enemy %ld HP", (long)g->d[SHOTS],
+           (long)g->d[ENEMY_HP]);
+}

@@ -189,3 +189,12 @@ void game_debug(const Game *g, char *out, size_t n) {
       (long)g->d[CARGO + 9] / 100, (long)g->d[CARGO + 10] / 100,
       (long)g->d[CARGO + 12] / 100, (long)g->d[CARGO + 13] / 100);
 }
+
+void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
+  snprintf(title, n, "%s",
+           g->status == 1    ? "Cargo secured"
+           : g->d[HULL] <= 0 ? "Hull lost"
+                             : "Time expired");
+  snprintf(detail, m, "%ld/5 crates | %lu points", (long)g->d[BANKED],
+           (unsigned long)g->score);
+}

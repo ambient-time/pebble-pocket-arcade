@@ -42,6 +42,14 @@ void pinball_launch(Game *g) {
   }
 }
 void game_input(Game *g, int a) {
+  if (a == ACT_RELEASE_UP) {
+    g->d[LEFT] = g->d[LEFT_AGE] = 0;
+    return;
+  }
+  if (a == ACT_RELEASE_DOWN) {
+    g->d[RIGHT] = g->d[RIGHT_AGE] = 0;
+    return;
+  }
   if (g->status)
     return;
   if (a == ACT_UP) {
@@ -54,10 +62,6 @@ void game_input(Game *g, int a) {
       g->d[RIGHT_AGE] = 5;
     g->d[RIGHT] = 1;
   }
-  if (a == ACT_RELEASE_UP)
-    g->d[LEFT] = g->d[LEFT_AGE] = 0;
-  if (a == ACT_RELEASE_DOWN)
-    g->d[RIGHT] = g->d[RIGHT_AGE] = 0;
   if (a == ACT_SELECT)
     pinball_launch(g);
 }
@@ -227,4 +231,11 @@ const int game_continuous = 0;
 void game_debug(const Game *g, char *out, size_t n) {
   snprintf(out, n, "wait=%ld lives=%ld", (long)g->d[WAITING],
            (long)g->d[LIVES]);
+}
+
+void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
+  snprintf(title, n, "%s",
+           g->status == 1 ? "Dungeon cleared" : "Last ball lost");
+  snprintf(detail, m, "%d/3 cleared | %lu points", g->stage,
+           (unsigned long)g->score);
 }

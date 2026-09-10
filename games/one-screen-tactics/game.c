@@ -175,3 +175,12 @@ void game_debug(const Game *g, char *out, size_t n) {
   if (n)
     out[0] = 0;
 }
+
+void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
+  snprintf(title, n, "%s",
+           g->status == 1         ? "Beacon defended"
+           : g->d[INTEGRITY] <= 0 ? "Beacon destroyed"
+                                  : "Defender lost");
+  snprintf(detail, m, "%ld/5 turns | %lu points", (long)g->d[ROUND],
+           (unsigned long)g->score);
+}
