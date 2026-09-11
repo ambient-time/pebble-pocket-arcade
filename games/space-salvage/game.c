@@ -5,9 +5,7 @@
 #include <string.h>
 const char *game_name = "Space Salvage";
 const char *game_rules =
-    "Bring 5 crates to the dock.\nThen enter the EXIT ring.\nUP/DOWN turn the "
-    "tug.\nSELECT gives thrust.\nOr tap a destination.\nAvoid rocks. 150 "
-    "seconds.";
+    "Bank 5 crates; exit.\nAvoid rocks. 150s.\nUP/DOWN turn.\nSELECT thrusts.\nOr tap to steer.";
 void game_init(Game *g, uint32_t seed) {
   memset(g, 0, sizeof *g);
   g->seed = seed;
@@ -162,12 +160,12 @@ bool game_valid(const Game *g) {
          g->d[DEADLINE] >= 0 && g->d[DEADLINE] <= 4500;
 }
 void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
-  snprintf(a, n, "Hull %ld  Cargo %ld/5  %lds", (long)g->d[HULL],
+  snprintf(a, n, "HP%ld  %ld/5 crates  %lds", (long)g->d[HULL],
            (long)g->d[BANKED], (long)g->d[DEADLINE] / 30);
   snprintf(b, m,
-           g->d[BANKED] == 5  ? "All cargo safe! Enter EXIT"
-           : g->d[CARRY] >= 0 ? "Tethered! Return to DOCK"
-                              : "Turn + SELECT thrust / tap");
+           g->d[BANKED] == 5  ? "Cargo safe. Enter EXIT"
+           : g->d[CARRY] >= 0 ? "Tethered: return to DOCK"
+                              : "SELECT: thrust / tap: steer");
 }
 
 const int game_controls = 0;
@@ -195,6 +193,6 @@ void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
            g->status == 1    ? "Cargo secured"
            : g->d[HULL] <= 0 ? "Hull lost"
                              : "Time expired");
-  snprintf(detail, m, "%ld/5 crates | %lu points", (long)g->d[BANKED],
+  snprintf(detail, m, "%ld/5 crates\n%lu points", (long)g->d[BANKED],
            (unsigned long)g->score);
 }

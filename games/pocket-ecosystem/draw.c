@@ -3,14 +3,16 @@
 void game_draw(const Game *g, GContext *c) {
   for (int i = 0; i < 24; i++) {
     int x = 4 + i % 6 * 28, y = 1 + i / 6 * 28;
-    ink(c, g->stage == 3 ? GColorOxfordBlue : GColorDarkGreen);
+    ink(c, GColorBlack);
     box(c, x, y, 27, 27, true);
-    ink(c, GColorGreen);
+    ink(c, g->stage == 3 ? GColorLightGray : GColorGreen);
+    graphics_context_set_stroke_width(c, 2);
     for (int k = 0; k < g->d[PLANTS + i]; k++) {
       int px = x + 4 + (k % 3) * 8, py = y + 8 + (k / 3) * 12;
       line(c, px, py + 5, px, py);
       line(c, px, py + 2, px + 3, py - 1);
     }
+    graphics_context_set_stroke_width(c, 1);
   }
   for (int i = 0; i < SLOTS; i++) {
     int b = ANIMALS + i * 5;
@@ -35,9 +37,10 @@ void game_draw(const Game *g, GContext *c) {
   box(c, 4 + g->d[CURSOR] % 6 * 28, 1 + g->d[CURSOR] / 6 * 28, 27, 27, false);
   const char *names[] = {"Leaf", "Graze", "Hunt", "Rain"};
   for (int i = 0; i < 4; i++) {
-    ink(c, g->d[TOOL] == i ? GColorWhite : GColorDarkGray);
-    box(c, i * 44, 116, 43, 27, false);
-    label(c, names[i], i * 44, 120, 43);
+    ink(c, g->d[TOOL] == i ? GColorWhite : GColorLightGray);
+    box(c, i * 44, 116, 43, 27, g->d[TOOL] == i);
+    ink(c, g->d[TOOL] == i ? GColorBlack : GColorWhite);
+    label(c, names[i], i * 44, 117, 43);
   }
   if (g->status == 1) {
     ink(c, GColorCyan);

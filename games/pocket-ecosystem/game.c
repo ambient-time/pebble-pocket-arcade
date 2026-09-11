@@ -4,8 +4,7 @@
 #include <string.h>
 const char *game_name = "Pocket Ecosystem";
 const char *game_rules =
-    "Add a hunter.\nKeep 3 grazers + plants\nbalanced for 60 seconds.\nUP/DOWN "
-    "cursor; SEL place.\nHold SEL changes tool.\nTap a tool, then a cell.";
+    "Plants + 3 grazers\n+ a hunter: 60s.\nUP/DOWN: cell\nSELECT: place\nHold SELECT: tool\nOr tap tool + cell.";
 const int game_controls = 0;
 static int occupied(const Game *g, int cell) {
   for (int i = 0; i < SLOTS; i++)
@@ -227,11 +226,11 @@ void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
   if (g->status == 2)
     snprintf(b, m, !h ? "Grazers extinct" : "Hunters extinct");
   else if (!p)
-    snprintf(b, m, "Add a hunter! Budget $%ld", (long)g->d[BUDGET]);
+    snprintf(b, m, "Add hunter  $%ld", (long)g->d[BUDGET]);
   else if (h < 3)
-    snprintf(b, m, "Need 3 grazers. Budget $%ld", (long)g->d[BUDGET]);
+    snprintf(b, m, "Need 3 grazers  $%ld", (long)g->d[BUDGET]);
   else if (g->status == 1)
-    snprintf(b, m, "Balanced! Water %ld  $%ld", (long)g->d[WATER],
+    snprintf(b, m, "Balanced W%ld $%ld", (long)g->d[WATER],
              (long)g->d[BUDGET]);
   else
     snprintf(b, m, "%s $%ld  W%ld  %ld/60", tools[g->d[TOOL]],

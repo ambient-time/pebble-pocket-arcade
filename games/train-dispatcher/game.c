@@ -4,9 +4,7 @@
 #include <string.h>
 const char *game_name = "Train Dispatcher";
 const char *game_rules =
-    "Route 18 trains to A/B/C.\nThree mistakes end a shift.\nUP/DOWN choose a "
-    "switch.\nSELECT toggles its track.\nOr tap a junction.\nA train on a "
-    "switch locks it.";
+    "Deliver 18 trains.\nThree misses: over.\nUP/DOWN: switch\nSELECT: change\nOr tap a junction.\nOccupied = locked.";
 const int train_paths[9][4] = {
     {3, 72, 48, 72},     {48, 72, 48, 12},    {48, 72, 96, 72},
     {96, 72, 96, 132},   {96, 72, 144, 72},   {144, 72, 171, 26},
@@ -175,7 +173,7 @@ bool game_valid(const Game *g) {
   return true;
 }
 void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
-  snprintf(a, n, "Delivered %ld/18  X %ld/3", (long)g->d[DELIVERED],
+  snprintf(a, n, "Trains %ld/18  X%ld/3", (long)g->d[DELIVERED],
            (long)g->d[STRIKES]);
   snprintf(b, m, "Switch %ld%s  Next %c", (long)g->d[FOCUS] + 1,
            train_locked(g, g->d[FOCUS]) ? " LOCKED" : "",
@@ -205,6 +203,6 @@ void game_debug(const Game *g, char *out, size_t n) {
 
 void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
   snprintf(title, n, "%s", g->status == 1 ? "Shift complete" : "Shift ended");
-  snprintf(detail, m, "%ld/18 trains | %ld strikes", (long)g->d[DELIVERED],
+  snprintf(detail, m, "%ld/18 trains\n%ld strikes", (long)g->d[DELIVERED],
            (long)g->d[STRIKES]);
 }

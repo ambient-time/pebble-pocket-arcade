@@ -1,5 +1,6 @@
 #pragma once
 #include "arcade.h"
+#define UI_ROUND_SCALE 115 // Preserve the corner habitat cells on the circle.
 enum {
   CURSOR,
   TOOL,

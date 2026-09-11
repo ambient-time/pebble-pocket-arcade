@@ -26,7 +26,7 @@ from pebble_tool.commands.screenshot import ScreenshotCommand
 from pebble_tool.commands.emucontrol import send_data_to_qemu
 import pebble_tool.sdk.emulator as emulator
 from libpebble2.services.install import AppInstaller
-from libpebble2.protocol.apps import AppRunState, AppRunStateStart, AppRunStateStop
+from libpebble2.protocol.apps import AppRunState, AppRunStateStart, AppRunStateStop, AppRunStateRequest
 from libpebble2.protocol.logs import AppLogMessage, AppLogShippingControl
 from libpebble2.communication.transports.qemu.protocol import QemuButton
 
@@ -137,6 +137,10 @@ def run(platform):
         return pixels
     width, height = (200, 228) if platform == 'emery' else (260, 260)
     x, y = width // 2, 105 if platform == 'emery' else 126
+    factor=108 if platform=='emery' else 125
+    fx=(width-176*factor//100)//2;fy=(height-144*factor//100)//2
+    def game_point(x,y):
+        return fx+x*factor//100,fy+y*factor//100
     def pointer(px, py, down):
         events = [{'type': 'abs', 'data': {'axis': axis, 'value': round(value * 32767 / (size - 1))}}
                   for axis, value, size in [('x', px, width), ('y', py, height)]]
@@ -190,20 +194,35 @@ def run(platform):
         # Touch the player to wait, allowing the beacon to be destroyed.
         for _ in range(5):
             if current()['status']:break
-            px=(width-176)//2+18+current()['d0']*28+14
-            py=(height-144)//2+2+current()['d1']*28+14
+            px,py=game_point(18+current()['d0']*28+14,2+current()['d1']*28+14)
             touch([(px,py)])
         expect(status=2);grab('defeat')
         time.sleep(.6)
-        fx=(width-176)//2;fy=(height-144)//2
         # A tap outside the replay row or a drag into it must keep the result.
-        touch([(fx+10,fy+45)]);expect(status=2)
-        touch([(fx+10,fy+45),(fx+88,fy+115)]);expect(status=2)
-        touch([(fx+88,fy+115),(fx+108,fy+115),(fx+88,fy+115)]);expect(status=2)
-        touch([(fx+88,fy+115)]);expect(status=0,screen=0)
+        touch([game_point(10,45)]);expect(status=2)
+        touch([game_point(10,45),game_point(88,115)]);expect(status=2)
+        touch([game_point(88,115),game_point(108,115),game_point(88,115)]);expect(status=2)
+        touch([game_point(88,115)]);expect(status=0,screen=0)
         grab('touch-replayed')
+        for attempt in range(3):
+            before=current()
+            button('Back');expect(screen=1)
+            button('Up')
+            pixels=grab('exit-selected-'+str(attempt))
+            selected_rows=[y for y,row in enumerate(pixels)
+                if sum(all(row[4*x+k]>240 for k in range(3))
+                       for x in range(width)) > width//2]
+            assert selected_rows, 'Selected native menu row is not visible'
+            exit_y=selected_rows[len(selected_rows)//2]
+            pointer(width//2,exit_y,True);time.sleep(.07)
+            pointer(width//2,exit_y,False);time.sleep(.7)
+            active=watch.send_and_read(AppRunState(data=AppRunStateRequest()),AppRunState)
+            assert active.data.uuid != APP, 'Native menu exit did not close the app'
+            watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.8)
+            assert current()==before, (before,current())
+        grab('exit-resumed')
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','board','button solution across five turns','first action save/relaunch','pause','victory','cancel restart','restart','touch wait','beacon loss','finished save restored','one-press replay','outside and dragged touches ignored','one-tap replay'],'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','board','button solution across five turns','first action save/relaunch','pause','victory','cancel restart','restart','touch wait','beacon loss','finished save restored','one-press replay','outside and dragged touches ignored','one-tap replay','three touch menu exits with exact saved-game resume'],'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

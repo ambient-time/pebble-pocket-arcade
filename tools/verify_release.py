@@ -4,7 +4,7 @@ from pathlib import Path
 import hashlib, json, shutil, subprocess, sys, zipfile
 ROOT = Path(__file__).resolve().parent.parent
 name = sys.argv[1]
-version = sys.argv[2] if len(sys.argv) > 2 else '0.2.0'
+version = sys.argv[2] if len(sys.argv) > 2 else '0.3.0'
 base = ROOT / 'release' / name / version
 sha = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
 for line in (base / 'SHA256SUMS.txt').read_text().splitlines():

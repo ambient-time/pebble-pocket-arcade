@@ -1,5 +1,6 @@
 #pragma once
 #include "arcade.h"
+#define UI_ROUND_SCALE 120 // Keep the complete table border and drain in view.
 enum {
   BALL_X,
   BALL_Y,

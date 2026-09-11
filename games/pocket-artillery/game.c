@@ -6,9 +6,7 @@
 #include <string.h>
 const char *game_name = "Pocket Artillery";
 const char *game_rules =
-    "Destroy the other tank.\nUP/DOWN adjust angle.\nSELECT switches to "
-    "power.\nHold SELECT to fire.\nDrag the sky to aim; tap FIRE.\nBACK pauses "
-    "and saves.";
+    "Destroy the tank.\nUP/DOWN adjust.\nSELECT: angle/power\nHold SELECT: fire\nOr drag; tap FIRE.";
 int artillery_y(const Game *g, int who) {
   return g->d[TERRAIN + (who ? 157 : 18)] - 4;
 }
@@ -157,7 +155,7 @@ void game_input(Game *g, int action) {
 void game_touch(Game *g, int x, int y, int type) {
   if (type != 2 || g->status || g->d[PHASE])
     return;
-  if (y > 120 && x > 110) {
+  if (y >= 115 && y < 144 && x >= 119 && x < 174) {
     game_input(g, ACT_SPECIAL);
     return;
   }
@@ -212,6 +210,6 @@ void game_debug(const Game *g, char *out, size_t n) {
 
 void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
   snprintf(title, n, "%s", g->status == 1 ? "Tank defeated" : "Tank lost");
-  snprintf(detail, m, "%ld shots | Enemy %ld HP", (long)g->d[SHOTS],
+  snprintf(detail, m, "%ld shots\nEnemy %ld HP", (long)g->d[SHOTS],
            (long)g->d[ENEMY_HP]);
 }

@@ -12,7 +12,7 @@ void game_draw(const Game *g, GContext *c) {
   ink(c, GColorCyan);
   circle(c, 20, 72, 15, false);
   label(c, "DOCK", 0, 82, 42);
-  ink(c, g->d[BANKED] == 5 ? GColorYellow : GColorDarkGray);
+  ink(c, g->d[BANKED] == 5 ? GColorYellow : GColorLightGray);
   circle(c, 20, 18, 12, false);
   label(c, "EXIT", 0, 25, 40);
   for (int i = 0; i < 5; i++) {
@@ -41,6 +41,7 @@ void game_draw(const Game *g, GContext *c) {
     box(c, g->d[BEAM_X] / 100 - 3, g->d[BEAM_Y] / 100 - 3, 6, 6, false);
   }
   ink(c, GColorCyan);
+  graphics_context_set_stroke_width(c, 2);
   line(c, x + cx[a] * 7 / 1000, y + cy[a] * 7 / 1000,
        x + cx[(a + 6) % 16] * 5 / 1000, y + cy[(a + 6) % 16] * 5 / 1000);
   line(c, x + cx[a] * 7 / 1000, y + cy[a] * 7 / 1000,
@@ -57,4 +58,5 @@ void game_draw(const Game *g, GContext *c) {
     ink(c, GColorYellow);
     circle(c, 20, 72, 16 + (16 - g->d[FX]) * 2, false);
   }
+  graphics_context_set_stroke_width(c, 1);
 }

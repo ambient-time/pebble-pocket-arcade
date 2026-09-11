@@ -25,6 +25,13 @@ every ten seconds), at important transitions, and when leaving the app. An
 unexpected interruption may lose the last few seconds. Time does not pass while
 the app is closed or paused.
 
+## Readability
+
+The playfield and pieces fill more of the watch. Text uses bold fonts with an
+18-pixel minimum; actions and instructions use 24 pixels. Selected controls use
+a white fill and black text, and important markers retain outlines or shapes
+in addition to color. Touch and button controls are unchanged.
+
 ## Install and build
 
 Open the included `.pbw` with the Pebble phone app and install it on the connected
@@ -35,6 +42,6 @@ The source ZIP is a standalone Pebble project. Extract it, enter its directory,
 and run `pebble build` with SDK 4.33.1 and pebble-tool installed. It has no runtime
 network service or phone-side JavaScript dependency.
 
-Version 0.2.0. Created by Luke Steuber. MIT license.
+Version 0.3.0. Created by Luke Steuber. MIT license.
 Native emulator evidence covers both watch shapes; physical-watch validation
 is still separate. This package does not imply a Pebble Store release.

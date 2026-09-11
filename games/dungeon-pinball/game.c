@@ -4,9 +4,7 @@
 #include <string.h>
 const char *game_name = "Dungeon Pinball";
 const char *game_rules =
-    "Clear 3 dungeon chambers.\nHit skulls to open the gate.\nThen hit the "
-    "boss 3 times.\nUP: left / DOWN: right.\nSELECT launches the ball.\nHold "
-    "either screen half.";
+    "Clear 3 chambers.\nSkulls unlock boss.\nHit boss 3 times.\nUP/DOWN: flippers\nOr hold screen sides.\nSELECT launches.";
 const int game_controls = 1;
 static void chamber(Game *g) {
   const int positions[3][6] = {{43, 40, 132, 43, 88, 76},
@@ -221,7 +219,7 @@ void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
     alive += g->d[BUMPERS + i * 4 + 2];
   snprintf(b, m,
            g->d[WAITING] ? "SELECT: launch"
-           : alive       ? "Skulls %d  UP/DN flippers"
+           : alive       ? "Skulls %d  UP/DN: flip"
                          : "Gate open! Boss %d HP",
            alive ? alive : (int)g->d[BOSS]);
 }
@@ -236,6 +234,6 @@ void game_debug(const Game *g, char *out, size_t n) {
 void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
   snprintf(title, n, "%s",
            g->status == 1 ? "Dungeon cleared" : "Last ball lost");
-  snprintf(detail, m, "%d/3 cleared | %lu points", g->stage,
+  snprintf(detail, m, "%d/3 cleared\n%lu points", g->stage,
            (unsigned long)g->score);
 }

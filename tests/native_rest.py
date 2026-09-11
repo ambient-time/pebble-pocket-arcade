@@ -138,6 +138,11 @@ def run(platform):
         return pixels
     width, height = (200, 228) if platform == 'emery' else (260, 260)
     x, y = width // 2, 105 if platform == 'emery' else 126
+    round_scale={'space-salvage':115,'pocket-ecosystem':115,'dungeon-pinball':120,'train-dispatcher':125}
+    factor=108 if platform=='emery' else round_scale[ROOT.name]
+    fx=(width-176*factor//100)//2;fy=(height-144*factor//100)//2
+    def game_point(x,y):
+        return fx+x*factor//100,fy+y*factor//100
     def pointer(px, py, down):
         events = [{'type': 'abs', 'data': {'axis': axis, 'value': round(value * 32767 / (size - 1))}}
                   for axis, value, size in [('x', px, width), ('y', py, height)]]
@@ -164,8 +169,8 @@ def run(platform):
             button('Back');button('Down');button('Select');expect(screen=3);button('Select')
         expect(screen=0,status=0)
     def direct_tap(x,y):
+        x,y=game_point(x-fx,y-fy)
         pointer(x,y,True);time.sleep(.04);pointer(x,y,False);time.sleep(.15)
-    fx=(width-176)//2;fy=(height-144)//2
     checks=[]
     try:
         time.sleep(4);button('Back')
@@ -240,8 +245,8 @@ def run(platform):
             send_data_to_qemu(watch.transport,QemuButton(state=QemuButton.Button.Up|QemuButton.Button.Down))
             time.sleep(.3);grab('both-flippers')
             send_data_to_qemu(watch.transport,QemuButton(state=0))
-            pointer(fx+45,fy+122,True);time.sleep(.3);expect(hp=1,enemy=0);grab('touch-left');pointer(fx+45,fy+122,False);time.sleep(.15)
-            pointer(fx+135,fy+122,True);time.sleep(.3);expect(hp=0,enemy=1);grab('touch-right');pointer(fx+135,fy+122,False);time.sleep(.15)
+            pointer(*game_point(45,122),True);time.sleep(.3);expect(hp=1,enemy=0);grab('touch-left');pointer(*game_point(45,122),False);time.sleep(.15)
+            pointer(*game_point(135,122),True);time.sleep(.3);expect(hp=0,enemy=1);grab('touch-right');pointer(*game_point(135,122),False);time.sleep(.15)
             watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
             watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
             expect(screen=0,hp=0,enemy=0);checks+=['flippers released after resume']

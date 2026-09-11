@@ -4,8 +4,7 @@
 #include <string.h>
 const char *game_name = "One-Screen Tactics";
 const char *game_rules =
-    "Keep the beacon alive\nfor five turns.\nUP/DOWN choose a move.\nSELECT "
-    "moves or shoves.\nPush enemies into X pits.\nTap a neighbor to act.";
+    "Guard B for 5 turns.\nShove foes into X.\nUP/DOWN: move\nSELECT: act\nOr tap a neighbor.";
 static const int dx[] = {0, 1, 0, -1, 0}, dy[] = {-1, 0, 1, 0, 0};
 static void transform(int *x, int *y, int b) {
   if (b & 4)
@@ -181,6 +180,6 @@ void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
            g->status == 1         ? "Beacon defended"
            : g->d[INTEGRITY] <= 0 ? "Beacon destroyed"
                                   : "Defender lost");
-  snprintf(detail, m, "%ld/5 turns | %lu points", (long)g->d[ROUND],
+  snprintf(detail, m, "%ld/5 turns\n%lu points", (long)g->d[ROUND],
            (unsigned long)g->score);
 }

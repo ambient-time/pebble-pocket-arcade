@@ -137,6 +137,10 @@ def run(platform):
         return pixels
     width, height = (200, 228) if platform == 'emery' else (260, 260)
     x, y = width // 2, 105 if platform == 'emery' else 126
+    factor=108 if platform=='emery' else 125
+    fx=(width-176*factor//100)//2;fy=(height-144*factor//100)//2
+    def game_point(x,y):
+        return fx+x*factor//100,fy+y*factor//100
     def pointer(px, py, down):
         events = [{'type': 'abs', 'data': {'axis': axis, 'value': round(value * 32767 / (size - 1))}}
                   for axis, value, size in [('x', px, width), ('y', py, height)]]
@@ -171,11 +175,10 @@ def run(platform):
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)))
         time.sleep(.8)
         expect(screen=0,d0=45,d1=71,hp=100,enemy=100)
-        fx=(width-176)//2;fy=(height-144)//2
-        touch([(fx+76,fy+30),(fx+88,fy+21)])
+        touch([game_point(76,30),game_point(88,21)])
         assert current()['d0']!=45 or current()['d1']!=71
         grab('touch-aim')
-        touch([(fx+145,fy+132)])
+        touch([game_point(145,132)])
         expect(d3=1)
         grab('flight')
         button('Back');expect(screen=1)

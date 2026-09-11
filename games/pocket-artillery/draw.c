@@ -8,8 +8,10 @@ void game_draw(const Game *g, GContext *c) {
     box(c, (i * 71 + 13) % 176, (i * 29 + 7) % 65, 1, 1, true);
   }
   for (int x = 0; x < FIELD_W; x++) {
-    ink(c, x % 4 ? GColorDarkGreen : GColorArmyGreen);
+    ink(c, GColorArmyGreen);
     line(c, x, g->d[TERRAIN + x], x, 143);
+    ink(c, GColorLightGray);
+    box(c, x, g->d[TERRAIN + x], 1, 2, true);
   }
   for (int who = 0; who < 2; who++) {
     int x = who ? 157 : 18, y = artillery_y(g, who);
@@ -42,10 +44,10 @@ void game_draw(const Game *g, GContext *c) {
         circle(c, x / 100, y / 100, 1, true);
     }
     ink(c, GColorBlack);
-    box(c, 119, 122, 55, 21, true);
+    box(c, 119, 115, 55, 28, true);
     ink(c, GColorWhite);
-    box(c, 119, 122, 55, 21, false);
-    label(c, "FIRE", 124, 123, 46);
+    box(c, 119, 115, 55, 28, false);
+    large_label(c, "FIRE", 121, 114, 51);
   }
   if (g->d[PHASE] == 1) {
     ink(c, GColorYellow);
@@ -63,7 +65,7 @@ void game_draw(const Game *g, GContext *c) {
     }
   }
   char b[50];
-  snprintf(b, sizeof b, "%ld deg  %ld%%   wind %+ld", (long)g->d[ANGLE],
+  snprintf(b, sizeof b, "%ld°  %ld%%  Wind %+ld", (long)g->d[ANGLE],
            (long)g->d[POWER], (long)g->d[WIND]);
   ink(c, GColorWhite);
   label(c, b, 3, 1, 170);

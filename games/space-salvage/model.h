@@ -1,5 +1,6 @@
 #pragma once
 #include "arcade.h"
+#define UI_ROUND_SCALE 115 // The entire flight field must remain visible.
 enum {
   X,
   Y,

@@ -3,7 +3,7 @@
 extern const int train_paths[9][4];
 void game_draw(const Game *g, GContext *c) {
   for (int i = 0; i < 9; i++) {
-    ink(c, GColorDarkGray);
+    ink(c, GColorLightGray);
     line(c, train_paths[i][0], train_paths[i][1], train_paths[i][2],
          train_paths[i][3]);
   }
@@ -21,7 +21,7 @@ void game_draw(const Game *g, GContext *c) {
     char b[] = {'1' + j, 0};
     label(c, b, 38 + j * 48, 61, 20);
   }
-  const int sx[] = {48, 96, 171}, sy[] = {12, 132, 26};
+  const int sx[] = {48, 96, 166}, sy[] = {12, 132, 26};
   GColor colors[] = {GColorCyan, GColorYellow, GColorMagenta};
   for (int i = 0; i < 3; i++) {
     ink(c, colors[i]);

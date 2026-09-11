@@ -1,7 +1,7 @@
 #include "draw.h"
 #include "model.h"
 void game_draw(const Game *g, GContext *c) {
-  ink(c, GColorDarkGray);
+  ink(c, GColorLightGray);
   box(c, 6, 6, 164, 133, false);
   ink(c, GColorLightGray);
   line(c, 10, 98, 42, 124);
@@ -22,12 +22,14 @@ void game_draw(const Game *g, GContext *c) {
            : g->d[b + 2] == 2 ? GColorRed
                               : GColorOrange);
     circle(c, x, y, 10, true);
+    ink(c, GColorWhite);
+    circle(c, x, y, 10, false);
     ink(c, GColorBlack);
     box(c, x - 5, y - 3, 3, 3, true);
     box(c, x + 2, y - 3, 3, 3, true);
     line(c, x - 3, y + 5, x + 3, y + 5);
   }
-  ink(c, alive ? GColorDarkGray : GColorMagenta);
+  ink(c, alive ? GColorLightGray : GColorMagenta);
   box(c, 75, 10, 26, 25, false);
   if (alive) {
     line(c, 78, 10, 78, 34);
@@ -35,10 +37,10 @@ void game_draw(const Game *g, GContext *c) {
     line(c, 92, 10, 92, 34);
     line(c, 99, 10, 99, 34);
   } else {
-    label(c, "B", 76, 11, 24);
+    large_label(c, "B", 76, 7, 24);
     for (int i = 0; i < g->d[BOSS]; i++)
       box(c, 78 + i * 7, 35, 4, 3, true);
   }
   ink(c, GColorWhite);
-  circle(c, g->d[BALL_X] / 100, g->d[BALL_Y] / 100, 3, true);
+  circle(c, g->d[BALL_X] / 100, g->d[BALL_Y] / 100, 4, true);
 }

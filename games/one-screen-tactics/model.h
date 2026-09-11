@@ -1,5 +1,6 @@
 #pragma once
 #include "arcade.h"
+#define UI_ROUND_SCALE 125
 enum {
   PX,
   PY,
