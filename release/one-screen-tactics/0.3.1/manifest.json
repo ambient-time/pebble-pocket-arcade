@@ -1,0 +1,60 @@
+{
+  "game": "one-screen-tactics",
+  "version": "0.3.1",
+  "author": "Luke Steuber",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "pbwSHA256": "316757de493570a80bf50b125c3551a5b58c99ad275da01febce2f029a58c7c6",
+  "sourceCommit": "6eb07a9b690b181af68c3b3e27f0b89689aaf46b",
+  "nativeChecks": {
+    "emery": [
+      "rules",
+      "board",
+      "button solution across five turns",
+      "first action save/relaunch",
+      "pause",
+      "victory",
+      "cancel restart",
+      "restart",
+      "touch wait",
+      "beacon loss",
+      "finished save restored",
+      "one-press replay",
+      "outside and dragged touches ignored",
+      "one-tap replay",
+      "three touch menu exits with exact saved-game resume",
+      "About portrait and version",
+      "About freezes gameplay and ignores direction buttons",
+      "Select/Back/touch return to the same selected menu row and scroll position",
+      "repeated About bitmap load/release",
+      "touch Save and exit after About",
+      "saved game resumes without About time or input leakage"
+    ],
+    "gabbro": [
+      "rules",
+      "board",
+      "button solution across five turns",
+      "first action save/relaunch",
+      "pause",
+      "victory",
+      "cancel restart",
+      "restart",
+      "touch wait",
+      "beacon loss",
+      "finished save restored",
+      "one-press replay",
+      "outside and dragged touches ignored",
+      "one-tap replay",
+      "three touch menu exits with exact saved-game resume",
+      "About portrait and version",
+      "About freezes gameplay and ignores direction buttons",
+      "Select/Back/touch return to the same selected menu row and scroll position",
+      "repeated About bitmap load/release",
+      "touch Save and exit after About",
+      "saved game resumes without About time or input leakage"
+    ]
+  },
+  "physicalWatchValidated": false
+}

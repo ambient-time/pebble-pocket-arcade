@@ -113,3 +113,30 @@ text and board characters have substantially stronger apparent size and weight.
 Open: physical-watch readability, contrast and gameplay checks. Version 0.3.0
 is a local candidate; the existing 0.2.0 Store drafts are unchanged. Artifacts are
 in `release/<game>/0.3.0/` and `release/pocket-arcade-0.3.0.zip`.
+
+## 0.3.1 About and local game preference — 2026-09-10
+
+Done: all six games have a compact About screen using Luke Steuber’s original
+96-pixel portrait and the installed version. Tap, Select, or Back returns to
+exactly the selected menu row and scroll position. The portrait loads only while
+About is open, is destroyed on return, and can safely be absent if allocation
+fails. Gameplay stays paused. The existing deferred native menu exit remains.
+Pocket Artillery is preferred in the local catalog and guides; Crosswind keeps
+its separate legacy identity. No external listing was changed.
+
+Measured: all twelve exact-PBW native campaigns and their new About lifecycle,
+input, return, and saved-exit checks pass. Core sanitizer checks and 2.88 million
+randomized input/tick checks pass. All six portable source ZIPs rebuild; authored
+source and resources match commit 6eb07a9b690b181af68c3b3e27f0b89689aaf46b. The raw portrait
+matches the original PNG in each ZIP. UUIDs and game/save sources are unchanged
+from 0.3.0. The largest application stack frame is 368 bytes; SDK-reported
+static RAM footprints are 12,101–13,513 bytes.
+
+Observed: both native About layouts and return menus fit with readable bold
+text and the original portrait. About captures are identical across games for
+each screen shape. One emulator launch refused its local connection before
+install; a fresh isolated retry passed with the same PBW.
+
+Open: physical-watch contrast, readability, and runtime memory. Artifacts are
+`release/<game>/0.3.1/` and `release/pocket-arcade-0.3.1.zip`. No 0.3.1 Store
+upload, publication, or Git push was performed.

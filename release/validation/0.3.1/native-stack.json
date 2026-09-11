@@ -1,0 +1,164 @@
+{
+  "dungeon-pinball": [
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/dungeon-pinball/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/dungeon-pinball/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/dungeon-pinball/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/dungeon-pinball/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:529:5:main",
+      "bytes": 152,
+      "report": "build/dungeon-pinball/build/src/c/main.c.17.su"
+    }
+  ],
+  "one-screen-tactics": [
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/one-screen-tactics/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/one-screen-tactics/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/one-screen-tactics/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/one-screen-tactics/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:529:5:main",
+      "bytes": 152,
+      "report": "build/one-screen-tactics/build/src/c/main.c.17.su"
+    }
+  ],
+  "pocket-artillery": [
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/pocket-artillery/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/pocket-artillery/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/pocket-artillery/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/pocket-artillery/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:529:5:main",
+      "bytes": 152,
+      "report": "build/pocket-artillery/build/src/c/main.c.17.su"
+    }
+  ],
+  "pocket-ecosystem": [
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/pocket-ecosystem/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/pocket-ecosystem/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/pocket-ecosystem/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/pocket-ecosystem/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:529:5:main",
+      "bytes": 152,
+      "report": "build/pocket-ecosystem/build/src/c/main.c.17.su"
+    }
+  ],
+  "space-salvage": [
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/space-salvage/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/space-salvage/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/space-salvage/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/space-salvage/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:529:5:main",
+      "bytes": 152,
+      "report": "build/space-salvage/build/src/c/main.c.17.su"
+    }
+  ],
+  "train-dispatcher": [
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/train-dispatcher/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:79:13:log_state",
+      "bytes": 368,
+      "report": "build/train-dispatcher/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/train-dispatcher/build/src/c/main.c.17.su"
+    },
+    {
+      "source": "../src/c/main.c:168:13:draw",
+      "bytes": 304,
+      "report": "build/train-dispatcher/build/src/c/main.c.16.su"
+    },
+    {
+      "source": "../src/c/main.c:529:5:main",
+      "bytes": 152,
+      "report": "build/train-dispatcher/build/src/c/main.c.17.su"
+    }
+  ]
+}

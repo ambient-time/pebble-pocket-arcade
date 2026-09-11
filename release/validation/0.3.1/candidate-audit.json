@@ -1,0 +1,444 @@
+{
+  "verifiedAt": "2026-09-11T06:40:58.879982+00:00",
+  "sourceCommit": "6eb07a9b690b181af68c3b3e27f0b89689aaf46b",
+  "games": {
+    "dungeon-pinball": {
+      "version": "0.3.1",
+      "uuid": "d5e62be8-ca14-548b-9406-d8e701ef275e",
+      "targets": [
+        "emery",
+        "gabbro"
+      ],
+      "pbwSHA256": "25a7c4dc1909d1cba1bb46718636b4e6bd7b22a65ad44462395b040a14dd2e1f",
+      "pbwBytes": 38064,
+      "nativeChecks": [
+        {
+          "target": "emery",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        },
+        {
+          "target": "gabbro",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        }
+      ],
+      "maximumStackFrameBytes": 368,
+      "largestFrames": [
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/dungeon-pinball/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/dungeon-pinball/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/dungeon-pinball/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/dungeon-pinball/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:529:5:main",
+          "bytes": 152,
+          "report": "build/dungeon-pinball/build/src/c/main.c.17.su"
+        }
+      ],
+      "reportedRAMBytes": [
+        13513,
+        13513
+      ],
+      "reportedFreeHeapBytes": [
+        117559,
+        117559
+      ],
+      "physicalWatchValidated": false
+    },
+    "one-screen-tactics": {
+      "version": "0.3.1",
+      "uuid": "cff5b6fa-bd63-578c-ab4a-10548d0d7b74",
+      "targets": [
+        "emery",
+        "gabbro"
+      ],
+      "pbwSHA256": "316757de493570a80bf50b125c3551a5b58c99ad275da01febce2f029a58c7c6",
+      "pbwBytes": 35285,
+      "nativeChecks": [
+        {
+          "target": "emery",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        },
+        {
+          "target": "gabbro",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        }
+      ],
+      "maximumStackFrameBytes": 368,
+      "largestFrames": [
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/one-screen-tactics/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/one-screen-tactics/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/one-screen-tactics/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/one-screen-tactics/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:529:5:main",
+          "bytes": 152,
+          "report": "build/one-screen-tactics/build/src/c/main.c.17.su"
+        }
+      ],
+      "reportedRAMBytes": [
+        12101,
+        12101
+      ],
+      "reportedFreeHeapBytes": [
+        118971,
+        118971
+      ],
+      "physicalWatchValidated": false
+    },
+    "pocket-artillery": {
+      "version": "0.3.1",
+      "uuid": "8ad36591-5850-582c-9c98-ea606979cf4b",
+      "targets": [
+        "emery",
+        "gabbro"
+      ],
+      "pbwSHA256": "a7a8745709d902288a523b4cad1dace4bef33b97623d682114e5df3c8a96d25a",
+      "pbwBytes": 37489,
+      "nativeChecks": [
+        {
+          "target": "emery",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        },
+        {
+          "target": "gabbro",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        }
+      ],
+      "maximumStackFrameBytes": 368,
+      "largestFrames": [
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/pocket-artillery/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/pocket-artillery/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/pocket-artillery/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/pocket-artillery/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:529:5:main",
+          "bytes": 152,
+          "report": "build/pocket-artillery/build/src/c/main.c.17.su"
+        }
+      ],
+      "reportedRAMBytes": [
+        13215,
+        13215
+      ],
+      "reportedFreeHeapBytes": [
+        117857,
+        117857
+      ],
+      "physicalWatchValidated": false
+    },
+    "pocket-ecosystem": {
+      "version": "0.3.1",
+      "uuid": "28118ddd-5774-592c-92f3-1cd55e250d86",
+      "targets": [
+        "emery",
+        "gabbro"
+      ],
+      "pbwSHA256": "b0ae2b2a0782604fbaa9d34f059b498ecf0687691e3272e00effe73c773e6e02",
+      "pbwBytes": 37006,
+      "nativeChecks": [
+        {
+          "target": "emery",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        },
+        {
+          "target": "gabbro",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        }
+      ],
+      "maximumStackFrameBytes": 368,
+      "largestFrames": [
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/pocket-ecosystem/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/pocket-ecosystem/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/pocket-ecosystem/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/pocket-ecosystem/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:529:5:main",
+          "bytes": 152,
+          "report": "build/pocket-ecosystem/build/src/c/main.c.17.su"
+        }
+      ],
+      "reportedRAMBytes": [
+        12925,
+        12925
+      ],
+      "reportedFreeHeapBytes": [
+        118147,
+        118147
+      ],
+      "physicalWatchValidated": false
+    },
+    "space-salvage": {
+      "version": "0.3.1",
+      "uuid": "1d97a4de-8e1a-543c-b6cc-42ed84749aa6",
+      "targets": [
+        "emery",
+        "gabbro"
+      ],
+      "pbwSHA256": "392dc8ab17099c16e16286124a59374ba213311bc5e28e6099c81344afec0f37",
+      "pbwBytes": 37343,
+      "nativeChecks": [
+        {
+          "target": "emery",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        },
+        {
+          "target": "gabbro",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        }
+      ],
+      "maximumStackFrameBytes": 368,
+      "largestFrames": [
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/space-salvage/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/space-salvage/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/space-salvage/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/space-salvage/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:529:5:main",
+          "bytes": 152,
+          "report": "build/space-salvage/build/src/c/main.c.17.su"
+        }
+      ],
+      "reportedRAMBytes": [
+        13153,
+        13153
+      ],
+      "reportedFreeHeapBytes": [
+        117919,
+        117919
+      ],
+      "physicalWatchValidated": false
+    },
+    "train-dispatcher": {
+      "version": "0.3.1",
+      "uuid": "91758b31-5a15-5295-9e8c-f30720ae9cc6",
+      "targets": [
+        "emery",
+        "gabbro"
+      ],
+      "pbwSHA256": "746e9c9c2c6d6ffd2444c42dbd823eea8641e2d6e16efd5e32275c372634e7b6",
+      "pbwBytes": 35699,
+      "nativeChecks": [
+        {
+          "target": "emery",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        },
+        {
+          "target": "gabbro",
+          "passed": true,
+          "aboutChecks": [
+            "About portrait and version",
+            "About freezes gameplay and ignores direction buttons",
+            "Select/Back/touch return to the same selected menu row and scroll position",
+            "repeated About bitmap load/release",
+            "touch Save and exit after About",
+            "saved game resumes without About time or input leakage"
+          ]
+        }
+      ],
+      "maximumStackFrameBytes": 368,
+      "largestFrames": [
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/train-dispatcher/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:79:13:log_state",
+          "bytes": 368,
+          "report": "build/train-dispatcher/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/train-dispatcher/build/src/c/main.c.17.su"
+        },
+        {
+          "source": "../src/c/main.c:168:13:draw",
+          "bytes": 304,
+          "report": "build/train-dispatcher/build/src/c/main.c.16.su"
+        },
+        {
+          "source": "../src/c/main.c:529:5:main",
+          "bytes": 152,
+          "report": "build/train-dispatcher/build/src/c/main.c.17.su"
+        }
+      ],
+      "reportedRAMBytes": [
+        12325,
+        12325
+      ],
+      "reportedFreeHeapBytes": [
+        118747,
+        118747
+      ],
+      "physicalWatchValidated": false
+    }
+  }
+}

@@ -1,0 +1,13 @@
+Artillery aimed play: 200 wins, 0 losses / 200 seeds
+Deliberate misses: 50/50 losses
+PASS: terrain bounds, terminal freeze, atomic saves at every write and exact mid-flight resume
+PASS: all 8 boards solvable within five turns; all 8 idle lines lose; hazard shove removes attacker before its telegraphed attack
+PASS: 100 zero-strike complete shifts with routing, 50 unattended failures, occupied switch lock
+Salvage direct-route policy: 62/100 wins
+PASS: routes, bounds, deadline failure, quota-gated exit, impact invulnerability
+Pinball reactive flipper policy: 47 wins/100, furthest chamber 3
+Mean winning run: 69 seconds
+100/100 hands-off runs lose: flipper timing is required
+PASS: bounded substep physics, drain counted once, independently held flippers
+Ecosystem species introduction and rain policy: 89/100 balanced
+PASS: carrying bounds, starvation/collapse, intervention costs and achievable balance

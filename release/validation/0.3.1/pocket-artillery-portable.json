@@ -1,0 +1,14 @@
+{
+  "game": "pocket-artillery",
+  "passed": true,
+  "checks": [
+    "all release checksums",
+    "standalone source extraction",
+    "standalone SDK build",
+    "both native targets and resources"
+  ],
+  "releasePBWSHA256": "a7a8745709d902288a523b4cad1dace4bef33b97623d682114e5df3c8a96d25a",
+  "sourceZIPSHA256": "62bbe53fcb081c5ef7539ebb70b66789e99902f4f22cb03d98c6062570b18d84",
+  "rebuiltPBWSHA256": "d0110e8bd48e6d22cab32a9a404a328c75d0af3924de16ec2c0c7b76742211ff",
+  "note": "SDK rebuild metadata may change binary hashes; native gameplay reports cover the release PBW."
+}

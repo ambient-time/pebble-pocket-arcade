@@ -1,0 +1,14 @@
+{
+  "game": "one-screen-tactics",
+  "passed": true,
+  "checks": [
+    "all release checksums",
+    "standalone source extraction",
+    "standalone SDK build",
+    "both native targets and resources"
+  ],
+  "releasePBWSHA256": "316757de493570a80bf50b125c3551a5b58c99ad275da01febce2f029a58c7c6",
+  "sourceZIPSHA256": "e9201ee493da4f20e5f139c996df391fc6ed0fc7fa14c1149365538a00baf8d0",
+  "rebuiltPBWSHA256": "d71ee712fd8db0b1d2c6d293514786f776ebf2151379f97d13048789c6096488",
+  "note": "SDK rebuild metadata may change binary hashes; native gameplay reports cover the release PBW."
+}

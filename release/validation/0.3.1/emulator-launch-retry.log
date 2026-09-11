@@ -1,0 +1,43 @@
+Traceback (most recent call last):
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/libpebble2/communication/transports/websocket/__init__.py", line 39, in connect
+    self.ws = websocket.create_connection(self.url)
+              ~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/websocket/_core.py", line 664, in create_connection
+    websock.connect(url, **options)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/websocket/_core.py", line 263, in connect
+    self.sock, addrs = connect(
+                       ~~~~~~~^
+        url, self.sock_opt, proxy_info(**options), options.pop("socket", None)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/websocket/_http.py", line 146, in connect
+    sock = _open_socket(addrinfo_list, options.sockopt, options.timeout)
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/websocket/_http.py", line 233, in _open_socket
+    raise err
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/websocket/_http.py", line 210, in _open_socket
+    sock.connect(address)
+    ~~~~~~~~~~~~^^^^^^^^^
+ConnectionRefusedError: [Errno 61] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/luke/workspace/pebble-pocket-arcade/tests/native_rest.py", line 332, in <module>
+    run(parser.parse_args().platform)
+    ~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/luke/workspace/pebble-pocket-arcade/tests/native_rest.py", line 77, in run
+    watch = cmd._connect_emulator(platform, SDK_VERSION)
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/pebble_tool/commands/screenshot.py", line 359, in _connect_emulator
+    pebble.connect()
+    ~~~~~~~~~~~~~~^^
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/libpebble2/communication/__init__.py", line 56, in connect
+    self.transport.connect()
+    ~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/pebble_tool/sdk/emulator.py", line 133, in connect
+    super(ManagedEmulatorTransport, self).connect()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/luke/.local/share/uv/tools/pebble-tool/lib/python3.14/site-packages/libpebble2/communication/transports/websocket/__init__.py", line 41, in connect
+    raise ConnectionError(str(e))
+libpebble2.exceptions.ConnectionError: [Errno 61] Connection refused

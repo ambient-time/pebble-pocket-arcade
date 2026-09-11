@@ -1,0 +1,56 @@
+{
+  "game": "pocket-artillery",
+  "version": "0.3.1",
+  "author": "Luke Steuber",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "pbwSHA256": "a7a8745709d902288a523b4cad1dace4bef33b97623d682114e5df3c8a96d25a",
+  "sourceCommit": "6eb07a9b690b181af68c3b3e27f0b89689aaf46b",
+  "nativeChecks": {
+    "emery": [
+      "rules",
+      "button angle and power",
+      "pause and resume",
+      "idle save/relaunch",
+      "touch aim and fire",
+      "projectile flight",
+      "paused simulation freezes",
+      "opponent turn",
+      "long-select fire",
+      "mid-flight resume",
+      "complete aimed match victory",
+      "deliberate-miss defeat",
+      "one-press rematch",
+      "About portrait and version",
+      "About freezes gameplay and ignores direction buttons",
+      "Select/Back/touch return to the same selected menu row and scroll position",
+      "repeated About bitmap load/release",
+      "touch Save and exit after About",
+      "saved game resumes without About time or input leakage"
+    ],
+    "gabbro": [
+      "rules",
+      "button angle and power",
+      "pause and resume",
+      "idle save/relaunch",
+      "touch aim and fire",
+      "projectile flight",
+      "paused simulation freezes",
+      "opponent turn",
+      "long-select fire",
+      "mid-flight resume",
+      "complete aimed match victory",
+      "deliberate-miss defeat",
+      "one-press rematch",
+      "About portrait and version",
+      "About freezes gameplay and ignores direction buttons",
+      "Select/Back/touch return to the same selected menu row and scroll position",
+      "repeated About bitmap load/release",
+      "touch Save and exit after About",
+      "saved game resumes without About time or input leakage"
+    ]
+  },
+  "physicalWatchValidated": false
+}
