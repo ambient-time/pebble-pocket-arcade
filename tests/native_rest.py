@@ -29,6 +29,7 @@ import pebble_tool.sdk.emulator as emulator
 from libpebble2.services.install import AppInstaller
 from libpebble2.protocol.apps import AppRunState, AppRunStateStart, AppRunStateStop
 from libpebble2.protocol.logs import AppLogMessage, AppLogShippingControl
+from about import exercise_about
 from libpebble2.communication.transports.qemu.protocol import QemuButton
 
 ROOT = Path(__file__).resolve().parent.parent / 'build' / sys.argv[1]
@@ -178,6 +179,7 @@ def run(platform):
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)))
         time.sleep(1);expect(screen=2);grab('rules')
         button('Select');expect(screen=0);grab('play')
+        checks+=exercise_about(button,expect,current,grab,pointer,width,watch,APP)
         button('Back');expect(screen=1);grab('pause')
         before=current()['ticks'];time.sleep(1);assert current()['ticks']==before
         # Finger scrolls the actual native list without activating a row.

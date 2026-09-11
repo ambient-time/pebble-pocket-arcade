@@ -18,6 +18,9 @@ source_hashes={str(p.relative_to(project)):sha(p) for p in sorted((project/'src/
 for folder in [ROOT/'common',ROOT/'games'/name]:
  for p in folder.iterdir():
   if p.suffix in ['.h','.c'] and sha(p)!=source_hashes['src/c/'+p.name]:raise SystemExit('Generated source drift: '+str(p))
+for folder in [ROOT/'common/resources',ROOT/'games'/name/'resources']:
+ for p in folder.rglob('*'):
+  if p.is_file() and sha(p)!=sha(project/'resources'/p.relative_to(folder)):raise SystemExit('Generated resource drift: '+str(p))
 out=ROOT/'release'/name/version
 if out.exists():raise SystemExit('Immutable release already exists: '+str(out))
 out.mkdir(parents=True)

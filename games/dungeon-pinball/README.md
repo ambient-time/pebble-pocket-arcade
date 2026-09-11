@@ -20,7 +20,7 @@ That is an automated-play measurement, not a guarantee of human play length.
 
 ## Pause and resume
 
-Back opens the pause menu: Resume, Restart, How to play, and Save and exit.
+Back opens the pause menu: Resume, Restart, How to play, About, and Save and exit.
 Restart asks before replacing an unfinished game. On a finished round, press
 Select once or tap the outlined replay row to start again. The result explains
 the outcome and shows the round totals. The next launch resumes the saved game.
@@ -28,6 +28,9 @@ Menus support buttons and touch dragging. Active play saves periodically (about
 every ten seconds), at important transitions, and when leaving the app. An
 unexpected interruption may lose the last few seconds. Time does not pass while
 the app is closed or paused.
+
+About shows Luke Steuber’s portrait and this app’s version. Tap, Select, or
+Back returns to the same menu row without advancing the game.
 
 ## Readability
 
@@ -46,6 +49,6 @@ The source ZIP is a standalone Pebble project. Extract it, enter its directory,
 and run `pebble build` with SDK 4.33.1 and pebble-tool installed. It has no runtime
 network service or phone-side JavaScript dependency.
 
-Version 0.3.0. Created by Luke Steuber. MIT license.
+Version 0.3.1. Created by Luke Steuber. MIT license.
 Native emulator evidence covers both watch shapes; physical-watch validation
 is still separate. This package does not imply a Pebble Store release.

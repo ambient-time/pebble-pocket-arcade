@@ -6,6 +6,8 @@ static Game g;
 static Window *win;
 static Layer *canvas;
 static MenuLayer *menu;
+static GBitmap *portrait;
+static bool portrait_attempted, return_to_about_row;
 static AppTimer *timer, *replay_timer, *exit_timer;
 static bool result_visible, replay_ready, replay_touch, replay_select;
 static int replay_x, replay_y;
@@ -16,7 +18,8 @@ static int config_kind = -1; // 0 play, 1 pause, 2 rules, 3 restart confirmation
 int field_x, field_y;
 static const SaveIO io = {persist_read_data, persist_write_data};
 static const char *rows[] = {"Resume game", "Restart game", "How to play",
-                             "Save and exit"};
+                             "About", "Save and exit"};
+enum { MENU_ROWS = sizeof(rows) / sizeof(rows[0]) };
 void ink(GContext *c, GColor color) {
   graphics_context_set_fill_color(c, color);
   graphics_context_set_stroke_color(c, color);
@@ -94,6 +97,13 @@ static void log_state(void) {
 }
 static void schedule(void);
 static void sync(void) {
+  if (screen == 4 && !portrait_attempted) {
+    portrait_attempted = true;
+    portrait = gbitmap_create_with_resource(RESOURCE_ID_LUKE_PORTRAIT);
+  } else if (screen != 4) {
+    if (portrait) { gbitmap_destroy(portrait); portrait = NULL; }
+    portrait_attempted = false;
+  }
   bool show = screen == 1 && !save_error;
   if (show != menu_visible) {
     menu_visible = show;
@@ -103,9 +113,12 @@ static void sync(void) {
       app_touch_navigation_enable(show);
       window_set_touch_bridge_disabled(win, !show);
     }
-    if (show)
-      menu_layer_set_selected_index(menu, (MenuIndex){0, 0}, MenuRowAlignTop,
-                                    false);
+    if (show) {
+      if (!return_to_about_row)
+        menu_layer_set_selected_index(menu, (MenuIndex){0, 0}, MenuRowAlignTop,
+                                      false);
+      return_to_about_row = false;
+    }
   }
 }
 static void clicks(void *);
@@ -172,6 +185,15 @@ static void draw(Layer *l, GContext *c) {
   if (screen == 3) {
     text(c, "Restart game?", top + 28, 36, true);
     text(c, "SELECT: start fresh\nBACK: keep game", top + 90, 65, false);
+    return;
+  }
+  if (screen == 4) {
+    text(c, "ABOUT", 14, 32, true);
+    if (portrait)
+      graphics_draw_bitmap_in_rect(c, portrait, GRect((view_w - 96) / 2, 47, 96, 96));
+    text(c, "Luke Steuber", 144, 30, false);
+    caption(c, "Version " UI_APP_VERSION, 176);
+    caption(c, "Tap / Select / Back", 203);
     return;
   }
   if (screen == 1) return; // The native list owns the complete pause surface.
@@ -247,14 +269,19 @@ static void action(int a) {
   if (screen == 1) {
     MenuIndex i = menu_layer_get_selected_index(menu);
     if (a == ACT_UP)
-      i.row = (i.row + 3) % 4;
+      i.row = (i.row + MENU_ROWS - 1) % MENU_ROWS;
     else if (a == ACT_DOWN)
-      i.row = (i.row + 1) % 4;
+      i.row = (i.row + 1) % MENU_ROWS;
     else if (a == ACT_SELECT) {
       menu_select(menu, &i, NULL);
       return;
     }
     menu_layer_set_selected_index(menu, i, MenuRowAlignCenter, false);
+    refresh();
+    return;
+  }
+  if (screen == 4) {
+    if (a == ACT_SELECT) screen = 1;
     refresh();
     return;
   }
@@ -282,7 +309,9 @@ static void special(ClickRecognizerRef r, void *x) { action(ACT_SPECIAL); }
 static void back(ClickRecognizerRef r, void *x) {
   if (!focused || !canvas || exiting || save_error)
     return;
-  if (screen == 3 || screen == 2 || screen == 1)
+  if (screen == 4)
+    screen = 1;
+  else if (screen == 3 || screen == 2 || screen == 1)
     screen = 0;
   else
     screen = 1;
@@ -331,7 +360,7 @@ static void clicks(void *x) {
   window_long_click_subscribe(BUTTON_ID_SELECT, 450, special, NULL);
   window_single_click_subscribe(BUTTON_ID_BACK, back);
 }
-static uint16_t row_count(MenuLayer *m, uint16_t section, void *x) { return 4; }
+static uint16_t row_count(MenuLayer *m, uint16_t section, void *x) { return MENU_ROWS; }
 static int16_t row_height(MenuLayer *m, MenuIndex *i, void *x) { return UI_ROW_HEIGHT; }
 static void draw_row(GContext *c, const Layer *l, MenuIndex *i, void *x) {
   GRect r = layer_get_bounds(l);
@@ -361,6 +390,10 @@ static void menu_select(MenuLayer *m, MenuIndex *i, void *x) {
     screen = 3;
   else if (row == 2)
     screen = 2;
+  else if (row == 3) {
+    return_to_about_row = true;
+    screen = 4;
+  }
   else if (save()) {
     request_exit();
     return;
@@ -399,7 +432,7 @@ static void touch(const TouchEvent *e, void *x) {
       game_touch(&g, world_x(e->x), world_y(e->y), 1);
   } else if (touching) {
     touching = false;
-    if (screen == 2 || save_error)
+    if (screen == 2 || screen == 4 || save_error)
       action(ACT_SELECT);
     else if (screen == 3) {
       if (e->y > view_h / 2)
@@ -486,6 +519,7 @@ static void deinit(void) {
   if (touch_on)
     touch_service_unsubscribe();
   app_focus_service_unsubscribe();
+  if (portrait) { gbitmap_destroy(portrait); portrait = NULL; }
   menu_layer_destroy(menu);
   menu = NULL;
   layer_destroy(canvas);

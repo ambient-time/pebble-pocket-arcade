@@ -28,6 +28,7 @@ import pebble_tool.sdk.emulator as emulator
 from libpebble2.services.install import AppInstaller
 from libpebble2.protocol.apps import AppRunState, AppRunStateStart, AppRunStateStop, AppRunStateRequest
 from libpebble2.protocol.logs import AppLogMessage, AppLogShippingControl
+from about import exercise_about
 from libpebble2.communication.transports.qemu.protocol import QemuButton
 
 ROOT = Path(__file__).resolve().parent.parent / 'build' / 'one-screen-tactics'
@@ -161,6 +162,7 @@ def run(platform):
         time.sleep(1)
         expect(screen=2);grab('rules')
         button('Select');expect(screen=0);grab('board')
+        about_checks=exercise_about(button,expect,current,grab,pointer,width,watch,APP)
         board=current()['stage']
         oracle=Path(__file__).resolve().parent.parent/'build/tactics-oracle'
         path=list(map(int,subprocess.check_output([str(oracle),str(board)],text=True).split()))
@@ -222,7 +224,7 @@ def run(platform):
             assert current()==before, (before,current())
         grab('exit-resumed')
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','board','button solution across five turns','first action save/relaunch','pause','victory','cancel restart','restart','touch wait','beacon loss','finished save restored','one-press replay','outside and dragged touches ignored','one-tap replay','three touch menu exits with exact saved-game resume'],'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','board','button solution across five turns','first action save/relaunch','pause','victory','cancel restart','restart','touch wait','beacon loss','finished save restored','one-press replay','outside and dragged touches ignored','one-tap replay','three touch menu exits with exact saved-game resume']+about_checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:

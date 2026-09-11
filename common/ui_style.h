@@ -2,6 +2,7 @@
 #pragma once
 #include <pebble.h>
 #include "model.h"
+#define UI_APP_VERSION "0.3.1"
 #define UI_FONT_SMALL FONT_KEY_GOTHIC_18_BOLD
 #define UI_FONT_BODY FONT_KEY_GOTHIC_24_BOLD
 #define UI_FONT_TITLE FONT_KEY_GOTHIC_28_BOLD

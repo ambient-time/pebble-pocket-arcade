@@ -4,16 +4,16 @@ Six native games by Luke Steuber for Pebble Time 2 and Pebble Round 2. Each is a
 separate app with buttons, touch, a pause menu, and saved progress.
 
 [Open the local install page](release/index.html) ·
-[Download the complete bundle](release/pocket-arcade-0.3.0.zip)
+[Download the complete bundle](release/pocket-arcade-0.3.1.zip)
 
 | Game | Objective | Session | Rules and controls |
 | --- | --- | --- | --- |
-| [Space Salvage](release/space-salvage/0.3.0/space-salvage-0.3.0.pbw) | Bank five crates, then reach the exit with hull remaining | 150-second limit | [Guide](games/space-salvage/README.md) |
-| [Pocket Artillery](release/pocket-artillery/0.3.0/pocket-artillery-0.3.0.pbw) | Destroy the opposing tank across destructible terrain | A few minutes; no aiming timer | [Guide](games/pocket-artillery/README.md) |
-| [Dungeon Pinball](release/dungeon-pinball/0.3.0/dungeon-pinball-0.3.0.pbw) | Defeat three chambers of skull targets and bosses with three balls | About 1–3 minutes | [Guide](games/dungeon-pinball/README.md) |
-| [Train Dispatcher](release/train-dispatcher/0.3.0/train-dispatcher-0.3.0.pbw) | Deliver 18 trains before three mistakes | About two minutes | [Guide](games/train-dispatcher/README.md) |
-| [Pocket Ecosystem](release/pocket-ecosystem/0.3.0/pocket-ecosystem-0.3.0.pbw) | Maintain plants, grazers, hunters, and water for 60 consecutive seconds | Continues after the balance milestone | [Guide](games/pocket-ecosystem/README.md) |
-| [One-Screen Tactics](release/one-screen-tactics/0.3.0/one-screen-tactics-0.3.0.pbw) | Keep yourself and the beacon alive through five enemy turns | Five turns; no timer | [Guide](games/one-screen-tactics/README.md) |
+| [Space Salvage](release/space-salvage/0.3.1/space-salvage-0.3.1.pbw) | Bank five crates, then reach the exit with hull remaining | 150-second limit | [Guide](games/space-salvage/README.md) |
+| [Pocket Artillery](release/pocket-artillery/0.3.1/pocket-artillery-0.3.1.pbw) | Destroy the opposing tank across destructible terrain | A few minutes; no aiming timer | [Guide](games/pocket-artillery/README.md) |
+| [Dungeon Pinball](release/dungeon-pinball/0.3.1/dungeon-pinball-0.3.1.pbw) | Defeat three chambers of skull targets and bosses with three balls | About 1–3 minutes | [Guide](games/dungeon-pinball/README.md) |
+| [Train Dispatcher](release/train-dispatcher/0.3.1/train-dispatcher-0.3.1.pbw) | Deliver 18 trains before three mistakes | About two minutes | [Guide](games/train-dispatcher/README.md) |
+| [Pocket Ecosystem](release/pocket-ecosystem/0.3.1/pocket-ecosystem-0.3.1.pbw) | Maintain plants, grazers, hunters, and water for 60 consecutive seconds | Continues after the balance milestone | [Guide](games/pocket-ecosystem/README.md) |
+| [One-Screen Tactics](release/one-screen-tactics/0.3.1/one-screen-tactics-0.3.1.pbw) | Keep yourself and the beacon alive through five enemy turns | Five turns; no timer | [Guide](games/one-screen-tactics/README.md) |
 
 ## Installation and saves
 
@@ -21,7 +21,7 @@ Open a PBW with the Pebble phone app to install it on the connected watch. The
 packages include only emery and gabbro targets. Touch requires firmware 4.33.2
 or later; buttons remain available.
 
-Back pauses and opens Resume, Restart, How to play, and Save and exit. Restart
+Back pauses and opens Resume, Restart, How to play, About, and Save and exit. Restart
 asks before replacing an unfinished game. Finished rounds show their outcome
 and totals, then one Select press or a tap on the replay row starts again.
 A held button or continuing drag cannot dismiss a new result. Launching again
@@ -31,9 +31,17 @@ interruption may lose the last few seconds. Closed-app time does not advance.
 Saves use two checksum-verified snapshots, retaining the preceding intact copy
 if a write is interrupted.
 
+## About and game choice
+
+About shows Luke Steuber’s portrait and the installed app version. Tap, Select,
+or Back returns to the same pause-menu row. Gameplay stays paused.
+
+Pocket Artillery is the preferred artillery game in this collection. Crosswind
+remains a separate legacy app with its own identity and saved games.
+
 ## Readability
 
-The 0.3.0 playfields fill more of each watch: 8% larger on Time 2 and 15–25%
+The 0.3.1 playfields fill more of each watch: 8% larger on Time 2 and 15–25%
 larger on Round 2, with per-game limits to keep required targets visible.
 Body text and menu actions use 24-pixel bold fonts. Compact counters and board
 labels use an 18-pixel bold minimum; short titles can use 28 pixels. Selected
@@ -62,7 +70,7 @@ reports, and checksum manifests. `release/validation/` holds core results,
 randomized invariant results, and independent source rebuild reports.
 `PLAN.md` records the acceptance checklist.
 
-Emulator checks do not replace physical-watch testing. Version 0.3.0 is a local test candidate. Version 0.2.0 remains uploaded to the Pebble developer account as six
+Emulator checks do not replace physical-watch testing. Version 0.3.1 is a local test candidate. Version 0.2.0 remains uploaded to the Pebble developer account as six
 unlisted apps with draft releases. None is publicly published. See the
 [store receipts](store/0.2.0/publication.json) and
 [listing notes](store/0.2.0/README.md).

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Assemble portable native source from the shared shell and a game module."""
-import json,shutil,subprocess,sys,uuid
+import json,re,shutil,subprocess,sys,uuid
 from pathlib import Path
 root=Path(__file__).resolve().parent.parent
 name=sys.argv[1]
@@ -14,9 +14,11 @@ for stale in src.iterdir():
 for folder in [root/'common',source]:
     for path in folder.iterdir():
         if path.suffix in ['.h','.c']:shutil.copy2(path,src/path.name)
-meta={'name':name,'version':'0.3.0','author':'Luke Steuber','private':True,'dependencies':{},'pebble':{'displayName':name.replace('-',' ').title(),'uuid':str(uuid.uuid5(uuid.NAMESPACE_URL,'https://lukesteuber.com/pebble/'+name)),'sdkVersion':'3','enableMultiJS':False,'targetPlatforms':['emery','gabbro'],'watchapp':{'watchface':False},'messageKeys':[],'resources':{'media':[]}}}
+version=re.search(r'#define UI_APP_VERSION "([^"]+)"',(root/'common/ui_style.h').read_text()).group(1)
+meta={'name':name,'version':version,'author':'Luke Steuber','private':True,'dependencies':{},'pebble':{'displayName':name.replace('-',' ').title(),'uuid':str(uuid.uuid5(uuid.NAMESPACE_URL,'https://lukesteuber.com/pebble/'+name)),'sdkVersion':'3','enableMultiJS':False,'targetPlatforms':['emery','gabbro'],'watchapp':{'watchface':False},'messageKeys':[],'resources':{'media':[]}}}
 shutil.copytree(source/'resources',project/'resources',dirs_exist_ok=True)
-meta['pebble']['resources']['media']=[{'type':'bitmap','name':'MENU_ICON','file':'menu.png','menuIcon':True}]
+shutil.copytree(root/'common/resources',project/'resources',dirs_exist_ok=True)
+meta['pebble']['resources']['media']=[{'type':'bitmap','name':'MENU_ICON','file':'menu.png','menuIcon':True},{'type':'bitmap','name':'LUKE_PORTRAIT','file':'luke-96.png'}]
 (project/'package.json').write_text(json.dumps(meta,indent=2)+'\n')
 shutil.copy2(root/'tools/wscript',project/'wscript')
 subprocess.run([shutil.which('pebble') or 'pebble','build'],cwd=project,check=True)
