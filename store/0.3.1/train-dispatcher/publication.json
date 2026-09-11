@@ -1,0 +1,50 @@
+{
+  "title": "Train Dispatcher",
+  "slug": "train-dispatcher",
+  "version": "0.3.1",
+  "pbw": "release/train-dispatcher/0.3.1/train-dispatcher-0.3.1.pbw",
+  "pbwSHA256": "746e9c9c2c6d6ffd2444c42dbd823eea8641e2d6e16efd5e32275c372634e7b6",
+  "uuid": "91758b31-5a15-5295-9e8c-f30720ae9cc6",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "release": "release/train-dispatcher/0.3.1",
+  "appId": "7740b7c3376d451ba5e451bb",
+  "media": "store/0.3.1/train-dispatcher",
+  "releaseNotes": "Larger playfields and text make the action easier to read. About now includes a small portrait of Luke, and returning from the menu resumes play reliably.",
+  "sources": {
+    "release/train-dispatcher/0.3.1/screenshots/emery-play.png": "9c21db75b7d90e6012f83d819536e8c7d1bee368c703069b310f2d5832ea6b66",
+    "release/train-dispatcher/0.3.1/screenshots/emery-traffic.png": "a94cf75d7c8dac09ff21a2d1adf3f27be264b075825ffbdc3551ce3561d59cf2",
+    "release/train-dispatcher/0.3.1/screenshots/emery-completed-shift.png": "4ecdffe8885f056d5d472372bb8633dce7e1c3ff6b4fa1e5c69b0df0a0780a17",
+    "release/train-dispatcher/0.3.1/screenshots/emery-rules.png": "f593c9215ebbff2208b7fdafe4c770a5c03c0193425b026ffb029b6efedd968d",
+    "release/train-dispatcher/0.3.1/screenshots/emery-about.png": "be6416c13788462d7d100f7cf16a13826021ee50d9264852ef53ce0fdf05abd4",
+    "release/train-dispatcher/0.3.1/screenshots/gabbro-play.png": "2e24c994c0fd53a2dc24573d3f22f4a30ffe5b0e17c64cde72bd19c4421bf3d9",
+    "release/train-dispatcher/0.3.1/screenshots/gabbro-traffic.png": "643f7acdaa964c091756310d1f9281fc335ca68da39f492862acfc89f637bdbb",
+    "release/train-dispatcher/0.3.1/screenshots/gabbro-completed-shift.png": "045a4442b8670685c0df1e590eeb58c340578958be5a19dcc4ffd6b5dc8164ce",
+    "release/train-dispatcher/0.3.1/screenshots/gabbro-rules.png": "7dc2a945b3be19c27b1a28b5217e0f446f4e9d84d414811b6c04035298e57a8b",
+    "release/train-dispatcher/0.3.1/screenshots/gabbro-about.png": "105aae846b8343de8f2c22543f67d93ca3936b81d487fa90e3e193a12fc55bd6"
+  },
+  "appstoreURL": "https://apps.repebble.com/7740b7c3376d451ba5e451bb",
+  "pbwDownloadURL": "https://appstore-api.repebble.com/api/assets/pbw/7740b7c3376d451ba5e451bb/0.3.1/9b3e7949-11b9-443a-90a3-fe0b1838f6a9.pbw",
+  "publicDownloadSHA256": "746e9c9c2c6d6ffd2444c42dbd823eea8641e2d6e16efd5e32275c372634e7b6",
+  "verifiedAt": "2026-09-11T07:06:42.165856+00:00",
+  "visibility": "Published",
+  "releaseState": "Published",
+  "physicalValidation": "Not performed; exact packages passed native emulator checks on both targets.",
+  "savedMedia": {
+    "emery": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/7740b7c3376d451ba5e451bb/emery/737b0cfa-4e78-4dfc-bc5a-816629d38eac.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/7740b7c3376d451ba5e451bb/emery/3dc2d1d9-89aa-4c84-8437-983c46aecbbc.png"
+    },
+    "gabbro": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/7740b7c3376d451ba5e451bb/gabbro/97338771-37cc-4d7e-8962-cedf579dc304.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/7740b7c3376d451ba5e451bb/gabbro/80cff7c4-0d24-4e76-a831-0f83fac43070.png"
+    }
+  },
+  "mediaVerification": "Reopened both saved target panels: five screenshots with a primary GIF and one banner per watch. GIF frames match unchanged native captures pixel for pixel.",
+  "descriptionChanges": "Owner title and description preserved.",
+  "physicalWatchValidated": false
+}

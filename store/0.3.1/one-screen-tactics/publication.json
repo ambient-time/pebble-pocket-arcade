@@ -1,0 +1,50 @@
+{
+  "title": "One-Screen Tactics",
+  "slug": "one-screen-tactics",
+  "version": "0.3.1",
+  "pbw": "release/one-screen-tactics/0.3.1/one-screen-tactics-0.3.1.pbw",
+  "pbwSHA256": "316757de493570a80bf50b125c3551a5b58c99ad275da01febce2f029a58c7c6",
+  "uuid": "cff5b6fa-bd63-578c-ab4a-10548d0d7b74",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "release": "release/one-screen-tactics/0.3.1",
+  "appId": "bd8c735ad2e5423db857d736",
+  "media": "store/0.3.1/one-screen-tactics",
+  "releaseNotes": "Larger playfields and text make the action easier to read. About now includes a small portrait of Luke, and returning from the menu resumes play reliably.",
+  "sources": {
+    "release/one-screen-tactics/0.3.1/screenshots/emery-board.png": "50a34257b2cf7c2db2f26874116e95bbf2f41cd7e460d92bf0286a2575c30dfa",
+    "release/one-screen-tactics/0.3.1/screenshots/emery-first-action.png": "6499f5a8b37fc61e2eb81da8f10b4ac7a66f946567207dd080fe098dc892c810",
+    "release/one-screen-tactics/0.3.1/screenshots/emery-victory.png": "75f9c625bb4c8d26b1041561748151f1c362cc3554e72c617ad09a3552c88f39",
+    "release/one-screen-tactics/0.3.1/screenshots/emery-rules.png": "11403de130e3c7e42d23a5827ba6a96c6688fd94ddc81825e5c49b4d0e26b31b",
+    "release/one-screen-tactics/0.3.1/screenshots/emery-about.png": "be6416c13788462d7d100f7cf16a13826021ee50d9264852ef53ce0fdf05abd4",
+    "release/one-screen-tactics/0.3.1/screenshots/gabbro-board.png": "30ecdeab67cca135060c7a3244f23042a29e16a43ba00843e62220ddd04f6aa5",
+    "release/one-screen-tactics/0.3.1/screenshots/gabbro-first-action.png": "538c39a8c2d0a10a4cc7e861b747bfd16f21bcf63e6c4a3e23dbb79e41c73f30",
+    "release/one-screen-tactics/0.3.1/screenshots/gabbro-victory.png": "8bdea1b6b063f61598f896091e493751d4fcd459bb12b6c4986ac1f6fa49377d",
+    "release/one-screen-tactics/0.3.1/screenshots/gabbro-rules.png": "d007610396d96f3079b8d70e9946b499113b291661c0abc3b6a2aab9a7da68a6",
+    "release/one-screen-tactics/0.3.1/screenshots/gabbro-about.png": "105aae846b8343de8f2c22543f67d93ca3936b81d487fa90e3e193a12fc55bd6"
+  },
+  "appstoreURL": "https://apps.repebble.com/bd8c735ad2e5423db857d736",
+  "pbwDownloadURL": "https://appstore-api.repebble.com/api/assets/pbw/bd8c735ad2e5423db857d736/0.3.1/7b3811f5-afe0-46d1-bcf3-844d674246a8.pbw",
+  "publicDownloadSHA256": "316757de493570a80bf50b125c3551a5b58c99ad275da01febce2f029a58c7c6",
+  "verifiedAt": "2026-09-11T07:08:20.321517+00:00",
+  "visibility": "Published",
+  "releaseState": "Published",
+  "physicalValidation": "Not performed; exact packages passed native emulator checks on both targets.",
+  "savedMedia": {
+    "emery": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/bd8c735ad2e5423db857d736/emery/1ba19687-7f8a-478d-9867-5e31f2b2ee6f.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/bd8c735ad2e5423db857d736/emery/723bf8f8-2c9a-4ae3-9300-88e31b1cd58f.png"
+    },
+    "gabbro": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/bd8c735ad2e5423db857d736/gabbro/d2af613e-98d5-4cf4-b272-2939e1cc7ee9.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/bd8c735ad2e5423db857d736/gabbro/9cae4c7f-899b-4cb0-be1c-77a17a1f0f73.png"
+    }
+  },
+  "mediaVerification": "Reopened both saved target panels: five screenshots with a primary GIF and one banner per watch. GIF frames match unchanged native captures pixel for pixel.",
+  "descriptionChanges": "Owner title and description preserved.",
+  "physicalWatchValidated": false
+}

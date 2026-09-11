@@ -1,0 +1,50 @@
+{
+  "title": "Dungeon Pinball",
+  "slug": "dungeon-pinball",
+  "version": "0.3.1",
+  "pbw": "release/dungeon-pinball/0.3.1/dungeon-pinball-0.3.1.pbw",
+  "pbwSHA256": "25a7c4dc1909d1cba1bb46718636b4e6bd7b22a65ad44462395b040a14dd2e1f",
+  "uuid": "d5e62be8-ca14-548b-9406-d8e701ef275e",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "release": "release/dungeon-pinball/0.3.1",
+  "appId": "af9f35b5deee4c228f985ee6",
+  "media": "store/0.3.1/dungeon-pinball",
+  "releaseNotes": "Larger playfields and text make the action easier to read. About now includes a small portrait of Luke, and returning from the menu resumes play reliably.",
+  "sources": {
+    "release/dungeon-pinball/0.3.1/screenshots/emery-play.png": "b066adff7187979d43dfe9d176e38caea892a529ec2c9d844c7fad24b14ad9d1",
+    "release/dungeon-pinball/0.3.1/screenshots/emery-both-flippers.png": "5ca0b815f5ad3c2e36aade4a7f9e3b4353d072d201bd6d520ed8e8fc4ead6ff7",
+    "release/dungeon-pinball/0.3.1/screenshots/emery-attempt-0-chamber-2.png": "2577eb08dfe8b406c135e5f3f41c6095d18b7c181ff6e7a2fdc538cc65f5761b",
+    "release/dungeon-pinball/0.3.1/screenshots/emery-dungeon-cleared.png": "c1001ebe0ccd952f93668ec0b57e884618c39d6d773503cd14be8bbe51c06f1a",
+    "release/dungeon-pinball/0.3.1/screenshots/emery-about.png": "be6416c13788462d7d100f7cf16a13826021ee50d9264852ef53ce0fdf05abd4",
+    "release/dungeon-pinball/0.3.1/screenshots/gabbro-play.png": "14e0c2319b2a2784023a93fe3f81a7097e52da8eef892a0adb8ef1b2fc374611",
+    "release/dungeon-pinball/0.3.1/screenshots/gabbro-both-flippers.png": "6b87d5d016ef37199c1f3df86c2fc7d73134611eb3eef7a5e36019e2453345ab",
+    "release/dungeon-pinball/0.3.1/screenshots/gabbro-attempt-0-chamber-2.png": "618c8f20ecc6b273e4539d1b8f9daed83504b407381859ac18a082653fc07b38",
+    "release/dungeon-pinball/0.3.1/screenshots/gabbro-dungeon-cleared.png": "0d3a6838b0103a5206e15bdef64111a9aa2be168147ae491d69a5d49a37a607d",
+    "release/dungeon-pinball/0.3.1/screenshots/gabbro-about.png": "105aae846b8343de8f2c22543f67d93ca3936b81d487fa90e3e193a12fc55bd6"
+  },
+  "appstoreURL": "https://apps.repebble.com/af9f35b5deee4c228f985ee6",
+  "pbwDownloadURL": "https://appstore-api.repebble.com/api/assets/pbw/af9f35b5deee4c228f985ee6/0.3.1/d0de2adb-fcde-4f96-baff-ec3eedcfb9fe.pbw",
+  "publicDownloadSHA256": "25a7c4dc1909d1cba1bb46718636b4e6bd7b22a65ad44462395b040a14dd2e1f",
+  "verifiedAt": "2026-09-11T07:05:38.202464+00:00",
+  "visibility": "Published",
+  "releaseState": "Published",
+  "physicalValidation": "Not performed; exact packages passed native emulator checks on both targets.",
+  "savedMedia": {
+    "emery": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/af9f35b5deee4c228f985ee6/emery/26c31ef0-a1dc-42a1-b269-7ed1590d41ab.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/af9f35b5deee4c228f985ee6/emery/2f3ce546-57f3-4d6f-9fee-72db9f8938e0.png"
+    },
+    "gabbro": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/af9f35b5deee4c228f985ee6/gabbro/b660fe62-e72b-4282-a7c1-beadb17301a1.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/af9f35b5deee4c228f985ee6/gabbro/342ecca2-5c81-4737-a763-ccc42477165d.png"
+    }
+  },
+  "mediaVerification": "Reopened both saved target panels: five screenshots with a primary GIF and one banner per watch. GIF frames match unchanged native captures pixel for pixel.",
+  "descriptionChanges": "Owner title and description preserved.",
+  "physicalWatchValidated": false
+}

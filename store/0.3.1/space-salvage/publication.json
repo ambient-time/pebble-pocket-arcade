@@ -1,0 +1,50 @@
+{
+  "title": "Space Salvage",
+  "slug": "space-salvage",
+  "version": "0.3.1",
+  "pbw": "release/space-salvage/0.3.1/space-salvage-0.3.1.pbw",
+  "pbwSHA256": "392dc8ab17099c16e16286124a59374ba213311bc5e28e6099c81344afec0f37",
+  "uuid": "1d97a4de-8e1a-543c-b6cc-42ed84749aa6",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "release": "release/space-salvage/0.3.1",
+  "appId": "68aa4add5dd34617aa03fab8",
+  "media": "store/0.3.1/space-salvage",
+  "releaseNotes": "Larger playfields and text make the action easier to read. About now includes a small portrait of Luke, and returning from the menu resumes play reliably.",
+  "sources": {
+    "release/space-salvage/0.3.1/screenshots/emery-play.png": "51e26f9620beadb35008f63d86dae8b4e6e1b35da7b3a4794839cd8c25bf92b0",
+    "release/space-salvage/0.3.1/screenshots/emery-tether.png": "6bd8781058ec2483f4372c3720ecf5a2bc746c219e6a345e811a85036125ac55",
+    "release/space-salvage/0.3.1/screenshots/emery-first-delivery.png": "5d6b1f905df466e7ea6a2d55b4b9fa899a425b655abd1cb9577df3d4ea9485e6",
+    "release/space-salvage/0.3.1/screenshots/emery-escaped.png": "1a08092987b7af6460c7fa658a4e635ffd9b01d60a7ec916baf38eb0ee344f15",
+    "release/space-salvage/0.3.1/screenshots/emery-about.png": "be6416c13788462d7d100f7cf16a13826021ee50d9264852ef53ce0fdf05abd4",
+    "release/space-salvage/0.3.1/screenshots/gabbro-play.png": "17c63ac263a9a04cd0e418881a392e520a0083363750d80bdbc77ba9b64964da",
+    "release/space-salvage/0.3.1/screenshots/gabbro-tether.png": "18403de9a1c8f7d1e5f7af1c57af4e7582edf861b3bd8ea643f6dc4298ed68e0",
+    "release/space-salvage/0.3.1/screenshots/gabbro-first-delivery.png": "d7456a89b89a22ec6a677e3ad61944bc1bb8ce3dc0141e4f2a4b36c58e39c8c4",
+    "release/space-salvage/0.3.1/screenshots/gabbro-escaped.png": "838ec85109a4bd1f418519dec0557e59998df8a2e0709b932ef255286585bbc6",
+    "release/space-salvage/0.3.1/screenshots/gabbro-about.png": "105aae846b8343de8f2c22543f67d93ca3936b81d487fa90e3e193a12fc55bd6"
+  },
+  "appstoreURL": "https://apps.repebble.com/68aa4add5dd34617aa03fab8",
+  "pbwDownloadURL": "https://appstore-api.repebble.com/api/assets/pbw/68aa4add5dd34617aa03fab8/0.3.1/622ebf1f-cd8f-47da-bad7-d715631165c8.pbw",
+  "publicDownloadSHA256": "392dc8ab17099c16e16286124a59374ba213311bc5e28e6099c81344afec0f37",
+  "verifiedAt": "2026-09-11T07:03:51.246804+00:00",
+  "visibility": "Published",
+  "releaseState": "Published",
+  "physicalValidation": "Not performed; exact packages passed native emulator checks on both targets.",
+  "savedMedia": {
+    "emery": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/68aa4add5dd34617aa03fab8/emery/b72e26a3-1a04-4acb-83cd-4efee17104bc.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/68aa4add5dd34617aa03fab8/emery/34ec7d85-b194-4973-8dbd-dd4cdc065f25.png"
+    },
+    "gabbro": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/68aa4add5dd34617aa03fab8/gabbro/d4bb495e-d574-43a7-8e9c-27eb4a5c82de.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/68aa4add5dd34617aa03fab8/gabbro/a39a09f0-ffce-4931-9ec9-754199bce412.png"
+    }
+  },
+  "mediaVerification": "Reopened both saved target panels: five screenshots with a primary GIF and one banner per watch. GIF frames match unchanged native captures pixel for pixel.",
+  "descriptionChanges": "Owner title and description preserved.",
+  "physicalWatchValidated": false
+}

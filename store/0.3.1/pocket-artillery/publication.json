@@ -1,0 +1,50 @@
+{
+  "title": "Pocket Artillery",
+  "slug": "pocket-artillery",
+  "version": "0.3.1",
+  "pbw": "release/pocket-artillery/0.3.1/pocket-artillery-0.3.1.pbw",
+  "pbwSHA256": "a7a8745709d902288a523b4cad1dace4bef33b97623d682114e5df3c8a96d25a",
+  "uuid": "8ad36591-5850-582c-9c98-ea606979cf4b",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "release": "release/pocket-artillery/0.3.1",
+  "appId": "f3f15b3aa8e84a9ba94799c2",
+  "media": "store/0.3.1/pocket-artillery",
+  "releaseNotes": "Larger playfields and text make the action easier to read. About now includes a small portrait of Luke, and returning from the menu resumes play reliably.",
+  "sources": {
+    "release/pocket-artillery/0.3.1/screenshots/emery-aim.png": "bb9966c4f2dbd3749cd755b58abfa3adb69a6afab6fec3ae2905bf10891b5fb6",
+    "release/pocket-artillery/0.3.1/screenshots/emery-touch-aim.png": "d5662ade43746894e2442c9d6937de73b03adfa19b19510190e83482325006ff",
+    "release/pocket-artillery/0.3.1/screenshots/emery-flight.png": "2641410ced3d636d9ec440132334974be1f765d18ef0a306cf05631dbe473fb8",
+    "release/pocket-artillery/0.3.1/screenshots/emery-victory.png": "3b538645f4a2f7bf403a6b29dc6db8c559395a98ff689c2c3c9f9d01fb0a13b3",
+    "release/pocket-artillery/0.3.1/screenshots/emery-about.png": "be6416c13788462d7d100f7cf16a13826021ee50d9264852ef53ce0fdf05abd4",
+    "release/pocket-artillery/0.3.1/screenshots/gabbro-aim.png": "4fa3fb07725cd1eff724ec330cdf297421c0991bd93ed8917633585664593ebf",
+    "release/pocket-artillery/0.3.1/screenshots/gabbro-touch-aim.png": "25db365311c026bc62a78d848d80f927adea76b8756dcc62572edb99d4bc5886",
+    "release/pocket-artillery/0.3.1/screenshots/gabbro-flight.png": "3533f77a589585050174515a8c62561112d889a72af5f5f3e36961af209d7bd4",
+    "release/pocket-artillery/0.3.1/screenshots/gabbro-victory.png": "c5dc12102b3d07cbb64d5138d54efe7a6187b29460668f8a56d2b9c284bbfc63",
+    "release/pocket-artillery/0.3.1/screenshots/gabbro-about.png": "105aae846b8343de8f2c22543f67d93ca3936b81d487fa90e3e193a12fc55bd6"
+  },
+  "appstoreURL": "https://apps.repebble.com/f3f15b3aa8e84a9ba94799c2",
+  "pbwDownloadURL": "https://appstore-api.repebble.com/api/assets/pbw/f3f15b3aa8e84a9ba94799c2/0.3.1/048b2da0-db7a-41c2-9457-579e5ec136c7.pbw",
+  "publicDownloadSHA256": "a7a8745709d902288a523b4cad1dace4bef33b97623d682114e5df3c8a96d25a",
+  "verifiedAt": "2026-09-11T07:03:50.253780+00:00",
+  "visibility": "Published",
+  "releaseState": "Published",
+  "physicalValidation": "Not performed; exact packages passed native emulator checks on both targets.",
+  "savedMedia": {
+    "emery": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/f3f15b3aa8e84a9ba94799c2/emery/5722148b-ad36-4f0f-9eeb-eed4fb6097bc.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/f3f15b3aa8e84a9ba94799c2/emery/253f55d7-08b1-4cf3-9ed0-d15488d9bdca.png"
+    },
+    "gabbro": {
+      "screenshots": 5,
+      "primaryGIF": "https://developer.repebble.com/api/assets/screenshots/f3f15b3aa8e84a9ba94799c2/gabbro/b27f5ce4-466b-472c-ac70-175afa6f2317.gif",
+      "banner": "https://developer.repebble.com/api/assets/banners/f3f15b3aa8e84a9ba94799c2/gabbro/ad017ccf-a2e1-4e1a-84ec-fcca324cd6f1.png"
+    }
+  },
+  "mediaVerification": "Reopened both saved target panels: five screenshots with a primary GIF and one banner per watch. GIF frames match unchanged native captures pixel for pixel.",
+  "descriptionChanges": "Owner title and description preserved.",
+  "physicalWatchValidated": false
+}

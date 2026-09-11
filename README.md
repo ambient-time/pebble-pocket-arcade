@@ -70,9 +70,10 @@ reports, and checksum manifests. `release/validation/` holds core results,
 randomized invariant results, and independent source rebuild reports.
 `PLAN.md` records the acceptance checklist.
 
-Emulator checks do not replace physical-watch testing. Version 0.3.1 is a local test candidate. Version 0.2.0 remains uploaded to the Pebble developer account as six
-unlisted apps with draft releases. None is publicly published. See the
-[store receipts](store/0.2.0/publication.json) and
-[listing notes](store/0.2.0/README.md).
+Emulator checks do not replace physical-watch testing. All six games are public
+at version 0.3.1. Each Store download matches the frozen release PBW; both watch
+media panels contain a native gameplay GIF, four current stills and a banner.
+See the [Store receipts](store/0.3.1/publication.json) and
+[public game links](store/0.3.1/README.md). Earlier drafts and packages are retained.
 
 MIT license. Original code and launcher art by Luke Steuber.
