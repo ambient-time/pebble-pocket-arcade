@@ -1,0 +1,38 @@
+{
+  "game": "train-dispatcher",
+  "version": "0.3.0",
+  "author": "Luke Steuber",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "pbwSHA256": "aa52bb3c077cd04affd473b778824edadc4c83f8bda54c3f7b17877f39d4ebd9",
+  "sourceCommit": "e1cdfb972610abd0c17f9147e1f24940ed5e415d",
+  "nativeChecks": {
+    "emery": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "button switch selection",
+      "touch routing",
+      "18 deliveries",
+      "completed shift",
+      "misrouting loss"
+    ],
+    "gabbro": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "button switch selection",
+      "touch routing",
+      "18 deliveries",
+      "completed shift",
+      "misrouting loss"
+    ]
+  },
+  "physicalWatchValidated": false
+}

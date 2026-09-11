@@ -1,0 +1,284 @@
+{
+  "dungeon-pinball": {
+    "version": "0.3.0",
+    "uuid": "d5e62be8-ca14-548b-9406-d8e701ef275e",
+    "targets": [
+      "emery",
+      "gabbro"
+    ],
+    "pbwSHA256": "cc89382433edce43ea7946ddafee6094934c72bf0863abd51995549ee4f68a8d",
+    "pbwBytes": 32863,
+    "maximumStackFrameBytes": 368,
+    "largestFrames": [
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/dungeon-pinball/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/dungeon-pinball/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/dungeon-pinball/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/dungeon-pinball/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:495:5:main",
+        "bytes": 152,
+        "report": "build/dungeon-pinball/build/src/c/main.c.17.su"
+      }
+    ],
+    "reportedRAMBytes": [
+      13037,
+      13037
+    ],
+    "reportedFreeHeapBytes": [
+      118035,
+      118035
+    ],
+    "physicalWatchValidated": false
+  },
+  "one-screen-tactics": {
+    "version": "0.3.0",
+    "uuid": "cff5b6fa-bd63-578c-ab4a-10548d0d7b74",
+    "targets": [
+      "emery",
+      "gabbro"
+    ],
+    "pbwSHA256": "7059fa2c70eb87ce94671ceded6f93c958ee3fa517617719df03667385a88c56",
+    "pbwBytes": 30084,
+    "maximumStackFrameBytes": 368,
+    "largestFrames": [
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/one-screen-tactics/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/one-screen-tactics/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/one-screen-tactics/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/one-screen-tactics/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:495:5:main",
+        "bytes": 152,
+        "report": "build/one-screen-tactics/build/src/c/main.c.17.su"
+      }
+    ],
+    "reportedRAMBytes": [
+      11625,
+      11625
+    ],
+    "reportedFreeHeapBytes": [
+      119447,
+      119447
+    ],
+    "physicalWatchValidated": false
+  },
+  "pocket-artillery": {
+    "version": "0.3.0",
+    "uuid": "8ad36591-5850-582c-9c98-ea606979cf4b",
+    "targets": [
+      "emery",
+      "gabbro"
+    ],
+    "pbwSHA256": "27f227da55176b61adf089d3699ba27b7828ecab49451faa8d904e01344e6090",
+    "pbwBytes": 32289,
+    "maximumStackFrameBytes": 368,
+    "largestFrames": [
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/pocket-artillery/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/pocket-artillery/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/pocket-artillery/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/pocket-artillery/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:495:5:main",
+        "bytes": 152,
+        "report": "build/pocket-artillery/build/src/c/main.c.17.su"
+      }
+    ],
+    "reportedRAMBytes": [
+      12739,
+      12739
+    ],
+    "reportedFreeHeapBytes": [
+      118333,
+      118333
+    ],
+    "physicalWatchValidated": false
+  },
+  "pocket-ecosystem": {
+    "version": "0.3.0",
+    "uuid": "28118ddd-5774-592c-92f3-1cd55e250d86",
+    "targets": [
+      "emery",
+      "gabbro"
+    ],
+    "pbwSHA256": "de933bb13e5e6ed8aedb74d3d97ce291f2a694ebd5516aa0fac347c0cc9be0d3",
+    "pbwBytes": 31805,
+    "maximumStackFrameBytes": 368,
+    "largestFrames": [
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/pocket-ecosystem/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/pocket-ecosystem/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/pocket-ecosystem/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/pocket-ecosystem/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:495:5:main",
+        "bytes": 152,
+        "report": "build/pocket-ecosystem/build/src/c/main.c.17.su"
+      }
+    ],
+    "reportedRAMBytes": [
+      12449,
+      12449
+    ],
+    "reportedFreeHeapBytes": [
+      118623,
+      118623
+    ],
+    "physicalWatchValidated": false
+  },
+  "space-salvage": {
+    "version": "0.3.0",
+    "uuid": "1d97a4de-8e1a-543c-b6cc-42ed84749aa6",
+    "targets": [
+      "emery",
+      "gabbro"
+    ],
+    "pbwSHA256": "32acdd3fe418d07ecfba24d47d75d128195596ac74892b937a13317658362159",
+    "pbwBytes": 32144,
+    "maximumStackFrameBytes": 368,
+    "largestFrames": [
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/space-salvage/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/space-salvage/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/space-salvage/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/space-salvage/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:495:5:main",
+        "bytes": 152,
+        "report": "build/space-salvage/build/src/c/main.c.17.su"
+      }
+    ],
+    "reportedRAMBytes": [
+      12677,
+      12677
+    ],
+    "reportedFreeHeapBytes": [
+      118395,
+      118395
+    ],
+    "physicalWatchValidated": false
+  },
+  "train-dispatcher": {
+    "version": "0.3.0",
+    "uuid": "91758b31-5a15-5295-9e8c-f30720ae9cc6",
+    "targets": [
+      "emery",
+      "gabbro"
+    ],
+    "pbwSHA256": "aa52bb3c077cd04affd473b778824edadc4c83f8bda54c3f7b17877f39d4ebd9",
+    "pbwBytes": 30498,
+    "maximumStackFrameBytes": 368,
+    "largestFrames": [
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/train-dispatcher/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:76:13:log_state",
+        "bytes": 368,
+        "report": "build/train-dispatcher/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/train-dispatcher/build/src/c/main.c.17.su"
+      },
+      {
+        "source": "../src/c/main.c:155:13:draw",
+        "bytes": 304,
+        "report": "build/train-dispatcher/build/src/c/main.c.16.su"
+      },
+      {
+        "source": "../src/c/main.c:495:5:main",
+        "bytes": 152,
+        "report": "build/train-dispatcher/build/src/c/main.c.17.su"
+      }
+    ],
+    "reportedRAMBytes": [
+      11849,
+      11849
+    ],
+    "reportedFreeHeapBytes": [
+      119223,
+      119223
+    ],
+    "physicalWatchValidated": false
+  }
+}

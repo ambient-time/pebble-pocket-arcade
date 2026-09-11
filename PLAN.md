@@ -83,3 +83,33 @@ gaps; both were fixed and checked. App UUIDs and the saved Game layout are uncha
 Open: physical-watch testing. No store publication. Original 0.1.0 release
 folders and bundle remain intact. Current artifacts are under each game's
 `release/<game>/0.2.0/` folder and `release/pocket-arcade-0.2.0.zip`.
+
+## 0.3.0 readability pass — 2026-09-10
+
+Done: all six games share a bold 18-pixel minimum for compact labels and
+counters, 24-pixel body/action text, and 28-pixel short titles where they fit.
+Playfields grow 8% on Time 2 and 15–25% on Round 2. Each round scale keeps its
+required board cells, flight area or table visible. Touch input uses the inverse
+drawing transform. Selected controls use white fills with black text; essential
+edges and symbols retain bright outlines. Rules are shorter without adding
+introductory pages. Saved Game layouts, UUIDs and game physics are retained.
+
+The shared native menu exits on a deferred timer, allowing its touch callback
+to finish before destroying the menu. Input, focus and redraw paths are guarded
+during exit. A 512-byte compiler stack-frame limit protects both native targets.
+
+Measured: all twelve exact-PBW native campaigns pass, including each game's win
+and loss or continuing-play conditions. Tactics also passes three touch menu
+exits with exact saved-game resume on each shape. All six standalone source
+packages rebuild independently. Source ZIP content matches the committed
+authored sources, and checksums verify. Core sanitizer checks and 2.88 million
+randomized input/tick checks pass. Maximum application stack frame is 368 bytes;
+SDK-reported RAM footprints are 11,625–13,037 bytes.
+
+Observed: native-size screenshots were inspected for both shapes, including
+instructions, gameplay, round-safe results, menu selection, and replay. Body
+text and board characters have substantially stronger apparent size and weight.
+
+Open: physical-watch readability, contrast and gameplay checks. Version 0.3.0
+is a local candidate; the existing 0.2.0 Store drafts are unchanged. Artifacts are
+in `release/<game>/0.3.0/` and `release/pocket-arcade-0.3.0.zip`.

@@ -1,0 +1,103 @@
+{
+  "sourceCommit": "e1cdfb972610abd0c17f9147e1f24940ed5e415d",
+  "games": {
+    "dungeon-pinball": {
+      "authoredSourcesMatch": true,
+      "sourceFileSHA256": {
+        "common/arcade.h": "ef7523ad12f1e5da82e19b4bdb28d77168f37e05b3b9dce5386d6087c09ca656",
+        "common/save.h": "d429d4e253d0d314f306dd1b5f2353cde9ef7b1ba94c66691741f148f5ad8e1d",
+        "common/main.c": "ef0b7af00d80990fa8e1478dbc97c5446d0257cbd6a2df9073e59cda7f848136",
+        "common/ui_style.h": "3a78ebc1d632719acb60e6c517794da41f00ca9588b5ef2ff0814e6cdebec3d9",
+        "common/save.c": "32379f1e93d6ea43c848fb20bb6c11efececdcf000f6e3f28f30133e07fe7358",
+        "common/draw.h": "76176b890110af62d139958843fb4a306c23c197d966797ee3b7006b8f756c74",
+        "games/dungeon-pinball/game.c": "0e71213c44895524fd67ca97749e16fa58d7a39f83723188ef2b3421d98a3650",
+        "games/dungeon-pinball/draw.c": "902b26619262a1fcec75ed64485221519438218a04bc7968d6395bc2ca72a05b",
+        "games/dungeon-pinball/model.h": "6270805ffc448f903269714715888cc0db02786ed2d375590b88c6fed55c88db"
+      },
+      "wscriptMatches": true,
+      "sourceZIPSHA256": "3417dfdbc8180b35fcec772208e5ed9495042c950c4dd8718c45a0474e69d7a1"
+    },
+    "one-screen-tactics": {
+      "authoredSourcesMatch": true,
+      "sourceFileSHA256": {
+        "common/arcade.h": "ef7523ad12f1e5da82e19b4bdb28d77168f37e05b3b9dce5386d6087c09ca656",
+        "common/save.h": "d429d4e253d0d314f306dd1b5f2353cde9ef7b1ba94c66691741f148f5ad8e1d",
+        "common/main.c": "ef0b7af00d80990fa8e1478dbc97c5446d0257cbd6a2df9073e59cda7f848136",
+        "common/ui_style.h": "3a78ebc1d632719acb60e6c517794da41f00ca9588b5ef2ff0814e6cdebec3d9",
+        "common/save.c": "32379f1e93d6ea43c848fb20bb6c11efececdcf000f6e3f28f30133e07fe7358",
+        "common/draw.h": "76176b890110af62d139958843fb4a306c23c197d966797ee3b7006b8f756c74",
+        "games/one-screen-tactics/game.c": "be02e64f5d7aaa103fd807853e17d0e1c076d0ad6e13d0aad0c5b0f9ea7ee123",
+        "games/one-screen-tactics/draw.c": "e1d6f6c13f7affe228cb9eb6039e859afb5cdd190eb47a620195a1d9b8c22211",
+        "games/one-screen-tactics/model.h": "bf00b7d48c62e8142c517f3580e6a3ef5e5415e010230961035d32bf825cf270"
+      },
+      "wscriptMatches": true,
+      "sourceZIPSHA256": "b380eda1a217ec60361559c841f8d32f87ef6820c3de56ebe29f57ddaf65b5df"
+    },
+    "pocket-artillery": {
+      "authoredSourcesMatch": true,
+      "sourceFileSHA256": {
+        "common/arcade.h": "ef7523ad12f1e5da82e19b4bdb28d77168f37e05b3b9dce5386d6087c09ca656",
+        "common/save.h": "d429d4e253d0d314f306dd1b5f2353cde9ef7b1ba94c66691741f148f5ad8e1d",
+        "common/main.c": "ef0b7af00d80990fa8e1478dbc97c5446d0257cbd6a2df9073e59cda7f848136",
+        "common/ui_style.h": "3a78ebc1d632719acb60e6c517794da41f00ca9588b5ef2ff0814e6cdebec3d9",
+        "common/save.c": "32379f1e93d6ea43c848fb20bb6c11efececdcf000f6e3f28f30133e07fe7358",
+        "common/draw.h": "76176b890110af62d139958843fb4a306c23c197d966797ee3b7006b8f756c74",
+        "games/pocket-artillery/game.c": "12c25ae96fd887ab5a68fd369f89dbd5bb9a0cb667fd10febbf98effc8c878b1",
+        "games/pocket-artillery/draw.c": "675a7528199b5bdc408b6b6893d5b15cb6a9e283d6029e9fc144feec65dc4b5c",
+        "games/pocket-artillery/trig.h": "1c810558706fbed337f9e3035acf03fcf1353bb0e0cd05e36cc4aee6b68ecebd",
+        "games/pocket-artillery/model.h": "e54147d71256fb3c0156f87c6254dd9eb4affb13983fbb0e730554150b5b5684"
+      },
+      "wscriptMatches": true,
+      "sourceZIPSHA256": "24102edd3c12fdfed91e7f82e1ab07d46e5d687b8fb5a5e48e3028e613fe7421"
+    },
+    "pocket-ecosystem": {
+      "authoredSourcesMatch": true,
+      "sourceFileSHA256": {
+        "common/arcade.h": "ef7523ad12f1e5da82e19b4bdb28d77168f37e05b3b9dce5386d6087c09ca656",
+        "common/save.h": "d429d4e253d0d314f306dd1b5f2353cde9ef7b1ba94c66691741f148f5ad8e1d",
+        "common/main.c": "ef0b7af00d80990fa8e1478dbc97c5446d0257cbd6a2df9073e59cda7f848136",
+        "common/ui_style.h": "3a78ebc1d632719acb60e6c517794da41f00ca9588b5ef2ff0814e6cdebec3d9",
+        "common/save.c": "32379f1e93d6ea43c848fb20bb6c11efececdcf000f6e3f28f30133e07fe7358",
+        "common/draw.h": "76176b890110af62d139958843fb4a306c23c197d966797ee3b7006b8f756c74",
+        "games/pocket-ecosystem/game.c": "f101b8769d114e109f90959bf5e0a76edfa0eb7c7842735779dbe8e9fce16f5d",
+        "games/pocket-ecosystem/draw.c": "534154eddb852cbabd423bfc55b135d0fa548d8a4983213488c82e50181ad3e9",
+        "games/pocket-ecosystem/model.h": "081b0c2d1b2d8fba37d1bae060ffbb174853810d3c95c1a8f0117ccfedbef87f"
+      },
+      "wscriptMatches": true,
+      "sourceZIPSHA256": "9026749f7a4699a2665cf470c3a210ffff7ed23c1a5ec89413866743b3892fbd"
+    },
+    "space-salvage": {
+      "authoredSourcesMatch": true,
+      "sourceFileSHA256": {
+        "common/arcade.h": "ef7523ad12f1e5da82e19b4bdb28d77168f37e05b3b9dce5386d6087c09ca656",
+        "common/save.h": "d429d4e253d0d314f306dd1b5f2353cde9ef7b1ba94c66691741f148f5ad8e1d",
+        "common/main.c": "ef0b7af00d80990fa8e1478dbc97c5446d0257cbd6a2df9073e59cda7f848136",
+        "common/ui_style.h": "3a78ebc1d632719acb60e6c517794da41f00ca9588b5ef2ff0814e6cdebec3d9",
+        "common/save.c": "32379f1e93d6ea43c848fb20bb6c11efececdcf000f6e3f28f30133e07fe7358",
+        "common/draw.h": "76176b890110af62d139958843fb4a306c23c197d966797ee3b7006b8f756c74",
+        "games/space-salvage/game.c": "2670ee33a0b938a48693af799e665bc04470a38c7d95645ea4383c99879ec033",
+        "games/space-salvage/draw.c": "30a7284630b6f2e007657cd8c780b6ae7eb0e2e53e73a6b74c2766b51de59fc1",
+        "games/space-salvage/trig.h": "79502762d68eecfe44e0b0537a5e7cbcd9eb7411da6d7b7c65c68c06f1f49eee",
+        "games/space-salvage/model.h": "58092d04bd63247b899bedcfbceebcbe721a79047dbe13b8cf140cf28e46f869"
+      },
+      "wscriptMatches": true,
+      "sourceZIPSHA256": "91d87087f5b112c4e720d4aebaab3d6209d8dc1440adce3fb3c1809c58edcdf2"
+    },
+    "train-dispatcher": {
+      "authoredSourcesMatch": true,
+      "sourceFileSHA256": {
+        "common/arcade.h": "ef7523ad12f1e5da82e19b4bdb28d77168f37e05b3b9dce5386d6087c09ca656",
+        "common/save.h": "d429d4e253d0d314f306dd1b5f2353cde9ef7b1ba94c66691741f148f5ad8e1d",
+        "common/main.c": "ef0b7af00d80990fa8e1478dbc97c5446d0257cbd6a2df9073e59cda7f848136",
+        "common/ui_style.h": "3a78ebc1d632719acb60e6c517794da41f00ca9588b5ef2ff0814e6cdebec3d9",
+        "common/save.c": "32379f1e93d6ea43c848fb20bb6c11efececdcf000f6e3f28f30133e07fe7358",
+        "common/draw.h": "76176b890110af62d139958843fb4a306c23c197d966797ee3b7006b8f756c74",
+        "games/train-dispatcher/game.c": "f1f4d87e8169dd06686158f5d0fd6f28ce28688862d625a22bb8ee1ef8394beb",
+        "games/train-dispatcher/draw.c": "83ed87d1a747fc738d4192210c5e3a5202292473a83e687ffe3eca7bfb1eee94",
+        "games/train-dispatcher/model.h": "5542c24424faa1c5b359f5eb0aefe2487f96183dc32861dd3d03dd976314b208"
+      },
+      "wscriptMatches": true,
+      "sourceZIPSHA256": "9713717c54d8059d60956f24d1a0fb46968667b3b56fd3a823ad36c971c82b6b"
+    }
+  }
+}

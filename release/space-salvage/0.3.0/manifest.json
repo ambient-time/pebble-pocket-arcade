@@ -1,0 +1,38 @@
+{
+  "game": "space-salvage",
+  "version": "0.3.0",
+  "author": "Luke Steuber",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "pbwSHA256": "32acdd3fe418d07ecfba24d47d75d128195596ac74892b937a13317658362159",
+  "sourceCommit": "e1cdfb972610abd0c17f9147e1f24940ed5e415d",
+  "nativeChecks": {
+    "emery": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "button turn and thrust",
+      "touch destination steering",
+      "cargo tether",
+      "five deliveries",
+      "quota gated escape"
+    ],
+    "gabbro": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "button turn and thrust",
+      "touch destination steering",
+      "cargo tether",
+      "five deliveries",
+      "quota gated escape"
+    ]
+  },
+  "physicalWatchValidated": false
+}

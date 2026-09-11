@@ -1,0 +1,50 @@
+{
+  "game": "dungeon-pinball",
+  "version": "0.3.0",
+  "author": "Luke Steuber",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "pbwSHA256": "cc89382433edce43ea7946ddafee6094934c72bf0863abd51995549ee4f68a8d",
+  "sourceCommit": "e1cdfb972610abd0c17f9147e1f24940ed5e415d",
+  "nativeChecks": {
+    "emery": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "flippers released after resume",
+      "launch",
+      "simultaneous physical flippers",
+      "independent held touch flippers",
+      "reactive flipper timing",
+      "three distinct chambers",
+      "monster targets and bosses",
+      "complete dungeon",
+      "passive last-ball loss",
+      "held Select crossing terminal does not replay",
+      "fresh Select replays once"
+    ],
+    "gabbro": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "flippers released after resume",
+      "launch",
+      "simultaneous physical flippers",
+      "independent held touch flippers",
+      "reactive flipper timing",
+      "three distinct chambers",
+      "monster targets and bosses",
+      "complete dungeon",
+      "passive last-ball loss",
+      "held Select crossing terminal does not replay",
+      "fresh Select replays once"
+    ]
+  },
+  "physicalWatchValidated": false
+}

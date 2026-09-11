@@ -1,0 +1,46 @@
+{
+  "game": "pocket-ecosystem",
+  "version": "0.3.0",
+  "author": "Luke Steuber",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "pbwSHA256": "de933bb13e5e6ed8aedb74d3d97ce291f2a694ebd5516aa0fac347c0cc9be0d3",
+  "sourceCommit": "e1cdfb972610abd0c17f9147e1f24940ed5e415d",
+  "nativeChecks": {
+    "emery": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "button cursor and tool",
+      "touch tool and planting",
+      "introduce grazers and predators",
+      "seasonal population dynamics",
+      "60-second balanced habitat",
+      "continued simulation after goal",
+      "extinction result",
+      "ongoing habitat restart confirmation",
+      "one-tap new habitat"
+    ],
+    "gabbro": [
+      "rules",
+      "playfield",
+      "pause freezes",
+      "native touch menu scroll without activation",
+      "save and relaunch",
+      "button cursor and tool",
+      "touch tool and planting",
+      "introduce grazers and predators",
+      "seasonal population dynamics",
+      "60-second balanced habitat",
+      "continued simulation after goal",
+      "extinction result",
+      "ongoing habitat restart confirmation",
+      "one-tap new habitat"
+    ]
+  },
+  "physicalWatchValidated": false
+}

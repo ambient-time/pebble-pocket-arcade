@@ -1,0 +1,48 @@
+{
+  "game": "one-screen-tactics",
+  "version": "0.3.0",
+  "author": "Luke Steuber",
+  "targets": [
+    "emery",
+    "gabbro"
+  ],
+  "pbwSHA256": "7059fa2c70eb87ce94671ceded6f93c958ee3fa517617719df03667385a88c56",
+  "sourceCommit": "e1cdfb972610abd0c17f9147e1f24940ed5e415d",
+  "nativeChecks": {
+    "emery": [
+      "rules",
+      "board",
+      "button solution across five turns",
+      "first action save/relaunch",
+      "pause",
+      "victory",
+      "cancel restart",
+      "restart",
+      "touch wait",
+      "beacon loss",
+      "finished save restored",
+      "one-press replay",
+      "outside and dragged touches ignored",
+      "one-tap replay",
+      "three touch menu exits with exact saved-game resume"
+    ],
+    "gabbro": [
+      "rules",
+      "board",
+      "button solution across five turns",
+      "first action save/relaunch",
+      "pause",
+      "victory",
+      "cancel restart",
+      "restart",
+      "touch wait",
+      "beacon loss",
+      "finished save restored",
+      "one-press replay",
+      "outside and dragged touches ignored",
+      "one-tap replay",
+      "three touch menu exits with exact saved-game resume"
+    ]
+  },
+  "physicalWatchValidated": false
+}
