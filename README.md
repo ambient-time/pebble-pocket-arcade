@@ -3,6 +3,8 @@
 Six native games by Luke Steuber for Pebble Time 2 and Pebble Round 2. Each is a
 separate app with buttons, touch, a pause menu, and saved progress.
 
+[![Get the games](https://img.shields.io/badge/Pebble-Games-2563eb?style=flat-square)](store/0.3.1/README.md) [![MIT code license](https://img.shields.io/badge/Code-MIT-181717?style=flat-square)](LICENSE) [![Ambient Time collection](https://img.shields.io/badge/Ambient_Time-Collection-181717?style=flat-square)](https://ambient-time.com/watch/pebble/)
+
 [Open the local install page](release/index.html) ·
 [Download the complete bundle](release/pocket-arcade-0.3.1.zip)
 
@@ -18,7 +20,7 @@ separate app with buttons, touch, a pause menu, and saved progress.
 ## Installation and saves
 
 Open a PBW with the Pebble phone app to install it on the connected watch. The
-packages include only emery and gabbro targets. Touch requires firmware 4.33.2
+packages support Time 2 (Emery) and Round 2 (Gabbro). Touch requires firmware 4.33.2
 or later; buttons remain available.
 
 Back pauses and opens Resume, Restart, How to play, About, and Save and exit. Restart
@@ -27,7 +29,7 @@ and totals, then one Select press or a tap on the replay row starts again.
 A held button or continuing drag cannot dismiss a new result. Launching again
 resumes the game, including a finished result. Timed play
 saves roughly every ten seconds and at important transitions; an unexpected
-interruption may lose the last few seconds. Closed-app time does not advance.
+interruption may lose the last few seconds. The game stays paused while the app is closed.
 Saves use two checksum-verified snapshots, retaining the preceding intact copy
 if a write is interrupted.
 
@@ -77,3 +79,10 @@ See the [Store receipts](store/0.3.1/publication.json) and
 [public game links](store/0.3.1/README.md). Earlier drafts and packages are retained.
 
 MIT license. Original code and launcher art by Luke Steuber.
+
+## Around here
+
+[Luke Steuber](https://github.com/lukeslp) · [Data Poems](https://github.com/data-poems) · [Ambient Time](https://github.com/ambient-time) · [Actually Useful AI](https://github.com/actually-useful-ai) · [One Impossible Thing](https://github.com/one-impossible-thing)
+
+Made by [Luke Steuber](https://lukesteuber.com). Questions or collaboration:
+[luke@lukesteuber.com](mailto:luke@lukesteuber.com).
