@@ -186,7 +186,7 @@ eeff4beb18a417bc26c2822240fc09740cadc729f7c714f51371e5a51453f7f8  dungeon-pinbal
 c3615fe4f18af661585ebed447755d98217e816788b03bb300853821caf33da5  dungeon-pinball/0.3.1/screenshots/gabbro-rules.png
 5a8130bdfa50cf0d9b1604622c670e54a2e54fabe0d38934f851651188d086f1  dungeon-pinball/0.3.1/screenshots/gabbro-touch-left.png
 582eab28dcbe1eb9694dc742273ac69d794b7e7b00e2810f84594b47d3703709  dungeon-pinball/0.3.1/screenshots/gabbro-touch-right.png
-7feaf3cfc2cafe8f260741cdc97f30b4295447c4c75547d940670743924ef853  index.html
+f9c352e88e099d6b97684bd26e7ac65e3155c42c57aca3878a3fd411d78051ea  index.html
 04965135e36d62a6361f4934f7b25b14644a3f9dc0702b19d4f21b942ee13760  one-screen-tactics/0.1.0/LICENSE
 7062f58fad39b5ff58203d91bde928073641ecabac1d40b297a612cd242b50bf  one-screen-tactics/0.1.0/README.md
 933ea97ea45f80189d3c1526cedf7e4f0bae46e87bc99446e7cb2d8dcabfe494  one-screen-tactics/0.1.0/SHA256SUMS.txt
