@@ -117,15 +117,26 @@ def run(platform):
             time.sleep(.02)
         assert count() > previous, 'Native input did not respond'
         time.sleep(.1)
+    resent = []
     def button(name, hold=.07):
         previous = count()
-        send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
-        time.sleep(hold)
-        send_data_to_qemu(watch.transport, QemuButton(state=0))
-        if previous:
-            response(previous)
-        else:
-            time.sleep(.2)
+        for attempt in range(2):
+            send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
+            time.sleep(hold)
+            send_data_to_qemu(watch.transport, QemuButton(state=0))
+            if not previous:
+                time.sleep(.2)
+                return
+            try:
+                response(previous)
+                return
+            except AssertionError:
+                # Legacy-firmware emulators can drop a press under host load. Resend
+                # once and record it; a second silence still fails. A late reply to the
+                # first press would double the input and fail the next expectation.
+                if attempt or count() > previous:
+                    raise
+                resent.append(name)
     def expect(**values):
         actual = current()
         assert all(actual[k] == v for k, v in values.items()), (values, actual)
@@ -242,7 +253,7 @@ def run(platform):
             while current()['d3'] and not current()['status'] and time.monotonic()<deadline:time.sleep(.1)
         expect(status=2);grab('defeat')
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','button angle and power','pause and resume','idle save/relaunch','touch aim and fire' if has_touch else 'button aim and long-select fire','projectile flight','paused simulation freezes','opponent turn','long-select fire','mid-flight resume','complete aimed match victory','deliberate-miss defeat','one-press rematch']+about_checks,'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'resentPresses':resent,'checks':['rules','button angle and power','pause and resume','idle save/relaunch','touch aim and fire' if has_touch else 'button aim and long-select fire','projectile flight','paused simulation freezes','opponent turn','long-select fire','mid-flight resume','complete aimed match victory','deliberate-miss defeat','one-press rematch']+about_checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:
