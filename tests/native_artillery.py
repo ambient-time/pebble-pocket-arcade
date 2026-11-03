@@ -136,10 +136,21 @@ def run(platform):
         png.from_array(pixels, mode='RGBA;8').save(str(file))
         frames.append(str(file.relative_to(ROOT)))
         return pixels
-    width, height = (200, 228) if platform == 'emery' else (260, 260)
+    sizes = {'basalt': (144, 168), 'diorite': (144, 168), 'flint': (144, 168),
+             'chalk': (180, 180), 'emery': (200, 228), 'gabbro': (260, 260)}
+    width, height = sizes[platform]
+    has_touch = platform in ('emery', 'gabbro')  # The other four watches have buttons only.
+    def about_buttons():
+        button('Back');expect(screen=1)
+        for _ in range(3):button('Down')
+        button('Select');expect(screen=4);grab('about')
+        button('Select');expect(screen=1)
+        button('Back');expect(screen=0)
+        return ['About by buttons']
     x, y = width // 2, 105 if platform == 'emery' else 126
     factor=108 if platform=='emery' else 125
     fx=(width-176*factor//100)//2;fy=(height-144*factor//100)//2
+    if platform=='gabbro':fy=height//2-101*factor//100  # Round horizon: tank line on the centre chord.
     def game_point(x,y):
         return fx+x*factor//100,fy+y*factor//100
     def pointer(px, py, down):
@@ -163,7 +174,7 @@ def run(platform):
         expect(screen=2);grab('rules')
         button('Select');expect(screen=0,d0=45,d1=70)
         grab('aim')
-        about_checks=exercise_about(button,expect,current,grab,pointer,width,watch,APP)
+        about_checks=exercise_about(button,expect,current,grab,pointer,width,watch,APP) if has_touch else about_buttons()
         button('Up');expect(d0=46)
         button('Down');expect(d0=45)
         button('Select');expect(d2=1)
@@ -177,10 +188,15 @@ def run(platform):
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)))
         time.sleep(.8)
         expect(screen=0,d0=45,d1=71,hp=100,enemy=100)
-        touch([game_point(76,30),game_point(88,21)])
-        assert current()['d0']!=45 or current()['d1']!=71
-        grab('touch-aim')
-        touch([game_point(145,132)])
+        if has_touch:
+            touch([game_point(76,30),game_point(88,21)])
+            assert current()['d0']!=45 or current()['d1']!=71
+            grab('touch-aim')
+            touch([game_point(145,132)])
+        else:
+            button('Up');expect(d0=46)
+            grab('button-aim')
+            button('Select',hold=.6)
         expect(d3=1)
         grab('flight')
         button('Back');expect(screen=1)
@@ -226,7 +242,7 @@ def run(platform):
             while current()['d3'] and not current()['status'] and time.monotonic()<deadline:time.sleep(.1)
         expect(status=2);grab('defeat')
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','button angle and power','pause and resume','idle save/relaunch','touch aim and fire','projectile flight','paused simulation freezes','opponent turn','long-select fire','mid-flight resume','complete aimed match victory','deliberate-miss defeat','one-press rematch']+about_checks,'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','button angle and power','pause and resume','idle save/relaunch','touch aim and fire' if has_touch else 'button aim and long-select fire','projectile flight','paused simulation freezes','opponent turn','long-select fire','mid-flight resume','complete aimed match victory','deliberate-miss defeat','one-press rematch']+about_checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:
@@ -237,5 +253,5 @@ def run(platform):
         qmp.close();qmp_socket.close();shutdown();bridge.close()
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('platform',choices=['emery','gabbro'])
+    parser=argparse.ArgumentParser();parser.add_argument('platform',choices=['basalt','chalk','diorite','emery','flint','gabbro'])
     run(parser.parse_args().platform)

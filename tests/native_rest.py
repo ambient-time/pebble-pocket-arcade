@@ -4,6 +4,7 @@ Run with pebble-tool's Python after `pebble build`. Each run owns a fresh profil
 No AppMessage test backdoor is compiled into the game.
 """
 import argparse
+import math
 import sys
 import datetime
 import hashlib
@@ -137,7 +138,10 @@ def run(platform):
         png.from_array(pixels, mode='RGBA;8').save(str(file))
         frames.append(str(file.relative_to(ROOT)))
         return pixels
-    width, height = (200, 228) if platform == 'emery' else (260, 260)
+    sizes = {'basalt': (144, 168), 'diorite': (144, 168), 'flint': (144, 168),
+             'chalk': (180, 180), 'emery': (200, 228), 'gabbro': (260, 260)}
+    width, height = sizes[platform]
+    has_touch = platform in ('emery', 'gabbro')  # The other four watches have buttons only.
     x, y = width // 2, 105 if platform == 'emery' else 126
     round_scale={'space-salvage':115,'pocket-ecosystem':115,'dungeon-pinball':120,'train-dispatcher':125}
     factor=108 if platform=='emery' else round_scale[ROOT.name]
@@ -179,21 +183,29 @@ def run(platform):
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)))
         time.sleep(1);expect(screen=2);grab('rules')
         button('Select');expect(screen=0);grab('play')
-        checks+=exercise_about(button,expect,current,grab,pointer,width,watch,APP)
+        if has_touch:
+            checks+=exercise_about(button,expect,current,grab,pointer,width,watch,APP)
+        else:
+            button('Back');expect(screen=1)
+            for _ in range(3):button('Down')
+            button('Select');expect(screen=4);grab('about')
+            button('Select');expect(screen=1);button('Back');expect(screen=0)
+            checks+=['About by buttons']
         button('Back');expect(screen=1);grab('pause')
         before=current()['ticks'];time.sleep(1);assert current()['ticks']==before
-        # Finger scrolls the actual native list without activating a row.
-        first=grab('menu-before')
-        pointer(width//2,height-70,True);time.sleep(.7)
-        for y in range(height-70,55,-10):pointer(width//2,y,True);time.sleep(.04)
-        pointer(width//2,55,False);time.sleep(.3)
-        expect(screen=1);grab('menu-scrolled')
+        if has_touch:
+            # Finger scrolls the actual native list without activating a row.
+            first=grab('menu-before')
+            pointer(width//2,height-70,True);time.sleep(.7)
+            for y in range(height-70,55,-10):pointer(width//2,y,True);time.sleep(.04)
+            pointer(width//2,55,False);time.sleep(.3)
+            expect(screen=1);grab('menu-scrolled')
         button('Back');expect(screen=0)
         watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
         previous=current()['ticks']
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
         expect(screen=0);assert current()['ticks']>=previous
-        checks+=['rules','playfield','pause freezes','native touch menu scroll without activation','save and relaunch']
+        checks+=['rules','playfield','pause freezes','native touch menu scroll without activation' if has_touch else 'button menu','save and relaunch']
         game=ROOT.name
         if game=='train-dispatcher':
             button('Down');expect(d3=1);button('Select');expect(d1=1)
@@ -226,7 +238,42 @@ def run(platform):
                 direct_tap(fx+x,fy+y)
                 until=time.monotonic()+12
                 while not current()['status'] and info()['auto'] and time.monotonic()<until:time.sleep(.12)
-            for attempt in range(4):
+            heading=[1]  # Down once from the starting heading 0; only buttons turn the tug here.
+            def turn_to(a):
+                diff=(a-heading[0])%16
+                for _ in range(diff if diff<=8 else 16-diff):
+                    if current()['status']:return  # The result screen ignores Up/Down.
+                    button('Down' if diff<=8 else 'Up')
+                    heading[0]=(heading[0]+(1 if diff<=8 else -1))%16
+            def pilot(x,y,radius):
+                # Buttons only. Steer the velocity, not the position: aim for a
+                # speed that falls off near the target, turn toward the needed
+                # change in velocity (16 headings) and thrust. Thrusting against
+                # drift brakes. State is in hundredths of a pixel per tick.
+                tx,ty=x*100,y*100
+                start=info();until=time.monotonic()+45
+                while not current()['status'] and time.monotonic()<until:
+                    c=current();px,py,vx,vy=c['d0'],c['d1'],c['d2'],c['d3']
+                    dx,dy=tx-px,ty-py
+                    if abs(dx)+abs(dy)<radius*100:return
+                    now=info()
+                    if now['carry']!=start['carry'] or now['bank']!=start['bank']:return  # Picked up or banked.
+                    # Never slower than 70: below the 55 dead-band the tug would park short of the goal.
+                    dist=math.hypot(dx,dy);speed=max(70,min(150,dist*.025))
+                    ex,ey=dx/dist*speed-vx,dy/dist*speed-vy
+                    if math.hypot(ex,ey)<55:
+                        time.sleep(.15);continue
+                    ideal=math.atan2(ey,ex)/(math.pi/8)
+                    off=(ideal-heading[0]+8)%16-8
+                    if abs(off)>1:turn_to(round(ideal)%16)  # Within one step: thrust as is.
+                    if not current()['status']:button('Select')
+            if not has_touch:
+                travel=lambda x,y:pilot(x,y,8 if (x,y)!=(20,72) else 12)
+                _restart=restart
+                def restart():
+                    _restart();heading[0]=0
+            # The button pilot cannot see rocks, so it gets more runs than touch steering.
+            for attempt in range(4 if has_touch else 8):
                 for trip in range(18):
                     if current()['status'] or info()['bank']==5:break
                     d=info()
@@ -241,7 +288,7 @@ def run(platform):
                 if current()['status']==1:break
                 grab('attempt-ended')
                 restart()
-            expect(status=1);grab('escaped');checks+=['button turn and thrust','touch destination steering','cargo tether','five deliveries','quota gated escape']
+            expect(status=1);grab('escaped');checks+=['button turn and thrust','touch destination steering' if has_touch else 'button-only piloting','cargo tether','five deliveries','quota gated escape']
         elif game=='dungeon-pinball':
             button('Select');time.sleep(.3)
             send_data_to_qemu(watch.transport,QemuButton(state=QemuButton.Button.Up|QemuButton.Button.Down))
@@ -328,5 +375,5 @@ def run(platform):
         watch.unregister_endpoint(handle);cmd._close_pebble_connection(watch);cmd.pebble=None
         qmp.close();qmp_socket.close();shutdown();bridge.close()
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('game',choices=['train-dispatcher','space-salvage','dungeon-pinball','pocket-ecosystem']);parser.add_argument('platform',choices=['emery','gabbro'])
+    parser=argparse.ArgumentParser();parser.add_argument('game',choices=['train-dispatcher','space-salvage','dungeon-pinball','pocket-ecosystem']);parser.add_argument('platform',choices=['basalt','chalk','diorite','emery','flint','gabbro'])
     run(parser.parse_args().platform)

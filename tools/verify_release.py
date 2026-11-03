@@ -18,13 +18,14 @@ with zipfile.ZipFile(base / f'{name}-{version}-source.zip') as archive:
 with (work / 'rebuild.log').open('w') as log:
     subprocess.run(['pebble', 'build'], cwd=work, stdout=log, stderr=subprocess.STDOUT, check=True)
 pbw = work / 'build' / f'{name}.pbw'
+targets = json.loads((base / 'manifest.json').read_text())['targets']
 with zipfile.ZipFile(pbw) as archive:
-    for target in ['emery', 'gabbro']:
+    for target in targets:
         assert len(archive.read(f'{target}/pebble-app.bin')) > 100
         assert len(archive.read(f'{target}/app_resources.pbpack')) > 0
     appinfo = json.loads(archive.read('appinfo.json'))
-    assert set(appinfo['targetPlatforms']) == {'emery', 'gabbro'}
-report = {'game': name, 'passed': True, 'checks': ['all release checksums', 'standalone source extraction', 'standalone SDK build', 'both native targets and resources'], 'releasePBWSHA256': sha(base / f'{name}-{version}.pbw'), 'sourceZIPSHA256': sha(base / f'{name}-{version}-source.zip'), 'rebuiltPBWSHA256': sha(pbw), 'note': 'SDK rebuild metadata may change binary hashes; native gameplay reports cover the release PBW.'}
+    assert set(appinfo['targetPlatforms']) == set(targets)
+report = {'game': name, 'passed': True, 'checks': ['all release checksums', 'standalone source extraction', 'standalone SDK build', 'every native target and its resources'], 'releasePBWSHA256': sha(base / f'{name}-{version}.pbw'), 'sourceZIPSHA256': sha(base / f'{name}-{version}-source.zip'), 'rebuiltPBWSHA256': sha(pbw), 'note': 'SDK rebuild metadata may change binary hashes; native gameplay reports cover the release PBW.'}
 out = ROOT / 'release' / 'validation' / version
 out.mkdir(parents=True, exist_ok=True)
 (out / f'{name}-portable.json').write_text(json.dumps(report, indent=2) + '\n')
