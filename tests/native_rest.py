@@ -341,28 +341,31 @@ def run(platform):
             # recorded in the report.
             silent=[]
             def replies(start):
-                # Log lines from index start that answer input: every state line
-                # except the once-a-second simulation lines, whose tick count
-                # advances to a multiple of 30 on the play screen.
-                last=-1
+                # State lines from index start that answer input. The play
+                # screen's once-a-second simulation lines (tick count advancing
+                # to a multiple of 30) and repeats of the previous line, which
+                # log shipping occasionally duplicates, do not count.
+                last=None
                 for l in reversed(logs[:start]):
-                    m=re.search(r'AR s=.* t=(\d+)',l)
-                    if m:last=int(m.group(1));break
+                    if 'AR s=' in l:last=l.split('AR s=',1)[1];break
                 n=0
                 for l in logs[start:]:
-                    m=re.search(r'AR s=(-?\d+) .* t=(\d+)',l)
-                    if not m:continue
-                    screen,t=int(m.group(1)),int(m.group(2))
-                    if not (screen==0 and t%30==0 and t>last):n+=1
-                    last=t
+                    if 'AR s=' not in l:continue
+                    state=l.split('AR s=',1)[1]
+                    screen=int(state.split(' ',1)[0]);t=int(re.search(r' t=(\d+)',state).group(1))
+                    t0=int(re.search(r' t=(\d+)',last).group(1)) if last else -1
+                    if state!=last and not (screen==0 and t%30==0 and t>t0):n+=1
+                    last=state
                 return n
-            def press(name,hold=.07):
+            def press(name,hold=.07,wait=10):
+                # A loaded host can stall the emulator for seconds; cursor and
+                # tool presses wait long enough that a late reply is not taken
+                # for a dropped press. Placements may legitimately change
+                # nothing (an occupied cell), so callers check their effect.
                 start=len(logs)
                 send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
                 time.sleep(hold);send_data_to_qemu(watch.transport,QemuButton(state=0))
-                # A loaded host can stall the emulator for seconds; wait long
-                # enough that a late reply is not mistaken for a dropped press.
-                deadline=time.monotonic()+10
+                deadline=time.monotonic()+wait
                 while not replies(start) and time.monotonic()<deadline:time.sleep(.02)
                 if not replies(start):silent.append(name);return False
                 time.sleep(.1);return True
@@ -378,9 +381,7 @@ def run(platform):
                     press('Down' if (cell-now)%24<=12 else 'Up')
                 expect(d0=cell)
             def place():
-                budget=current()['d3']
-                if not press('Select'):press('Select')
-                return budget
+                budget=current()['d3'];press('Select',wait=2);return budget
             if has_touch:
                 button('Down');expect(d0=1)
                 button('Select',hold=.6);expect(d1=1)
@@ -388,8 +389,11 @@ def run(platform):
                 direct_tap(fx+18,fy+15);grab('seeded-cell')
             else:
                 choose_cell(1);choose_tool(1)
-                choose_tool(0);choose_cell(0);budget=place()
-                # Planting costs 2; energy may regrow by 1 in the same second.
+                choose_tool(0);choose_cell(0)
+                for _ in range(3):
+                    budget=place()
+                    # Planting costs 2; energy may regrow by 1 in the same second.
+                    if current()['d3'] in (budget-2,budget-1):break
                 assert current()['d3'] in (budget-2,budget-1),'Leaf did not plant';grab('seeded-cell')
             for attempt in range(4):
                 for tool, preferred in [(1,15),(2,5)]:
@@ -421,7 +425,10 @@ def run(platform):
             while current()['status']==0 and time.monotonic()<deadline:time.sleep(.2)
             expect(status=2);time.sleep(.6);grab('extinction-result')
             if has_touch:direct_tap(fx+88,fy+115)
-            else:place()
+            else:
+                for _ in range(3):
+                    if current()['status']==0:break
+                    place()
             expect(status=0,screen=0)
             checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat' if has_touch else 'one-press new habitat']
             if silent:checks+=['silent presses resent: '+' '.join(silent)]
