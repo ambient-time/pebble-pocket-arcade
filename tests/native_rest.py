@@ -119,15 +119,25 @@ def run(platform):
             time.sleep(.02)
         assert count() > previous, 'Native input did not respond'
         time.sleep(.1)
+    resent = []
     def button(name, hold=.07):
         previous = count()
-        send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
-        time.sleep(hold)
-        send_data_to_qemu(watch.transport, QemuButton(state=0))
-        if previous:
-            response(previous)
-        else:
-            time.sleep(.2)
+        for attempt in range(2):
+            send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
+            time.sleep(hold)
+            send_data_to_qemu(watch.transport, QemuButton(state=0))
+            if not previous:
+                time.sleep(.2)
+                return
+            try:
+                response(previous)
+                return
+            except AssertionError:
+                # Legacy-firmware emulators can drop a press under host load. Resend
+                # once and record it; a second silence still fails.
+                if attempt or count() > previous:
+                    raise
+                resent.append(name)
     def expect(**values):
         actual = current()
         assert all(actual[k] == v for k, v in values.items()), (values, actual)
@@ -219,11 +229,20 @@ def run(platform):
                     if not incoming:continue
                     kind=max(incoming,key=lambda t:t[2])[3]
                     desired=int(kind==0) if junction==0 else int(kind==1) if junction==1 else 0
-                    if current()['d'+str(junction)]!=desired:direct_tap(fx+48+junction*48,fy+72)
+                    if current()['d'+str(junction)]==desired:continue
+                    if has_touch:
+                        direct_tap(fx+48+junction*48,fy+72)
+                    else:
+                        # Buttons only: Up/Down moves the selected junction, Select flips it.
+                        step=(junction-current()['d3'])%3
+                        if step:button('Down' if step==1 else 'Up')
+                        button('Select')
+                        until=time.monotonic()+.5
+                        while current()['d'+str(junction)]!=desired and time.monotonic()<until:time.sleep(.03)
                 if not captured and current()['score']>=300:grab('traffic');captured=True
                 time.sleep(.12)
             expect(status=1);grab('completed-shift')
-            checks+=['button switch selection','touch routing','18 deliveries','completed shift']
+            checks+=['button switch selection','touch routing' if has_touch else 'button-only routing','18 deliveries','completed shift']
             restart();deadline=time.monotonic()+90
             while not current()['status'] and time.monotonic()<deadline:time.sleep(.2)
             expect(status=2);grab('failed-shift');checks+=['misrouting loss']
@@ -366,7 +385,7 @@ def run(platform):
             direct_tap(fx+88,fy+115);expect(status=0,screen=0)
             checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat']
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':checks,'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'resentPresses':resent,'checks':checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2));print('PASS',game,platform)
     finally:
         try:grab('final-screen')

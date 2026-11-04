@@ -175,6 +175,14 @@ bool game_valid(const Game *g) {
 void game_hud(const Game *g, char *a, size_t n, char *b, size_t m) {
   snprintf(a, n, "Trains %ld/18  X%ld/3", (long)g->d[DELIVERED],
            (long)g->d[STRIKES]);
+#ifdef PBL_PLATFORM_GABBRO
+  // Round 2: "Switch 1 LOCKED  Next B" ran past the rim at the bottom.
+  if (train_locked(g, g->d[FOCUS])) {
+    snprintf(b, m, "%ld LOCKED  Next %c", (long)g->d[FOCUS] + 1,
+             'A' + (int)g->d[NEXT]);
+    return;
+  }
+#endif
   snprintf(b, m, "Switch %ld%s  Next %c", (long)g->d[FOCUS] + 1,
            train_locked(g, g->d[FOCUS]) ? " LOCKED" : "",
            'A' + (int)g->d[NEXT]);
