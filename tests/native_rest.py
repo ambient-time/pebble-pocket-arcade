@@ -97,9 +97,21 @@ def run(platform):
                 return response['return']
     execute('qmp_capabilities')
     logs, frames = [], []
+    seen = [0.0]  # Host arrival time of the latest state line.
+    pace = []  # (arrival, watch tick) pairs: the emulator slows under host load.
     def log(packet):
         line = str(packet.message)
         logs.append(line)
+        if 'AR s=' in line:
+            seen[0] = time.monotonic()
+            tick = re.search(r' t=(\d+)', line)
+            if tick:
+                pace.append((seen[0], int(tick.group(1))))
+                del pace[:-12]
+    def tick_rate():
+        if len(pace) < 2 or pace[-1][1] <= pace[0][1] or pace[-1][0] <= pace[0][0]:
+            return 30.0
+        return min(30.0, (pace[-1][1] - pace[0][1]) / (pace[-1][0] - pace[0][0]))
         if 'AR ' in line:
             print(line, flush=True)
     handle = watch.register_endpoint(AppLogMessage, log)
@@ -177,6 +189,13 @@ def run(platform):
                 time.sleep(.1);return
             if attempt:raise AssertionError(f'{name} press had no effect: {current()}')
             resent.append(name)
+    def settle(timeout=3, **values):
+        # Held-button changes log only on the next tick report; give a slowed
+        # emulator time to send it, then require the values.
+        until = time.monotonic() + timeout
+        while time.monotonic() < until and not all(current()[k] == v for k, v in values.items()):
+            time.sleep(.05)
+        expect(**values)
     def grab(name):
         time.sleep(.15)
         pixels = cmd._grab_processed_image(argparse.Namespace(no_correction=True, scale=1, no_open=True, v=0), show_progress=False)
@@ -217,8 +236,20 @@ def run(platform):
         if current()['status'] and not (ROOT.name=='pocket-ecosystem' and current()['status']==1):
             time.sleep(.6);button('Select')
         else:
-            button('Back');button('Down');button('Select');expect(screen=3);button('Select')
+            pause_running()
+            button('Down');button('Select');expect(screen=3);button('Select')
         expect(screen=0,status=0)
+    def pause_running():
+        # While play runs, tick logs answer any press, so a dropped Back is only
+        # visible in the screen value. Resend once and record it, as button() does.
+        for attempt in range(2):
+            button('Back')
+            until=time.monotonic()+4
+            while current()['screen']!=1 and time.monotonic()<until:time.sleep(.05)
+            if current()['screen']==1:return
+            if attempt:break
+            resent.append('Back (running)')
+        expect(screen=1)
     def direct_tap(x,y):
         x,y=game_point(x-fx,y-fy)
         pointer(x,y,True);time.sleep(.04);pointer(x,y,False);time.sleep(.15)
@@ -394,17 +425,36 @@ def run(platform):
             send_data_to_qemu(watch.transport,QemuButton(state=QemuButton.Button.Up|QemuButton.Button.Down))
             time.sleep(.3);grab('both-flippers')
             send_data_to_qemu(watch.transport,QemuButton(state=0))
-            pointer(*game_point(45,122),True);time.sleep(.3);expect(hp=1,enemy=0);grab('touch-left');pointer(*game_point(45,122),False);time.sleep(.15)
-            pointer(*game_point(135,122),True);time.sleep(.3);expect(hp=0,enemy=1);grab('touch-right');pointer(*game_point(135,122),False);time.sleep(.15)
+            if has_touch:
+                pointer(*game_point(45,122),True);time.sleep(.3);expect(hp=1,enemy=0);grab('touch-left');pointer(*game_point(45,122),False);time.sleep(.15)
+                pointer(*game_point(135,122),True);time.sleep(.3);expect(hp=0,enemy=1);grab('touch-right');pointer(*game_point(135,122),False);time.sleep(.15)
+            else:
+                # Buttons only: each held button lifts its own flipper and nothing else.
+                for name,side,values in [('Up','left',{'hp':1,'enemy':0}),('Down','right',{'hp':0,'enemy':1})]:
+                    send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
+                    settle(**values);grab('button-'+side)
+                    send_data_to_qemu(watch.transport,QemuButton(state=0))
+                    settle(hp=0,enemy=0)
             watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
             watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
             expect(screen=0,hp=0,enemy=0);checks+=['flippers released after resume']
             for attempt in range(8):
-                deadline=time.monotonic()+180;mask=-1;stage=-1;last_launch=0
-                while not current()['status'] and time.monotonic()<deadline:
+                # Three minutes of game time (30 ticks a second); a loaded host slows
+                # the emulator, so wall time alone would cut attempts short.
+                deadline=time.monotonic()+600;mask=-1;stage=-1;last_launch=0;first=current()['ticks']
+                while not current()['status'] and time.monotonic()<deadline and current()['ticks']-first<5400:
                     d=current();now=time.monotonic()
-                    ready=d['d1']>10000 and d['d3']>0
-                    wanted=(QemuButton.Button.Up if ready and d['d0']<9000 else 0)|(QemuButton.Button.Down if ready and d['d0']>8600 else 0)
+                    # The state line is up to three ticks old when sent and arrives
+                    # later still; the press needs another tick or two to land. Look
+                    # ahead by that lag (one tick: v += 7 gravity, then p += v), and
+                    # pulse the flipper (two ticks held, one released) so a fresh
+                    # five-tick strike window is open whatever the exact delay. A host
+                    # model of this pilot wins about 60% of dungeons with the estimate
+                    # one tick short to three ticks long; holding wins only when exact.
+                    rate=tick_rate();k=min(8,int((now-seen[0])*rate)+2)
+                    px=d['d0']+k*d['d2'];py=d['d1']+k*d['d3']+7*k*(k+1)//2;pv=d['d3']+7*k
+                    ready=py>10000 and pv>0 and int(now*rate)%3<2
+                    wanted=(QemuButton.Button.Up if ready and px<9000 else 0)|(QemuButton.Button.Down if ready and px>8600 else 0)
                     if wanted!=mask:send_data_to_qemu(watch.transport,QemuButton(state=wanted));mask=wanted
                     if 'wait=1' in world() and now-last_launch>.5:
                         send_data_to_qemu(watch.transport,QemuButton(state=wanted|QemuButton.Button.Select));time.sleep(.05)
@@ -414,9 +464,9 @@ def run(platform):
                 send_data_to_qemu(watch.transport,QemuButton(state=0))
                 if current()['status']==1:break
                 grab('lost-run-'+str(attempt));restart()
-            expect(status=1);grab('dungeon-cleared');checks+=['launch','simultaneous physical flippers','independent held touch flippers','reactive flipper timing','three distinct chambers','monster targets and bosses','complete dungeon']
+            expect(status=1);grab('dungeon-cleared');checks+=['launch','simultaneous physical flippers','independent held touch flippers' if has_touch else 'independent held button flippers','reactive flipper timing','three distinct chambers','monster targets and bosses','complete dungeon']
             # Hold Select before the final drain; its eventual release must not replay.
-            restart();held=False;deadline=time.monotonic()+100
+            restart();held=False;deadline=time.monotonic()+300
             while not current()['status'] and time.monotonic()<deadline:
                 if 'wait=1' in world():
                     last_ball='lives=1' in world()
