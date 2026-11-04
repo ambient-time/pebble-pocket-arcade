@@ -335,36 +335,60 @@ def run(platform):
         elif game=='pocket-ecosystem':
             button('Down');expect(d0=1)
             button('Select',hold=.6);expect(d1=1)
-            direct_tap(fx+22,fy+130);expect(d1=0)
-            direct_tap(fx+18,fy+15);grab('seeded-cell')
+            # The four watches without touch play by buttons alone: hold Select
+            # cycles the tool, Up/Down walk the cursor through the 24 cells and
+            # Select places. Each helper reads the native state, so a press that
+            # a legacy-firmware emulator drops is simply sent again.
+            def choose_tool(tool):
+                for _ in range(6):
+                    if current()['d1']==tool:return
+                    button('Select',hold=.6)
+                expect(d1=tool)
+            def choose_cell(cell):
+                for _ in range(16):
+                    now=current()['d0']
+                    if now==cell:return
+                    button('Down' if (cell-now)%24<=12 else 'Up')
+                expect(d0=cell)
+            if has_touch:
+                direct_tap(fx+22,fy+130);expect(d1=0)
+                direct_tap(fx+18,fy+15);grab('seeded-cell')
+            else:
+                choose_tool(0);choose_cell(0);budget=current()['d3'];button('Select')
+                assert current()['d3']==budget-2,'Leaf did not plant';grab('seeded-cell')
             for attempt in range(4):
                 for tool, preferred in [(1,15),(2,5)]:
-                    direct_tap(fx+22+44*tool,fy+130)
+                    if has_touch:direct_tap(fx+22+44*tool,fy+130)
+                    else:choose_tool(tool)
                     budget=current()['d3'];cost=3 if tool==1 else 5
                     while budget < cost:
                         time.sleep(.2);budget=current()['d3']
                     for offset in range(24):
                         cell=(preferred+offset)%24
-                        direct_tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
+                        if has_touch:direct_tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
+                        else:choose_cell(cell);budget=current()['d3'];button('Select')
                         if current()['d3']<=budget-cost:break
                     assert current()['d3']<=budget-cost
                 grab('introduced-species-'+str(attempt))
                 deadline=time.monotonic()+200;season=-1
                 while current()['status']==0 and time.monotonic()<deadline:
                     if current()['d2']<30 and current()['d3']>=3:
-                        direct_tap(fx+154,fy+130)
+                        if has_touch:direct_tap(fx+154,fy+130)
+                        else:choose_tool(3);button('Select')
                     if current()['stage']!=season:season=current()['stage'];grab('attempt-'+str(attempt)+'-season-'+str(season))
                     time.sleep(.15)
                 if current()['status']==1:break
                 grab('habitat-ended-'+str(attempt));restart()
             expect(status=1);grab('balanced')
             before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
-            checks+=['button cursor and tool','touch tool and planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
+            checks+=['button cursor and tool','touch tool and planting' if has_touch else 'button tool cycling and planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
             restart();deadline=time.monotonic()+65
             while current()['status']==0 and time.monotonic()<deadline:time.sleep(.2)
             expect(status=2);time.sleep(.6);grab('extinction-result')
-            direct_tap(fx+88,fy+115);expect(status=0,screen=0)
-            checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat']
+            if has_touch:direct_tap(fx+88,fy+115)
+            else:button('Select')
+            expect(status=0,screen=0)
+            checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat' if has_touch else 'one-press new habitat']
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
         report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2));print('PASS',game,platform)
