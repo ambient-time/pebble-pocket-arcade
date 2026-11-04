@@ -176,7 +176,7 @@ def run(platform):
     def direct_tap(x,y):
         x,y=game_point(x-fx,y-fy)
         pointer(x,y,True);time.sleep(.04);pointer(x,y,False);time.sleep(.15)
-    checks=[]
+    checks=[];resent=[]  # Presses resent once after a silent first try.
     try:
         time.sleep(4);button('Back')
         AppInstaller(watch,str(PBW)).install()
@@ -333,40 +333,117 @@ def run(platform):
             checks+=['passive last-ball loss','held Select crossing terminal does not replay','fresh Select replays once']
 
         elif game=='pocket-ecosystem':
-            button('Down');expect(d0=1)
-            button('Select',hold=.6);expect(d1=1)
-            direct_tap(fx+22,fy+130);expect(d1=0)
-            direct_tap(fx+18,fy+15);grab('seeded-cell')
-            for attempt in range(4):
-                for tool, preferred in [(1,15),(2,5)]:
-                    direct_tap(fx+22+44*tool,fy+130)
-                    budget=current()['d3'];cost=3 if tool==1 else 5
-                    while budget < cost:
-                        time.sleep(.2);budget=current()['d3']
-                    for offset in range(24):
-                        cell=(preferred+offset)%24
-                        direct_tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
-                        if current()['d3']<=budget-cost:break
-                    assert current()['d3']<=budget-cost
-                grab('introduced-species-'+str(attempt))
-                deadline=time.monotonic()+200;season=-1
-                while current()['status']==0 and time.monotonic()<deadline:
-                    if current()['d2']<30 and current()['d3']>=3:
-                        direct_tap(fx+154,fy+130)
-                    if current()['stage']!=season:season=current()['stage'];grab('attempt-'+str(attempt)+'-season-'+str(season))
-                    time.sleep(.15)
-                if current()['status']==1:break
-                grab('habitat-ended-'+str(attempt));restart()
-            expect(status=1);grab('balanced')
-            before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
-            checks+=['button cursor and tool','touch tool and planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
-            restart();deadline=time.monotonic()+65
-            while current()['status']==0 and time.monotonic()<deadline:time.sleep(.2)
-            expect(status=2);time.sleep(.6);grab('extinction-result')
-            direct_tap(fx+88,fy+115);expect(status=0,screen=0)
-            checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat']
+            if has_touch:
+                button('Down');expect(d0=1)
+                button('Select',hold=.6);expect(d1=1)
+                direct_tap(fx+22,fy+130);expect(d1=0)
+                direct_tap(fx+18,fy+15);grab('seeded-cell')
+                for attempt in range(4):
+                    for tool, preferred in [(1,15),(2,5)]:
+                        direct_tap(fx+22+44*tool,fy+130)
+                        budget=current()['d3'];cost=3 if tool==1 else 5
+                        while budget < cost:
+                            time.sleep(.2);budget=current()['d3']
+                        for offset in range(24):
+                            cell=(preferred+offset)%24
+                            direct_tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
+                            if current()['d3']<=budget-cost:break
+                        assert current()['d3']<=budget-cost
+                    grab('introduced-species-'+str(attempt))
+                    deadline=time.monotonic()+200;season=-1
+                    while current()['status']==0 and time.monotonic()<deadline:
+                        if current()['d2']<30 and current()['d3']>=3:
+                            direct_tap(fx+154,fy+130)
+                        if current()['stage']!=season:season=current()['stage'];grab('attempt-'+str(attempt)+'-season-'+str(season))
+                        time.sleep(.15)
+                    if current()['status']==1:break
+                    grab('habitat-ended-'+str(attempt));restart()
+                expect(status=1);grab('balanced')
+                before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
+                checks+=['button cursor and tool','touch tool and planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
+                restart();deadline=time.monotonic()+65
+                while current()['status']==0 and time.monotonic()<deadline:time.sleep(.2)
+                expect(status=2);time.sleep(.6);grab('extinction-result')
+                direct_tap(fx+88,fy+115);expect(status=0,screen=0)
+                checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat']
+            else:
+                # No touchscreen: the same plan by buttons. Up/Down move the cell
+                # cursor (24 cells, wrapping), holding Select cycles the tool and
+                # Select places or rains. The habitat logs a state line every
+                # simulated second, so a press counts only when an action line
+                # follows it: off the playfield or after the result (no tick
+                # lines there), or a line whose tick is not a multiple of 30 or
+                # repeats the previous tick. A silent press is resent once and
+                # recorded; a second silence fails.
+                def acted(start):
+                    states=[l for l in logs[:start] if 'AR s=' in l][-1:]
+                    new=[l for l in logs[start:] if 'AR s=' in l]
+                    if not new:return False
+                    seen=[{k:int(v) for k,v in re.findall(r'(\w+)=(-?\d+)',l)} for l in states+new]
+                    if any(d['s'] or d['st']==2 for d in seen):return True
+                    ticks=[d['t'] for d in seen]
+                    return any(t%30 for t in ticks[len(states):]) or len(ticks)!=len(set(ticks))
+                def press(name,hold=.07):
+                    for attempt in range(2):
+                        start=len(logs)
+                        send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
+                        time.sleep(hold)
+                        send_data_to_qemu(watch.transport,QemuButton(state=0))
+                        until=time.monotonic()+3
+                        while not acted(start) and time.monotonic()<until:time.sleep(.03)
+                        if acted(start):
+                            time.sleep(.1);return
+                        if attempt:raise AssertionError(f'{name} press had no effect: {current()}')
+                        resent.append(name)
+                def cursor_to(cell):
+                    while current()['d0']!=cell:
+                        now=current()['d0'];step=1 if (cell-now)%24<=12 else -1
+                        press('Down' if step>0 else 'Up');expect(d0=(now+step)%24)
+                def tool_to(tool):
+                    while current()['d1']!=tool:
+                        nxt=(current()['d1']+1)%4
+                        press('Select',hold=.6);expect(d1=nxt)
+                def place(cost):
+                    while current()['d3']<cost:time.sleep(.2)
+                    before=current()['d3'];press('Select')
+                    return current()['d3']<before  # Energy regenerates by one at most.
+                def eco_restart():
+                    press('Back');expect(screen=1);press('Down')
+                    press('Select');expect(screen=3);press('Select');expect(screen=0,status=0)
+                press('Down');expect(d0=1)
+                press('Select',hold=.6);expect(d1=1)
+                tool_to(0);cursor_to(0);assert place(2);grab('seeded-cell')
+                for attempt in range(4):
+                    for tool, preferred in [(1,15),(2,5)]:
+                        tool_to(tool);cost=3 if tool==1 else 5
+                        for offset in range(24):
+                            cursor_to((preferred+offset)%24)
+                            if place(cost):break
+                        else:raise AssertionError('No free cell for tool '+str(tool))
+                    grab('introduced-species-'+str(attempt))
+                    # Legacy emulators tick slowly under load, so the limit is
+                    # simulated time (200 s) with a wall-clock cap.
+                    first=current()['ticks'];deadline=time.monotonic()+1500;season=-1
+                    while current()['status']==0 and current()['ticks']-first<6000 and time.monotonic()<deadline:
+                        if current()['d2']<30 and current()['d3']>=3:
+                            tool_to(3);press('Select')
+                        if current()['stage']!=season:season=current()['stage'];grab('attempt-'+str(attempt)+'-season-'+str(season))
+                        time.sleep(.15)
+                    if current()['status']==1:break
+                    grab('habitat-ended-'+str(attempt))
+                    if current()['status']==2:
+                        time.sleep(.6);press('Select');expect(status=0,screen=0)
+                    else:eco_restart()
+                expect(status=1);grab('balanced')
+                before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
+                checks+=['button cursor and tool','button planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
+                eco_restart();first=current()['ticks'];deadline=time.monotonic()+900
+                while current()['status']==0 and current()['ticks']-first<1600 and time.monotonic()<deadline:time.sleep(.2)
+                expect(status=2);time.sleep(.6);grab('extinction-result')
+                press('Select');expect(status=0,screen=0)
+                checks+=['extinction result','ongoing habitat restart confirmation','one-press new habitat']
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':checks,'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'resentPresses':resent,'checks':checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2));print('PASS',game,platform)
     finally:
         try:grab('final-screen')
