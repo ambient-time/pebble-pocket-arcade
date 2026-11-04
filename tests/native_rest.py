@@ -310,13 +310,23 @@ def run(platform):
             # The legacy-firmware emulators (basalt, chalk, diorite) answer the
             # reactive player later, so it wins less often there; watches
             # without touch get more runs, as the Salvage button pilot does.
+            # Lead the ball by the measured flipper lag: ticks from the state that
+            # prompted a left-flipper press to the first state showing it raised.
+            # New firmware answers in the same tick (lead 0, the original policy);
+            # the legacy emulators take one or two, which without a lead drops the
+            # host-simulated win rate from about 37% to 3%.
+            lags=[];sent=None
             for attempt in range(8 if has_touch else 16):
                 deadline=time.monotonic()+180;mask=-1;stage=-1;last_launch=0
                 while not current()['status'] and time.monotonic()<deadline:
                     d=current();now=time.monotonic()
-                    ready=d['d1']>10000 and d['d3']>0
+                    if sent is not None and d['hp']==1:lags.append(d['ticks']-sent);sent=None
+                    lead=min(4,max(0,sorted(lags)[len(lags)//2])) if lags else 0
+                    ready=d['d1']+d['d3']*lead>10000 and d['d3']>0
                     wanted=(QemuButton.Button.Up if ready and d['d0']<9000 else 0)|(QemuButton.Button.Down if ready and d['d0']>8600 else 0)
-                    if wanted!=mask:send_data_to_qemu(watch.transport,QemuButton(state=wanted));mask=wanted
+                    if wanted!=mask:
+                        if wanted&QemuButton.Button.Up and not max(mask,0)&QemuButton.Button.Up and d['hp']==0:sent=d['ticks']
+                        send_data_to_qemu(watch.transport,QemuButton(state=wanted));mask=wanted
                     if 'wait=1' in world() and now-last_launch>.5:
                         send_data_to_qemu(watch.transport,QemuButton(state=wanted|QemuButton.Button.Select));time.sleep(.05)
                         send_data_to_qemu(watch.transport,QemuButton(state=wanted));last_launch=now
@@ -327,6 +337,7 @@ def run(platform):
                 send_data_to_qemu(watch.transport,QemuButton(state=0))
                 if current()['status']==1:break
                 grab('lost-run-'+str(attempt));restart()
+            print('flipper lag ticks (median of %d): %s'%(len(lags),sorted(lags)[len(lags)//2] if lags else 0),flush=True)
             expect(status=1);grab('dungeon-cleared');checks+=['launch','simultaneous physical flippers','independent held touch flippers' if has_touch else 'independent held button flippers','reactive flipper timing','three distinct chambers','monster targets and bosses','complete dungeon']
             # Hold Select before the final drain; its eventual release must not replay.
             restart();held=False;deadline=time.monotonic()+100
