@@ -131,6 +131,23 @@ def run(platform):
     def expect(**values):
         actual = current()
         assert all(actual[k] == v for k, v in values.items()), (values, actual)
+    resent = []
+    def press(name, **values):
+        # Legacy-firmware emulators can drop a press under host load, and during
+        # play the once-a-second tick log can pass for a reply. Confirm the press
+        # by its state change; resend at most twice and record it in the report.
+        for attempt in range(3):
+            try:
+                button(name)
+            except AssertionError:
+                pass
+            time.sleep(.25)
+            actual = current()
+            if all(actual[k] == v for k, v in values.items()):
+                if attempt:
+                    resent.append(name)
+                return
+        expect(**values)
     def grab(name):
         time.sleep(.15)
         pixels = cmd._grab_processed_image(argparse.Namespace(no_correction=True, scale=1, no_open=True, v=0), show_progress=False)
@@ -182,16 +199,16 @@ def run(platform):
         AppInstaller(watch,str(PBW)).install()
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)))
         time.sleep(1);expect(screen=2);grab('rules')
-        button('Select');expect(screen=0);grab('play')
+        press('Select',screen=0);grab('play')
         if has_touch:
             checks+=exercise_about(button,expect,current,grab,pointer,width,watch,APP)
         else:
-            button('Back');expect(screen=1)
+            press('Back',screen=1)
             for _ in range(3):button('Down')
-            button('Select');expect(screen=4);grab('about')
-            button('Select');expect(screen=1);button('Back');expect(screen=0)
+            press('Select',screen=4);grab('about')
+            press('Select',screen=1);press('Back',screen=0)
             checks+=['About by buttons']
-        button('Back');expect(screen=1);grab('pause')
+        press('Back',screen=1);grab('pause')
         before=current()['ticks'];time.sleep(1);assert current()['ticks']==before
         if has_touch:
             # Finger scrolls the actual native list without activating a row.
@@ -200,7 +217,7 @@ def run(platform):
             for y in range(height-70,55,-10):pointer(width//2,y,True);time.sleep(.04)
             pointer(width//2,55,False);time.sleep(.3)
             expect(screen=1);grab('menu-scrolled')
-        button('Back');expect(screen=0)
+        press('Back',screen=0)
         watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
         previous=current()['ticks']
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
@@ -208,8 +225,8 @@ def run(platform):
         checks+=['rules','playfield','pause freezes','native touch menu scroll without activation' if has_touch else 'button menu','save and relaunch']
         game=ROOT.name
         if game=='train-dispatcher':
-            button('Down');expect(d3=1);button('Select');expect(d1=1)
-            button('Up');expect(d3=0)
+            press('Down',d3=1);press('Select',d1=1)
+            press('Up',d3=0)
             deadline=time.monotonic()+180
             captured=False
             while not current()['status'] and time.monotonic()<deadline:
@@ -219,11 +236,17 @@ def run(platform):
                     if not incoming:continue
                     kind=max(incoming,key=lambda t:t[2])[3]
                     desired=int(kind==0) if junction==0 else int(kind==1) if junction==1 else 0
-                    if current()['d'+str(junction)]!=desired:direct_tap(fx+48+junction*48,fy+72)
+                    if current()['d'+str(junction)]!=desired:
+                        if has_touch:direct_tap(fx+48+junction*48,fy+72)
+                        else:
+                            # Buttons only: move the selection the short way round, then switch.
+                            step=(junction-current()['d3'])%3
+                            if step:press('Down' if step==1 else 'Up',d3=junction)
+                            button('Select')
                 if not captured and current()['score']>=300:grab('traffic');captured=True
                 time.sleep(.12)
             expect(status=1);grab('completed-shift')
-            checks+=['button switch selection','touch routing','18 deliveries','completed shift']
+            checks+=['button switch selection','touch routing' if has_touch else 'button routing','18 deliveries','completed shift']
             restart();deadline=time.monotonic()+90
             while not current()['status'] and time.monotonic()<deadline:time.sleep(.2)
             expect(status=2);grab('failed-shift');checks+=['misrouting loss']
@@ -366,7 +389,7 @@ def run(platform):
             direct_tap(fx+88,fy+115);expect(status=0,screen=0)
             checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat']
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':checks,'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'resentPresses':resent,'checks':checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2));print('PASS',game,platform)
     finally:
         try:grab('final-screen')
