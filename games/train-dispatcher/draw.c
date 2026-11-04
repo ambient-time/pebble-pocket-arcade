@@ -121,7 +121,9 @@ void game_draw(const Game *g, GContext *c) {
 // selected junction ("Switch 1 LOCKED" no longer fits). The Time Round's lower
 // chord is about 105 px: "Sw 1  Next C", or "Sw 1 LOCKED".
 void game_hud_compact(const Game *g, char *a, size_t n, char *b, size_t m) {
-  snprintf(a, n, "Trains %ld/18  X%ld/3", (long)g->d[DELIVERED], (long)g->d[STRIKES]);
+  // The Time Round's top chord is 120 px: "Trains 18/18  X0/3" needs 128.
+  snprintf(a, n, PBL_IF_ROUND_ELSE("Trains %ld/18  X%ld", "Trains %ld/18  X%ld/3"),
+           (long)g->d[DELIVERED], (long)g->d[STRIKES]);
   long sw = (long)g->d[FOCUS] + 1;
   char next = 'A' + (int)g->d[NEXT];
   bool locked = train_locked(g, g->d[FOCUS]);

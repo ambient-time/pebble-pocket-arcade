@@ -47,7 +47,8 @@ the smaller screens so the junction number stays inside its ring.
 
 The bottom line is shorter where space is tight. On 144×168 it reads "Switch 1
 Next C", or "1 LOCKED  Next C" while a train holds the selected junction. The
-Pebble Time Round reads "Sw 1  Next C" or "Sw 1 LOCKED". On Pebble Round 2 the
+Pebble Time Round reads "Sw 1  Next C" or "Sw 1 LOCKED", and its top line
+shows strikes as "X1" so "Trains 18/18" still fits. On Pebble Round 2 the
 locked line now reads "1 LOCKED  Next B" so it no longer runs past the rim.
 
 On black-and-white Pebbles every station is white with a black letter, and
