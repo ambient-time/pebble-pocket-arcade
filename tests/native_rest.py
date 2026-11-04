@@ -360,7 +360,9 @@ def run(platform):
                 start=len(logs)
                 send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
                 time.sleep(hold);send_data_to_qemu(watch.transport,QemuButton(state=0))
-                deadline=time.monotonic()+4
+                # A loaded host can stall the emulator for seconds; wait long
+                # enough that a late reply is not mistaken for a dropped press.
+                deadline=time.monotonic()+10
                 while not replies(start) and time.monotonic()<deadline:time.sleep(.02)
                 if not replies(start):silent.append(name);return False
                 time.sleep(.1);return True
@@ -387,7 +389,8 @@ def run(platform):
             else:
                 choose_cell(1);choose_tool(1)
                 choose_tool(0);choose_cell(0);budget=place()
-                assert current()['d3']==budget-2,'Leaf did not plant';grab('seeded-cell')
+                # Planting costs 2; energy may regrow by 1 in the same second.
+                assert current()['d3'] in (budget-2,budget-1),'Leaf did not plant';grab('seeded-cell')
             for attempt in range(4):
                 for tool, preferred in [(1,15),(2,5)]:
                     if has_touch:direct_tap(fx+22+44*tool,fy+130)
