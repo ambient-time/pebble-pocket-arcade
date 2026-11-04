@@ -41,16 +41,37 @@ The playfield and pieces fill more of the watch. Text uses bold fonts with an
 a white fill and black text, and important markers retain outlines or shapes
 in addition to color. Touch and button controls are unchanged.
 
+## Screens and shapes
+
+The habitat is a grid of six by four square cells, wider than tall, with the
+tools underneath, so it is drawn for rectangles first. On 144×168 screens the
+grid spans the full width with the season and species counts above it and the
+goal line below. The Time Round shows the same grid at 79% with its corners
+inside the rim. Its top line keeps the season and the grazer and hunter counts,
+and the plant total moves to the goal line when plants run short.
+
+Watches without touch show the tools as a legend: each tool has the mark it
+puts on the board and its cost, and the selected tool is inverted. Hold Select
+to change it. The goal line names what the habitat lacks (a hunter, grazers,
+plants or rain); otherwise it shows energy, water and the balance count. The
+rules drop the touch line.
+
+On black-and-white Pebbles the species differ by shape: grazers are solid discs
+on a black ring and hunters are hollow triangles with a centre dot. Winter
+plants use thin strokes instead of grey, and the cursor is a double outline.
+
 ## Install and build
 
 Open the included `.pbw` with the Pebble phone app and install it on the connected
-watch. This app targets Pebble Time 2 (emery) and Pebble Round 2 (gabbro).
-Touch requires firmware 4.33.2 or later; buttons remain available.
+watch. Version 0.4.0 runs on every Pebble with a native build: Pebble Time 2
+(emery), Pebble Round 2 (gabbro), Pebble Time and Time Steel (basalt), Pebble 2
+(diorite), Pebble 2 Duo (flint) and Pebble Time Round (chalk). Touch works on
+Time 2 and Round 2 with firmware 4.33.2 or later; buttons work everywhere.
 
 The source ZIP is a standalone Pebble project. Extract it, enter its directory,
 and run `pebble build` with SDK 4.33.1 and pebble-tool installed. It has no runtime
 network service or phone-side JavaScript dependency.
 
-Version 0.3.1. Created by Luke Steuber. MIT license.
-Native emulator evidence covers both watch shapes; physical-watch validation
+Version 0.4.0. Created by Luke Steuber. MIT license.
+Native emulator evidence covers all six targets; physical-watch validation
 is still separate. This package does not imply a Pebble Store release.
