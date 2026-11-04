@@ -56,11 +56,19 @@ void game_draw(const Game *g, GContext *c) {
     line(c, 92, 10, 92, 34);
     line(c, 99, 10, 99, 34);
   } else {
-    ink(c, PBL_IF_BW_ELSE(GColorBlack, GColorMagenta));
+#ifdef PBL_BW
+    // A black B inside the white block, with the boss's hits left as bars
+    // under it, clear of the block.
+    ink(c, GColorBlack);
+    label(c, "B", 76, 8, 24);
+    ink(c, GColorWhite);
+    for (int i = 0; i < g->d[BOSS]; i++)
+      box(c, 78 + i * 7, 37, 4, 3, true);
+#else
     large_label(c, "B", 76, 7, 24);
-    ink(c, PBL_IF_BW_ELSE(GColorWhite, GColorMagenta));
     for (int i = 0; i < g->d[BOSS]; i++)
       box(c, 78 + i * 7, 35, 4, 3, true);
+#endif
   }
   ink(c, GColorWhite);
   circle(c, g->d[BALL_X] / 100, g->d[BALL_Y] / 100, 4, true);
