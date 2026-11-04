@@ -333,8 +333,6 @@ def run(platform):
             checks+=['passive last-ball loss','held Select crossing terminal does not replay','fresh Select replays once']
 
         elif game=='pocket-ecosystem':
-            button('Down');expect(d0=1)
-            button('Select',hold=.6);expect(d1=1)
             # The four watches without touch play by buttons alone: hold Select
             # cycles the tool, Up/Down walk the cursor through the 24 cells and
             # Select places. Legacy-firmware emulators can drop a press under host
@@ -342,13 +340,29 @@ def run(platform):
             # reads the native state back and presses again. Silent presses are
             # recorded in the report.
             silent=[]
+            def replies(start):
+                # Log lines from index start that answer input: every state line
+                # except the once-a-second simulation lines, whose tick count
+                # advances to a multiple of 30 on the play screen.
+                last=-1
+                for l in reversed(logs[:start]):
+                    m=re.search(r'AR s=.* t=(\d+)',l)
+                    if m:last=int(m.group(1));break
+                n=0
+                for l in logs[start:]:
+                    m=re.search(r'AR s=(-?\d+) .* t=(\d+)',l)
+                    if not m:continue
+                    screen,t=int(m.group(1)),int(m.group(2))
+                    if not (screen==0 and t%30==0 and t>last):n+=1
+                    last=t
+                return n
             def press(name,hold=.07):
-                previous=count()
+                start=len(logs)
                 send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
                 time.sleep(hold);send_data_to_qemu(watch.transport,QemuButton(state=0))
                 deadline=time.monotonic()+4
-                while count()==previous and time.monotonic()<deadline:time.sleep(.02)
-                if count()==previous:silent.append(name);return False
+                while not replies(start) and time.monotonic()<deadline:time.sleep(.02)
+                if not replies(start):silent.append(name);return False
                 time.sleep(.1);return True
             def choose_tool(tool):
                 for _ in range(8):
@@ -366,9 +380,12 @@ def run(platform):
                 if not press('Select'):press('Select')
                 return budget
             if has_touch:
+                button('Down');expect(d0=1)
+                button('Select',hold=.6);expect(d1=1)
                 direct_tap(fx+22,fy+130);expect(d1=0)
                 direct_tap(fx+18,fy+15);grab('seeded-cell')
             else:
+                choose_cell(1);choose_tool(1)
                 choose_tool(0);choose_cell(0);budget=place()
                 assert current()['d3']==budget-2,'Leaf did not plant';grab('seeded-cell')
             for attempt in range(4):
