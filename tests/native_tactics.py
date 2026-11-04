@@ -117,15 +117,28 @@ def run(platform):
             time.sleep(.02)
         assert count() > previous, 'Native input did not respond'
         time.sleep(.1)
-    def button(name, hold=.07):
-        previous = count()
+    resent = []
+    def press(name, hold=.07):
         send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
         time.sleep(hold)
         send_data_to_qemu(watch.transport, QemuButton(state=0))
-        if previous:
-            response(previous)
-        else:
-            time.sleep(.2)
+    def button(name, hold=.07):
+        previous = count()
+        for attempt in range(2):
+            press(name, hold)
+            if not previous:
+                time.sleep(.2)
+                return
+            try:
+                response(previous)
+                return
+            except AssertionError:
+                # Legacy-firmware emulators can drop a press under host load. Resend
+                # once and record it; a second silence still fails. A late reply to the
+                # first press would double the input and fail the next expectation.
+                if attempt or count() > previous:
+                    raise
+                resent.append(name)
     def expect(**values):
         actual = current()
         assert all(actual[k] == v for k, v in values.items()), (values, actual)
@@ -136,9 +149,24 @@ def run(platform):
         png.from_array(pixels, mode='RGBA;8').save(str(file))
         frames.append(str(file.relative_to(ROOT)))
         return pixels
-    width, height = (200, 228) if platform == 'emery' else (260, 260)
-    x, y = width // 2, 105 if platform == 'emery' else 126
-    factor=108 if platform=='emery' else 125
+    sizes = {'basalt': (144, 168), 'diorite': (144, 168), 'flint': (144, 168),
+             'chalk': (180, 180), 'emery': (200, 228), 'gabbro': (260, 260)}
+    width, height = sizes[platform]
+    has_touch = platform in ('emery', 'gabbro')  # The other four watches have buttons only.
+    def about_buttons():
+        button('Back');expect(screen=1)
+        for _ in range(3):button('Down')
+        button('Select');expect(screen=4);grab('about')
+        button('Up');expect(screen=4)
+        button('Select');expect(screen=1)
+        button('Select');expect(screen=4)
+        button('Back');expect(screen=1)
+        button('Back');expect(screen=0)
+        return ['About by buttons: Select and Back return to the menu']
+    def app_running():
+        active=watch.send_and_read(AppRunState(data=AppRunStateRequest()),AppRunState)
+        return active.data.uuid == APP
+    factor={'emery':108,'gabbro':125}.get(platform,0)
     fx=(width-176*factor//100)//2;fy=(height-144*factor//100)//2
     def game_point(x,y):
         return fx+x*factor//100,fy+y*factor//100
@@ -162,9 +190,12 @@ def run(platform):
         time.sleep(1)
         expect(screen=2);grab('rules')
         button('Select');expect(screen=0);grab('board')
-        about_checks=exercise_about(button,expect,current,grab,pointer,width,watch,APP)
+        about_checks=exercise_about(button,expect,current,grab,pointer,width,watch,APP) if has_touch else about_buttons()
         board=current()['stage']
         oracle=Path(__file__).resolve().parent.parent/'build/tactics-oracle'
+        repo=Path(__file__).resolve().parent.parent
+        subprocess.run(['cc','-std=c11','-I',str(repo/'common'),'-I',str(repo/'games/one-screen-tactics'),
+            str(repo/'tests/tactics_oracle.c'),str(repo/'games/one-screen-tactics/game.c'),'-o',str(oracle)],check=True)
         path=list(map(int,subprocess.check_output([str(oracle),str(board)],text=True).split()))
         choice=0
         for turn,direction in enumerate(path):
@@ -193,38 +224,62 @@ def run(platform):
         before=current()
         button('Back');button('Down');button('Select');expect(screen=3)
         button('Back');assert current()==before
-        # Touch the player to wait, allowing the beacon to be destroyed.
-        for _ in range(5):
-            if current()['status']:break
-            px,py=game_point(18+current()['d0']*28+14,2+current()['d1']*28+14)
-            touch([(px,py)])
-        expect(status=2);grab('defeat')
-        time.sleep(.6)
-        # A tap outside the replay row or a drag into it must keep the result.
-        touch([game_point(10,45)]);expect(status=2)
-        touch([game_point(10,45),game_point(88,115)]);expect(status=2)
-        touch([game_point(88,115),game_point(108,115),game_point(88,115)]);expect(status=2)
-        touch([game_point(88,115)]);expect(status=0,screen=0)
-        grab('touch-replayed')
-        for attempt in range(3):
-            before=current()
-            button('Back');expect(screen=1)
+        if has_touch:
+            # Touch the player to wait, allowing the beacon to be destroyed.
+            for _ in range(5):
+                if current()['status']:break
+                px,py=game_point(18+current()['d0']*28+14,2+current()['d1']*28+14)
+                touch([(px,py)])
+            expect(status=2);grab('defeat')
+            time.sleep(.6)
+            # A tap outside the replay row or a drag into it must keep the result.
+            touch([game_point(10,45)]);expect(status=2)
+            touch([game_point(10,45),game_point(88,115)]);expect(status=2)
+            touch([game_point(88,115),game_point(108,115),game_point(88,115)]);expect(status=2)
+            touch([game_point(88,115)]);expect(status=0,screen=0)
+            grab('touch-replayed')
+            for attempt in range(3):
+                before=current()
+                button('Back');expect(screen=1)
+                button('Up')
+                pixels=grab('exit-selected-'+str(attempt))
+                selected_rows=[y for y,row in enumerate(pixels)
+                    if sum(all(row[4*x+k]>240 for k in range(3))
+                           for x in range(width)) > width//2]
+                assert selected_rows, 'Selected native menu row is not visible'
+                exit_y=selected_rows[len(selected_rows)//2]
+                pointer(width//2,exit_y,True);time.sleep(.07)
+                pointer(width//2,exit_y,False);time.sleep(.7)
+                active=watch.send_and_read(AppRunState(data=AppRunStateRequest()),AppRunState)
+                assert active.data.uuid != APP, 'Native menu exit did not close the app'
+                watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.8)
+                assert current()==before, (before,current())
+            grab('exit-resumed')
+        else:
+            # WAIT (Up from the fresh game's UP) every turn lets the beacon fall.
             button('Up')
-            pixels=grab('exit-selected-'+str(attempt))
-            selected_rows=[y for y,row in enumerate(pixels)
-                if sum(all(row[4*x+k]>240 for k in range(3))
-                       for x in range(width)) > width//2]
-            assert selected_rows, 'Selected native menu row is not visible'
-            exit_y=selected_rows[len(selected_rows)//2]
-            pointer(width//2,exit_y,True);time.sleep(.07)
-            pointer(width//2,exit_y,False);time.sleep(.7)
-            active=watch.send_and_read(AppRunState(data=AppRunStateRequest()),AppRunState)
-            assert active.data.uuid != APP, 'Native menu exit did not close the app'
-            watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.8)
-            assert current()==before, (before,current())
-        grab('exit-resumed')
+            for _ in range(5):
+                if current()['status']:break
+                button('Select')
+            expect(status=2);grab('defeat')
+            time.sleep(.6)
+            button('Select');expect(status=0,screen=0)
+            grab('button-replayed')
+            for attempt in range(3):
+                button('Select')  # One move, so the saved game differs from a fresh one.
+                before=current()
+                button('Back');expect(screen=1)
+                button('Up')
+                grab('exit-selected-'+str(attempt))
+                press('Select');time.sleep(.9)
+                assert not app_running(), 'Native menu exit did not close the app'
+                watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.8)
+                assert current()==before, (before,current())
+            grab('exit-resumed')
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':['rules','board','button solution across five turns','first action save/relaunch','pause','victory','cancel restart','restart','touch wait','beacon loss','finished save restored','one-press replay','outside and dragged touches ignored','one-tap replay','three touch menu exits with exact saved-game resume']+about_checks,'frames':frames,'logs':logs}
+        late=(['touch wait','beacon loss','outside and dragged touches ignored','one-tap replay','three touch menu exits with exact saved-game resume'] if has_touch else
+              ['button wait','beacon loss','one-press replay after defeat','three button menu exits with exact saved-game resume'])
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'resentPresses':resent,'checks':['rules','board','button solution across five turns','first action save/relaunch','pause','victory','cancel restart','restart','finished save restored','one-press replay']+late+about_checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2))
         print('PASS',platform)
     finally:
@@ -235,5 +290,5 @@ def run(platform):
         qmp.close();qmp_socket.close();shutdown();bridge.close()
 
 if __name__=='__main__':
-    parser=argparse.ArgumentParser();parser.add_argument('platform',choices=['emery','gabbro'])
+    parser=argparse.ArgumentParser();parser.add_argument('platform',choices=['basalt','chalk','diorite','emery','flint','gabbro'])
     run(parser.parse_args().platform)
