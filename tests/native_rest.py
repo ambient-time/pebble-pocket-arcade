@@ -337,24 +337,39 @@ def run(platform):
             button('Select',hold=.6);expect(d1=1)
             # The four watches without touch play by buttons alone: hold Select
             # cycles the tool, Up/Down walk the cursor through the 24 cells and
-            # Select places. Each helper reads the native state, so a press that
-            # a legacy-firmware emulator drops is simply sent again.
+            # Select places. Legacy-firmware emulators can drop a press under host
+            # load, so these presses wait for a reply without failing; each helper
+            # reads the native state back and presses again. Silent presses are
+            # recorded in the report.
+            silent=[]
+            def press(name,hold=.07):
+                previous=count()
+                send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
+                time.sleep(hold);send_data_to_qemu(watch.transport,QemuButton(state=0))
+                deadline=time.monotonic()+4
+                while count()==previous and time.monotonic()<deadline:time.sleep(.02)
+                if count()==previous:silent.append(name);return False
+                time.sleep(.1);return True
             def choose_tool(tool):
-                for _ in range(6):
+                for _ in range(8):
                     if current()['d1']==tool:return
-                    button('Select',hold=.6)
+                    press('Select',.6)
                 expect(d1=tool)
             def choose_cell(cell):
-                for _ in range(16):
+                for _ in range(20):
                     now=current()['d0']
                     if now==cell:return
-                    button('Down' if (cell-now)%24<=12 else 'Up')
+                    press('Down' if (cell-now)%24<=12 else 'Up')
                 expect(d0=cell)
+            def place():
+                budget=current()['d3']
+                if not press('Select'):press('Select')
+                return budget
             if has_touch:
                 direct_tap(fx+22,fy+130);expect(d1=0)
                 direct_tap(fx+18,fy+15);grab('seeded-cell')
             else:
-                choose_tool(0);choose_cell(0);budget=current()['d3'];button('Select')
+                choose_tool(0);choose_cell(0);budget=place()
                 assert current()['d3']==budget-2,'Leaf did not plant';grab('seeded-cell')
             for attempt in range(4):
                 for tool, preferred in [(1,15),(2,5)]:
@@ -366,7 +381,7 @@ def run(platform):
                     for offset in range(24):
                         cell=(preferred+offset)%24
                         if has_touch:direct_tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
-                        else:choose_cell(cell);budget=current()['d3'];button('Select')
+                        else:choose_cell(cell);budget=place()
                         if current()['d3']<=budget-cost:break
                     assert current()['d3']<=budget-cost
                 grab('introduced-species-'+str(attempt))
@@ -374,7 +389,7 @@ def run(platform):
                 while current()['status']==0 and time.monotonic()<deadline:
                     if current()['d2']<30 and current()['d3']>=3:
                         if has_touch:direct_tap(fx+154,fy+130)
-                        else:choose_tool(3);button('Select')
+                        else:choose_tool(3);place()
                     if current()['stage']!=season:season=current()['stage'];grab('attempt-'+str(attempt)+'-season-'+str(season))
                     time.sleep(.15)
                 if current()['status']==1:break
@@ -386,9 +401,10 @@ def run(platform):
             while current()['status']==0 and time.monotonic()<deadline:time.sleep(.2)
             expect(status=2);time.sleep(.6);grab('extinction-result')
             if has_touch:direct_tap(fx+88,fy+115)
-            else:button('Select')
+            else:place()
             expect(status=0,screen=0)
             checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat' if has_touch else 'one-press new habitat']
+            if silent:checks+=['silent presses resent: '+' '.join(silent)]
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
         report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2));print('PASS',game,platform)
