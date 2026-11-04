@@ -357,11 +357,14 @@ def run(platform):
                     d=current();now=time.monotonic()
                     # The state line is up to three ticks old when sent and arrives
                     # later still; the press needs another tick or two to land. Look
-                    # ahead by that lag (one tick: v += 7 gravity, then p += v) so the
-                    # flipper's short strike window meets the ball on every firmware.
-                    k=min(8,int((now-seen[0])*tick_rate())+2)
+                    # ahead by that lag (one tick: v += 7 gravity, then p += v), and
+                    # pulse the flipper (two ticks held, one released) so a fresh
+                    # five-tick strike window is open whatever the exact delay. A host
+                    # model of this pilot wins about 60% of dungeons with the estimate
+                    # one tick short to three ticks long; holding wins only when exact.
+                    rate=tick_rate();k=min(8,int((now-seen[0])*rate)+2)
                     px=d['d0']+k*d['d2'];py=d['d1']+k*d['d3']+7*k*(k+1)//2;pv=d['d3']+7*k
-                    ready=py>10000 and pv>0
+                    ready=py>10000 and pv>0 and int(now*rate)%3<2
                     wanted=(QemuButton.Button.Up if ready and px<9000 else 0)|(QemuButton.Button.Down if ready and px>8600 else 0)
                     if wanted!=mask:send_data_to_qemu(watch.transport,QemuButton(state=wanted));mask=wanted
                     if 'wait=1' in world() and now-last_launch>.5:
