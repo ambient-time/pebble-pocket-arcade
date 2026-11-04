@@ -41,16 +41,40 @@ The playfield and pieces fill more of the watch. Text uses bold fonts with an
 a white fill and black text, and important markers retain outlines or shapes
 in addition to color. Touch and button controls are unchanged.
 
+## Screens and shapes
+
+The habitat is a 6×4 grid of square cells with a tool row underneath, so it reads
+best on rectangles. On 144×168 screens the grid and tool row span the full width.
+On round screens the whole habitat sits inside the circle, scaled evenly and never
+stretched: Round 2 as before, and the Time Round with the grid and tool row inside
+the rim and a readout above and below.
+
+The tool names do not fit a 35-pixel tile, so on Pebble Time, Pebble 2, Pebble 2
+Duo and the Time Round each tile shows an icon and its cost (sprouts 2, grazer 3,
+hunter 5, rain drop 3). The selected tile is white. The bottom line shows energy,
+water and the balance count ("$7  W84  2/60") or what the habitat still needs
+("Add hunter  $10", "Add 1 grazer $5"). The Time Round shortens the season to
+three letters ("Sum L144 G9 P2") and the bottom line to fit its chord ("Grazers
+2/3 $5", "Balanced W84"). Each animal sits on a small black disc so it stays clear
+of the plants, and the cursor is a double outline.
+
+On black-and-white Pebbles, grazers are white discs with an eye, hunters are white
+triangles with a dark center, plants are white sprouts that lose their leaves in
+winter, the selected tool is a filled tile, and the season and counts are always
+written above the habitat. Watches without touch drop the touch hints.
+
 ## Install and build
 
 Open the included `.pbw` with the Pebble phone app and install it on the connected
-watch. This app targets Pebble Time 2 (emery) and Pebble Round 2 (gabbro).
-Touch requires firmware 4.33.2 or later; buttons remain available.
+watch. Version 0.4.0 runs on every Pebble with a native build: Pebble Time 2
+(emery), Pebble Round 2 (gabbro), Pebble Time and Time Steel (basalt), Pebble 2
+(diorite), Pebble 2 Duo (flint) and Pebble Time Round (chalk). Touch works on
+Time 2 and Round 2 with firmware 4.33.2 or later; buttons work everywhere.
 
 The source ZIP is a standalone Pebble project. Extract it, enter its directory,
 and run `pebble build` with SDK 4.33.1 and pebble-tool installed. It has no runtime
 network service or phone-side JavaScript dependency.
 
-Version 0.3.1. Created by Luke Steuber. MIT license.
-Native emulator evidence covers both watch shapes; physical-watch validation
+Version 0.4.0. Created by Luke Steuber. MIT license.
+Native emulator evidence covers all six targets; physical-watch validation
 is still separate. This package does not imply a Pebble Store release.

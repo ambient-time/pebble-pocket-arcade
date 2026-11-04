@@ -119,9 +119,11 @@ def run(platform):
             time.sleep(.02)
         assert count() > previous, 'Native input did not respond'
         time.sleep(.1)
-    resent = []
+    resent = []  # Presses resent once after a silent first try.
     def button(name, hold=.07):
         previous = count()
+        if ROOT.name == 'pocket-ecosystem' and previous:
+            return press(name, hold)  # Its tick lines would satisfy response().
         for attempt in range(2):
             send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
             time.sleep(hold)
@@ -134,13 +136,47 @@ def run(platform):
                 return
             except AssertionError:
                 # Legacy-firmware emulators can drop a press under host load. Resend
-                # once and record it; a second silence still fails.
+                # once and record it; a second silence still fails. A late reply to the
+                # first press would double the input and fail the next expectation.
                 if attempt or count() > previous:
                     raise
                 resent.append(name)
     def expect(**values):
-        actual = current()
+        # Allow up to 2 s for the state line to arrive from a loaded emulator.
+        until = time.monotonic() + 2
+        while True:
+            actual = current()
+            if all(actual[k] == v for k, v in values.items()) or time.monotonic() > until:
+                break
+            time.sleep(.05)
         assert all(actual[k] == v for k, v in values.items()), (values, actual)
+    # Pocket Ecosystem logs a state line every simulated second, so an input
+    # counts only when an action line follows it: off the playfield or
+    # after the result (no tick lines there), or a line whose tick is not
+    # a multiple of 30 or repeats the previous tick. A silent input is
+    # resent once and recorded; a second silence fails.
+    def acted(start):
+        states=[l for l in logs[:start] if 'AR s=' in l][-1:]
+        new=[l for l in logs[start:] if 'AR s=' in l]
+        if not new:return False
+        seen=[{k:int(v) for k,v in re.findall(r'(\w+)=(-?\d+)',l)} for l in states+new]
+        if any(d['s'] or d['st']==2 for d in seen):return True
+        ticks=[d['t'] for d in seen]
+        return any(t%30 for t in ticks[len(states):]) or len(ticks)!=len(set(ticks))
+    # 0.15 s, as in the capture tool: under load a 0.07 s press can reach
+    # the slowed legacy emulators shorter than the button debounce.
+    def press(name,hold=.15):
+        for attempt in range(2):
+            start=len(logs)
+            send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
+            time.sleep(hold)
+            send_data_to_qemu(watch.transport,QemuButton(state=0))
+            until=time.monotonic()+3
+            while not acted(start) and time.monotonic()<until:time.sleep(.03)
+            if acted(start):
+                time.sleep(.1);return
+            if attempt:raise AssertionError(f'{name} press had no effect: {current()}')
+            resent.append(name)
     def grab(name):
         time.sleep(.15)
         pixels = cmd._grab_processed_image(argparse.Namespace(no_correction=True, scale=1, no_open=True, v=0), show_progress=False)
@@ -211,9 +247,17 @@ def run(platform):
             pointer(width//2,55,False);time.sleep(.3)
             expect(screen=1);grab('menu-scrolled')
         button('Back');expect(screen=0)
+        exits=sum('Heap Usage' in l for l in logs)
         watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
         previous=current()['ticks']
         watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
+        # Under load the stop and start can land late; wait (up to 8 s) for the
+        # firmware's exit line and the new instance's first state line.
+        until=time.monotonic()+8
+        while time.monotonic()<until:
+            ends=[i for i,l in enumerate(logs) if 'Heap Usage' in l]
+            if len(ends)>exits and any('AR s=' in l for l in logs[ends[-1]:]):break
+            time.sleep(.1)
         expect(screen=0);assert current()['ticks']>=previous
         checks+=['rules','playfield','pause freezes','native touch menu scroll without activation' if has_touch else 'button menu','save and relaunch']
         game=ROOT.name
@@ -389,38 +433,113 @@ def run(platform):
             checks+=['passive last-ball loss','held Select crossing terminal does not replay','fresh Select replays once']
 
         elif game=='pocket-ecosystem':
-            button('Down');expect(d0=1)
-            button('Select',hold=.6);expect(d1=1)
-            direct_tap(fx+22,fy+130);expect(d1=0)
-            direct_tap(fx+18,fy+15);grab('seeded-cell')
-            for attempt in range(4):
-                for tool, preferred in [(1,15),(2,5)]:
-                    direct_tap(fx+22+44*tool,fy+130)
-                    budget=current()['d3'];cost=3 if tool==1 else 5
-                    while budget < cost:
-                        time.sleep(.2);budget=current()['d3']
-                    for offset in range(24):
-                        cell=(preferred+offset)%24
-                        direct_tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
-                        if current()['d3']<=budget-cost:break
-                    assert current()['d3']<=budget-cost
-                grab('introduced-species-'+str(attempt))
-                deadline=time.monotonic()+200;season=-1
-                while current()['status']==0 and time.monotonic()<deadline:
-                    if current()['d2']<30 and current()['d3']>=3:
-                        direct_tap(fx+154,fy+130)
-                    if current()['stage']!=season:season=current()['stage'];grab('attempt-'+str(attempt)+'-season-'+str(season))
-                    time.sleep(.15)
-                if current()['status']==1:break
-                grab('habitat-ended-'+str(attempt));restart()
-            expect(status=1);grab('balanced')
-            before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
-            checks+=['button cursor and tool','touch tool and planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
-            restart();deadline=time.monotonic()+65
-            while current()['status']==0 and time.monotonic()<deadline:time.sleep(.2)
-            expect(status=2);time.sleep(.6);grab('extinction-result')
-            direct_tap(fx+88,fy+115);expect(status=0,screen=0)
-            checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat']
+            def tap(x,y):
+                # Under host load a single short contact is often lost (5 of 13 on
+                # emery). Repeating the contact sample every 50 ms for 0.35 s, as
+                # the capture tool's drag does, registered 7 of 7.
+                px,py=game_point(x-fx,y-fy)
+                for attempt in range(2):
+                    start=len(logs)
+                    for _ in range(7):pointer(px,py,True);time.sleep(.05)
+                    pointer(px,py,False)
+                    until=time.monotonic()+3
+                    while not acted(start) and time.monotonic()<until:time.sleep(.03)
+                    if acted(start):
+                        time.sleep(.6);return  # Contacts spaced 1.5 s apart all registered.
+                    if attempt:raise AssertionError(f'Tap at {x},{y} had no effect: {current()}')
+                    resent.append(f'tap {x - fx},{y - fy}')
+            if has_touch:
+                press('Down');expect(d0=1)
+                press('Select',hold=1.2);expect(d1=1)
+                tap(fx+22,fy+130);expect(d1=0)
+                tap(fx+18,fy+15);grab('seeded-cell')
+                for attempt in range(4):
+                    for tool, preferred in [(1,15),(2,5)]:
+                        tap(fx+22+44*tool,fy+130)
+                        budget=current()['d3'];cost=3 if tool==1 else 5
+                        while budget < cost:
+                            time.sleep(.2);budget=current()['d3']
+                        for offset in range(24):
+                            cell=(preferred+offset)%24;before=current()['d3']
+                            tap(fx+4+(cell%6)*28+14,fy+1+(cell//6)*28+14)
+                            if current()['d3']<before:break  # Placed; energy regenerates by one at most.
+                        else:raise AssertionError('No free cell for tool '+str(tool))
+                    grab('introduced-species-'+str(attempt))
+                    # Simulated time (200 s) with a wall-clock cap: emulators tick slowly under load.
+                    first=current()['ticks'];deadline=time.monotonic()+1500;season=-1
+                    while current()['status']==0 and current()['ticks']-first<6000 and time.monotonic()<deadline:
+                        if current()['d2']<30 and current()['d3']>=3:
+                            tap(fx+154,fy+130)
+                        if current()['stage']!=season:season=current()['stage'];grab('attempt-'+str(attempt)+'-season-'+str(season))
+                        time.sleep(.15)
+                    if current()['status']==1:break
+                    grab('habitat-ended-'+str(attempt));restart()
+                expect(status=1);grab('balanced')
+                before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
+                checks+=['button cursor and tool','touch tool and planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
+                restart();first=current()['ticks'];deadline=time.monotonic()+900
+                while current()['status']==0 and current()['ticks']-first<1600 and time.monotonic()<deadline:time.sleep(.2)
+                expect(status=2);time.sleep(.6);grab('extinction-result')
+                tap(fx+88,fy+115);expect(status=0,screen=0)
+                checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat']
+            else:
+                # No touchscreen: the same plan by buttons. Up/Down move the cell
+                # cursor (24 cells, wrapping), holding Select cycles the tool and
+                # Select places or rains.
+                def cursor_to(cell):
+                    # Up/Down repeat every 100 ms while held, so a slow press may
+                    # step twice; re-aim from wherever the cursor lands.
+                    for _ in range(40):
+                        now=current()['d0']
+                        if now==cell:return
+                        press('Down' if (cell-now)%24<=12 else 'Up')
+                        assert current()['d0']!=now,current()
+                    raise AssertionError('Cursor did not reach '+str(cell))
+                # A long press is held 1.2 s: under load 0.6 s of host time can reach the
+                # watch as a short press and place instead of changing the tool.
+                def tool_to(tool):
+                    while current()['d1']!=tool:
+                        nxt=(current()['d1']+1)%4
+                        press('Select',hold=1.2);expect(d1=nxt)
+                def place(cost):
+                    while current()['d3']<cost:time.sleep(.2)
+                    before=current()['d3'];press('Select')
+                    return current()['d3']<before  # Energy regenerates by one at most.
+                def eco_restart():
+                    press('Back');expect(screen=1);press('Down')
+                    press('Select');expect(screen=3);press('Select');expect(screen=0,status=0)
+                press('Down');expect(d0=1)
+                press('Select',hold=1.2);expect(d1=1)
+                tool_to(0);cursor_to(0);assert place(2);grab('seeded-cell')
+                for attempt in range(4):
+                    for tool, preferred in [(1,15),(2,5)]:
+                        tool_to(tool);cost=3 if tool==1 else 5
+                        for offset in range(24):
+                            cursor_to((preferred+offset)%24)
+                            if place(cost):break
+                        else:raise AssertionError('No free cell for tool '+str(tool))
+                    grab('introduced-species-'+str(attempt))
+                    # Legacy emulators tick slowly under load, so the limit is
+                    # simulated time (200 s) with a wall-clock cap.
+                    first=current()['ticks'];deadline=time.monotonic()+1500;season=-1
+                    while current()['status']==0 and current()['ticks']-first<6000 and time.monotonic()<deadline:
+                        if current()['d2']<30 and current()['d3']>=3:
+                            tool_to(3);press('Select')
+                        if current()['stage']!=season:season=current()['stage'];grab('attempt-'+str(attempt)+'-season-'+str(season))
+                        time.sleep(.15)
+                    if current()['status']==1:break
+                    grab('habitat-ended-'+str(attempt))
+                    if current()['status']==2:
+                        time.sleep(.6);press('Select');expect(status=0,screen=0)
+                    else:eco_restart()
+                expect(status=1);grab('balanced')
+                before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
+                checks+=['button cursor and tool','button planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
+                eco_restart();first=current()['ticks'];deadline=time.monotonic()+900
+                while current()['status']==0 and current()['ticks']-first<1600 and time.monotonic()<deadline:time.sleep(.2)
+                expect(status=2);time.sleep(.6);grab('extinction-result')
+                press('Select');expect(status=0,screen=0)
+                checks+=['extinction result','ongoing habitat restart confirmation','one-press new habitat']
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
         report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'resentPresses':resent,'checks':checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2));print('PASS',game,platform)
