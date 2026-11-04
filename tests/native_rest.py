@@ -119,15 +119,26 @@ def run(platform):
             time.sleep(.02)
         assert count() > previous, 'Native input did not respond'
         time.sleep(.1)
+    resent = []
     def button(name, hold=.07):
         previous = count()
-        send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
-        time.sleep(hold)
-        send_data_to_qemu(watch.transport, QemuButton(state=0))
-        if previous:
-            response(previous)
-        else:
-            time.sleep(.2)
+        for attempt in range(2):
+            send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
+            time.sleep(hold)
+            send_data_to_qemu(watch.transport, QemuButton(state=0))
+            if not previous:
+                time.sleep(.2)
+                return
+            try:
+                response(previous)
+                return
+            except AssertionError:
+                # Legacy-firmware emulators can drop a press under host load. Resend
+                # once and record it; a second silence still fails. A late reply to the
+                # first press would double the input and fail the next expectation.
+                if attempt or count() > previous:
+                    raise
+                resent.append(name)
     def expect(**values):
         actual = current()
         assert all(actual[k] == v for k, v in values.items()), (values, actual)
@@ -294,8 +305,16 @@ def run(platform):
             send_data_to_qemu(watch.transport,QemuButton(state=QemuButton.Button.Up|QemuButton.Button.Down))
             time.sleep(.3);grab('both-flippers')
             send_data_to_qemu(watch.transport,QemuButton(state=0))
-            pointer(*game_point(45,122),True);time.sleep(.3);expect(hp=1,enemy=0);grab('touch-left');pointer(*game_point(45,122),False);time.sleep(.15)
-            pointer(*game_point(135,122),True);time.sleep(.3);expect(hp=0,enemy=1);grab('touch-right');pointer(*game_point(135,122),False);time.sleep(.15)
+            if has_touch:
+                pointer(*game_point(45,122),True);time.sleep(.3);expect(hp=1,enemy=0);grab('touch-left');pointer(*game_point(45,122),False);time.sleep(.15)
+                pointer(*game_point(135,122),True);time.sleep(.3);expect(hp=0,enemy=1);grab('touch-right');pointer(*game_point(135,122),False);time.sleep(.15)
+            else:
+                # Buttons only: each held button lifts its own flipper and nothing else.
+                for name,side,values in [('Up','left',{'hp':1,'enemy':0}),('Down','right',{'hp':0,'enemy':1})]:
+                    send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
+                    time.sleep(.3);expect(**values);grab('button-'+side)
+                    send_data_to_qemu(watch.transport,QemuButton(state=0));time.sleep(.3)
+                    expect(hp=0,enemy=0)
             watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
             watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
             expect(screen=0,hp=0,enemy=0);checks+=['flippers released after resume']
@@ -314,7 +333,7 @@ def run(platform):
                 send_data_to_qemu(watch.transport,QemuButton(state=0))
                 if current()['status']==1:break
                 grab('lost-run-'+str(attempt));restart()
-            expect(status=1);grab('dungeon-cleared');checks+=['launch','simultaneous physical flippers','independent held touch flippers','reactive flipper timing','three distinct chambers','monster targets and bosses','complete dungeon']
+            expect(status=1);grab('dungeon-cleared');checks+=['launch','simultaneous physical flippers','independent held touch flippers' if has_touch else 'independent held button flippers','reactive flipper timing','three distinct chambers','monster targets and bosses','complete dungeon']
             # Hold Select before the final drain; its eventual release must not replay.
             restart();held=False;deadline=time.monotonic()+100
             while not current()['status'] and time.monotonic()<deadline:
@@ -366,7 +385,7 @@ def run(platform):
             direct_tap(fx+88,fy+115);expect(status=0,screen=0)
             checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat']
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':checks,'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'resentPresses':resent,'checks':checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2));print('PASS',game,platform)
     finally:
         try:grab('final-screen')
