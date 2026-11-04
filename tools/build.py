@@ -16,7 +16,7 @@ for folder in [root/'common',source]:
         if path.suffix in ['.h','.c']:shutil.copy2(path,src/path.name)
 # Games with layouts for 144x168 and the Time Round ship on all six watches;
 # the rest stay on Time 2 and Round 2 until their screens are designed.
-ALL_WATCHES={'pocket-artillery','space-salvage'}
+ALL_WATCHES={'pocket-artillery','space-salvage','one-screen-tactics'}
 platforms=['basalt','chalk','diorite','emery','flint','gabbro'] if name in ALL_WATCHES else ['emery','gabbro']
 version=re.search(r'#define UI_APP_VERSION "([^"]+)"',(root/'common/ui_style.h').read_text()).group(1)
 meta={'name':name,'version':version,'author':'Luke Steuber','private':True,'dependencies':{},'pebble':{'displayName':name.replace('-',' ').title(),'uuid':str(uuid.uuid5(uuid.NAMESPACE_URL,'https://lukesteuber.com/pebble/'+name)),'sdkVersion':'3','enableMultiJS':False,'targetPlatforms':platforms,'watchapp':{'watchface':False},'messageKeys':[],'resources':{'media':[]}}}
