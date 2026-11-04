@@ -409,8 +409,10 @@ def run(platform):
                         if current()['d3']<=budget-cost:break
                     assert current()['d3']<=budget-cost
                 grab('introduced-species-'+str(attempt))
-                deadline=time.monotonic()+200;season=-1
-                while current()['status']==0 and time.monotonic()<deadline:
+                # Each attempt gets 200 simulated seconds. A loaded host slows the
+                # emulator, so the limit counts ticks; wall time is only a backstop.
+                begun=current()['ticks'];deadline=time.monotonic()+1200;season=-1
+                while current()['status']==0 and current()['ticks']-begun<200*30 and time.monotonic()<deadline:
                     if current()['d2']<30 and current()['d3']>=3:
                         if has_touch:direct_tap(fx+154,fy+130)
                         else:choose_tool(3);place()
@@ -421,7 +423,8 @@ def run(platform):
             expect(status=1);grab('balanced')
             before=current()['ticks'];time.sleep(4);assert current()['ticks']>before
             checks+=['button cursor and tool','touch tool and planting' if has_touch else 'button tool cycling and planting','introduce grazers and predators','seasonal population dynamics','60-second balanced habitat','continued simulation after goal']
-            restart();deadline=time.monotonic()+65
+            # Extinction takes 40 simulated seconds; allow a slowed emulator.
+            restart();deadline=time.monotonic()+400
             while current()['status']==0 and time.monotonic()<deadline:time.sleep(.2)
             expect(status=2);time.sleep(.6);grab('extinction-result')
             if has_touch:direct_tap(fx+88,fy+115)
