@@ -307,7 +307,10 @@ def run(platform):
             watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
             watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
             expect(screen=0,hp=0,enemy=0);checks+=['flippers released after resume']
-            for attempt in range(8):
+            # The legacy-firmware emulators (basalt, chalk, diorite) answer the
+            # reactive player later, so it wins less often there; watches
+            # without touch get more runs, as the Salvage button pilot does.
+            for attempt in range(8 if has_touch else 16):
                 deadline=time.monotonic()+180;mask=-1;stage=-1;last_launch=0
                 while not current()['status'] and time.monotonic()<deadline:
                     d=current();now=time.monotonic()
