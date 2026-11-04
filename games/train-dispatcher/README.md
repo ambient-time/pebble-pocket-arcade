@@ -41,8 +41,10 @@ The network is a wide rectangle with stations at its top, bottom and corner, so
 rectangles show it whole: on 144×168 screens it spans the full width with the
 score above and "Switch 1  Next C" below ("1 LOCKED  Next C" while a train
 occupies the selected junction). The Time Round keeps the whole network inside
-the rim at 80%, with the score above and "Next C" below; the selected and
-locked junctions are marked on the network itself. Time 2 and Round 2 keep
+the rim at 80%, with "Trains 12/18" above and "Next C  X0/3" below, so both
+lines fit their chords; the selected and locked junctions are marked on the
+network itself. On 144×168, a train at either end of the track is drawn just
+inside the screen edge so it stays whole. Time 2 and Round 2 keep
 their published layout.
 
 On the four new watches every junction state has a shape as well as a colour.

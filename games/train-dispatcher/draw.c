@@ -162,6 +162,11 @@ void game_draw(const Game *g, GContext *c) {
     if (g->d[TRAINS + i * TRAIN_WORDS]) {
       int x, y, k = g->d[TRAINS + i * TRAIN_WORDS + 3];
       train_position(g, i, &x, &y);
+#ifndef PBL_ROUND
+      // 144-pixel screens: a train at either track end (x 3 or 171) would
+      // hang off the edge, so it is drawn whole just inside it (drawing only).
+      x = x < 11 ? 11 : x > 165 ? 165 : x;
+#endif
       ink(c, GColorBlack);
       box(c, x - 9, y - 10, 18, 20, true);
       ink(c, hue(k));
@@ -170,12 +175,14 @@ void game_draw(const Game *g, GContext *c) {
     }
 }
 void game_hud_compact(const Game *g, char *a, size_t n, char *b, size_t m) {
-  snprintf(a, n, "Trains %ld/18  X%ld/3", (long)g->d[DELIVERED], (long)g->d[STRIKES]);
 #ifdef PBL_ROUND
-  // The Time Round's bottom chord holds one short phrase; the selected and
-  // the locked junctions are already marked on the network.
-  snprintf(b, m, "Next %c", 'A' + (int)g->d[NEXT]);
+  // The Time Round's top chord is about 120 px, too short for "Trains 18/18
+  // X0/3" once two digits arrive, so the misses move down beside the next
+  // train. The selected and locked junctions are marked on the network.
+  snprintf(a, n, "Trains %ld/18", (long)g->d[DELIVERED]);
+  snprintf(b, m, "Next %c  X%ld/3", 'A' + (int)g->d[NEXT], (long)g->d[STRIKES]);
 #else
+  snprintf(a, n, "Trains %ld/18  X%ld/3", (long)g->d[DELIVERED], (long)g->d[STRIKES]);
   snprintf(b, m, train_locked(g, g->d[FOCUS]) ? "%ld LOCKED  Next %c" : "Switch %ld  Next %c",
            (long)g->d[FOCUS] + 1, 'A' + (int)g->d[NEXT]);
 #endif
