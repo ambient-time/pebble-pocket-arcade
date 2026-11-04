@@ -154,6 +154,13 @@ def run(platform):
     def expect(**values):
         actual = current()
         assert all(actual[k] == v for k, v in values.items()), (values, actual)
+    def settle(timeout=3, **values):
+        # Held-button changes log only on the next tick report; give a slowed
+        # emulator time to send it, then require the values.
+        until = time.monotonic() + timeout
+        while time.monotonic() < until and not all(current()[k] == v for k, v in values.items()):
+            time.sleep(.05)
+        expect(**values)
     def grab(name):
         time.sleep(.15)
         pixels = cmd._grab_processed_image(argparse.Namespace(no_correction=True, scale=1, no_open=True, v=0), show_progress=False)
@@ -336,9 +343,9 @@ def run(platform):
                 # Buttons only: each held button lifts its own flipper and nothing else.
                 for name,side,values in [('Up','left',{'hp':1,'enemy':0}),('Down','right',{'hp':0,'enemy':1})]:
                     send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
-                    time.sleep(.3);expect(**values);grab('button-'+side)
-                    send_data_to_qemu(watch.transport,QemuButton(state=0));time.sleep(.3)
-                    expect(hp=0,enemy=0)
+                    settle(**values);grab('button-'+side)
+                    send_data_to_qemu(watch.transport,QemuButton(state=0))
+                    settle(hp=0,enemy=0)
             watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
             watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
             expect(screen=0,hp=0,enemy=0);checks+=['flippers released after resume']
