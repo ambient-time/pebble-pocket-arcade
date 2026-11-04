@@ -7,7 +7,7 @@ published on November 2, 2026; Dungeon Pinball, Train Dispatcher, Pocket Ecosyst
 One-Screen Tactics are staged, and their store listings have been hidden since
 September 11.
 
-The store kits (five native screenshots and a banner per watch, listing text, release
-notes and a proposed description that names every watch) live in the Ambient Time
+The store kits (five native screenshots and a banner per watch, listing text and release
+notes; no description, so publishing leaves the owner's description unchanged) live in the Ambient Time
 repository at `appstores/pebble/store/<game>/`, laid out for `scripts/publish-pebble-update.py`.
 Publication, and showing the four hidden listings again, wait for Luke's go-ahead.
