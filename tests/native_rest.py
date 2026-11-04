@@ -294,8 +294,16 @@ def run(platform):
             send_data_to_qemu(watch.transport,QemuButton(state=QemuButton.Button.Up|QemuButton.Button.Down))
             time.sleep(.3);grab('both-flippers')
             send_data_to_qemu(watch.transport,QemuButton(state=0))
-            pointer(*game_point(45,122),True);time.sleep(.3);expect(hp=1,enemy=0);grab('touch-left');pointer(*game_point(45,122),False);time.sleep(.15)
-            pointer(*game_point(135,122),True);time.sleep(.3);expect(hp=0,enemy=1);grab('touch-right');pointer(*game_point(135,122),False);time.sleep(.15)
+            if has_touch:
+                pointer(*game_point(45,122),True);time.sleep(.3);expect(hp=1,enemy=0);grab('touch-left');pointer(*game_point(45,122),False);time.sleep(.15)
+                pointer(*game_point(135,122),True);time.sleep(.3);expect(hp=0,enemy=1);grab('touch-right');pointer(*game_point(135,122),False);time.sleep(.15)
+            else:
+                # Buttons only: each physical flipper holds and releases on its own.
+                for held,left,right in [(QemuButton.Button.Up,1,0),(QemuButton.Button.Down,0,1)]:
+                    send_data_to_qemu(watch.transport,QemuButton(state=held));time.sleep(.3)
+                    expect(hp=left,enemy=right);grab('button-left' if left else 'button-right')
+                    send_data_to_qemu(watch.transport,QemuButton(state=0));time.sleep(.3)
+                    expect(hp=0,enemy=0)
             watch.send_packet(AppRunState(data=AppRunStateStop(uuid=APP)));time.sleep(.4)
             watch.send_packet(AppRunState(data=AppRunStateStart(uuid=APP)));time.sleep(.7)
             expect(screen=0,hp=0,enemy=0);checks+=['flippers released after resume']
@@ -309,12 +317,14 @@ def run(platform):
                     if 'wait=1' in world() and now-last_launch>.5:
                         send_data_to_qemu(watch.transport,QemuButton(state=wanted|QemuButton.Button.Select));time.sleep(.05)
                         send_data_to_qemu(watch.transport,QemuButton(state=wanted));last_launch=now
-                    if d['stage']!=stage:stage=d['stage'];grab('attempt-'+str(attempt)+'-chamber-'+str(stage+1))
+                    if d['stage']!=stage:stage=d['stage'];gate=False;grab('attempt-'+str(attempt)+'-chamber-'+str(stage+1))
+                    # Six skull hits (50 each) per chamber open the gate; a cleared chamber scores 600.
+                    if not gate and d['stage']<3 and d['score']-600*d['stage']>=300:gate=True;grab('attempt-'+str(attempt)+'-gate-open-'+str(stage+1))
                     time.sleep(.03)
                 send_data_to_qemu(watch.transport,QemuButton(state=0))
                 if current()['status']==1:break
                 grab('lost-run-'+str(attempt));restart()
-            expect(status=1);grab('dungeon-cleared');checks+=['launch','simultaneous physical flippers','independent held touch flippers','reactive flipper timing','three distinct chambers','monster targets and bosses','complete dungeon']
+            expect(status=1);grab('dungeon-cleared');checks+=['launch','simultaneous physical flippers','independent held touch flippers' if has_touch else 'independent held button flippers','reactive flipper timing','three distinct chambers','monster targets and bosses','complete dungeon']
             # Hold Select before the final drain; its eventual release must not replay.
             restart();held=False;deadline=time.monotonic()+100
             while not current()['status'] and time.monotonic()<deadline:
