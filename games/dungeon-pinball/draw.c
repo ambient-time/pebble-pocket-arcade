@@ -26,9 +26,6 @@ static void skull(GContext *c, int x, int y, int hits, bool struck) {
   box(c, x + 2, y - 3, 3, 3, true);
   line(c, x - 3, y + 5, x + 3, y + 5);
 }
-#if UI_COMPACT
-static void status_line(const Game *, char *, size_t);
-#endif
 void game_draw(const Game *g, GContext *c) {
   GColor rail = PBL_IF_COLOR_ELSE(GColorLightGray, GColorWhite);
   ink(c, rail);
@@ -72,41 +69,19 @@ void game_draw(const Game *g, GContext *c) {
   }
   ink(c, GColorWhite);
   circle(c, g->d[BALL_X] / 100, g->d[BALL_Y] / 100, 4, true);
-#if UI_COMPACT && defined(PBL_ROUND)
-  // Time Round status line: directly under the table's bottom rail (y 145),
-  // where the circle is still 110 px wide. Finished rounds show the shell's
-  // "BACK: menu" instead.
-  if (!g->status) {
-    char b[32];
-    status_line(g, b, sizeof b);
-    graphics_draw_text(c, b, fonts_get_system_font(UI_FONT_SMALL), GRect(35, 143, 110, 24),
-                       GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
-  }
-#endif
 }
 #if UI_COMPACT
 // 144x168 and the Time Round: the same facts in fewer words, without the
 // touch hint (none of these watches has a touchscreen).
-static void status_line(const Game *g, char *out, size_t m) {
+void game_hud_compact(const Game *g, char *top, size_t n, char *bottom, size_t m) {
   int alive = 0;
   for (int i = 0; i < 3; i++)
     alive += g->d[BUMPERS + i * 4 + 2];
-  if (g->d[WAITING])
-    snprintf(out, m, "SELECT: launch");
-  else if (alive)
-    snprintf(out, m, "Balls %ld  Skulls %d", (long)g->d[LIVES], alive);
-  else
-    snprintf(out, m, "Balls %ld  Boss %ld", (long)g->d[LIVES], (long)g->d[BOSS]);
-}
-void game_hud_compact(const Game *g, char *top, size_t n, char *bottom, size_t m) {
   snprintf(top, n, "Chamber %d/3", g->stage < 3 ? g->stage + 1 : 3);
-#ifdef PBL_ROUND
-  // The shell's bottom caption sits where the Time Round's chord is about
-  // 100 px; game_draw puts the status line just under the table instead.
-  (void)m;
-  bottom[0] = 0;
-#else
-  status_line(g, bottom, m);
-#endif
+  if (g->d[WAITING])
+    snprintf(bottom, m, "SELECT: launch");
+  else // Skulls left to hit, then the boss's hits left once the gate opens.
+    snprintf(bottom, m, "Balls %ld  %s %ld", (long)g->d[LIVES], alive ? "Skulls" : "Boss",
+             (long)(alive ? alive : g->d[BOSS]));
 }
 #endif

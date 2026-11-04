@@ -45,10 +45,10 @@ The drain belongs at the bottom and both walls carry rails, so the table is
 never rotated or cropped: every screen shows all of it, scaled evenly. On
 144×168 screens the walls touch both edges (87%), which keeps the flippers,
 skulls and ball as large as the width allows, with the chamber above and the
-status below ("Balls 2 Skulls 4", "SELECT: launch"). Pebble Time Round fits the
-whole table inside the circle, corners just inside the rim, with the chamber
-above and the status line tucked under the bottom rail where the circle is still
-wide enough. Pebble Time 2 and Round 2 are unchanged.
+status below ("Balls 2  Skulls 4", "SELECT: launch"). Pebble Time Round shows
+the table at 78%, every corner inside the circle, so the chamber line and the
+status line fit above and below it where the circle is still wide enough. Pebble
+Time 2 and Round 2 are unchanged.
 
 On black-and-white Pebbles a skull with two hits left is solid white, with one
 hit left it is an outline, and a struck skull flashes a halo; the locked gate
