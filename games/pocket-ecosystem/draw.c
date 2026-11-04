@@ -5,10 +5,31 @@
 // is a legend rather than buttons: each tool shows the glyph it leaves on the
 // board and its cost. Black-and-white screens tell the species apart by shape
 // alone: grazers are solid discs, hunters hollow triangles with a centre dot.
+#if !UI_COMPACT
 static void sprout(GContext *c, int px, int py) {
   line(c, px, py + 5, px, py);
   line(c, px, py + 2, px + 3, py - 1);
 }
+#endif
+#if UI_COMPACT
+// Screen point for a world point, matching the shared shell's projection.
+static GPoint at(int x, int y) {
+  return GPoint(field_x + x * UI_FIELD_SCALE / 100, field_y + y * UI_FIELD_SCALE / 100);
+}
+// The same plant mark from cheap primitives: a 2 px stem and a doubled leaf.
+// The board redraws 30 times a second and can hold 144 plants; thick strokes
+// cost far more on the smaller watches' processors.
+static void plant(GContext *c, int px, int py, bool thin) {
+  GPoint top = at(px, py), foot = at(px, py + 5), leaf = at(px, py + 2), tip = at(px + 3, py - 1);
+  if (thin)
+    graphics_draw_line(c, top, foot);
+  else
+    graphics_fill_rect(c, GRect(top.x, top.y, 2, foot.y - top.y + 1), 0, GCornerNone);
+  graphics_draw_line(c, leaf, tip);
+  if (!thin)
+    graphics_draw_line(c, GPoint(leaf.x + 1, leaf.y), GPoint(tip.x + 1, tip.y));
+}
+#endif
 static void grazer(GContext *c, int x, int y) {
 #if UI_COMPACT
   // A slightly larger disc on a black ring, so it keeps its edge among plants.
@@ -30,12 +51,6 @@ static void triangle(GContext *c, int x, int y) {
   line(c, x - 8, y + 6, x + 8, y + 6);
   line(c, x + 8, y + 6, x, y - 8);
 }
-#if UI_COMPACT
-// Screen point for a world point, matching the shared shell's projection.
-static GPoint at(int x, int y) {
-  return GPoint(field_x + x * UI_FIELD_SCALE / 100, field_y + y * UI_FIELD_SCALE / 100);
-}
-#endif
 static void hunter(GContext *c, int x, int y) {
 #if UI_COMPACT
   // A black triangle a little larger than the outline clears the plants
@@ -73,10 +88,8 @@ static void tool_row(const Game *g, GContext *c) {
     // The selected tool is inverted: black glyph on white.
     if (i == 0) {
       ink(c, on ? GColorBlack : PBL_IF_COLOR_ELSE(GColorGreen, GColorWhite));
-      graphics_context_set_stroke_width(c, 2);
-      sprout(c, gx - 5, gy - 2);
-      sprout(c, gx + 2, gy - 1);
-      graphics_context_set_stroke_width(c, 1);
+      plant(c, gx - 5, gy - 2, false);
+      plant(c, gx + 2, gy - 1, false);
     } else if (i == 1) {
       if (on) {
         ink(c, GColorBlack);
@@ -106,17 +119,19 @@ void game_draw(const Game *g, GContext *c) {
     int x = 4 + i % 6 * 28, y = 1 + i / 6 * 28;
     ink(c, GColorBlack);
     box(c, x, y, 27, 27, true);
-#ifdef PBL_COLOR
+#if UI_COMPACT
+    // Winter plants are dormant: grey on colour screens, thin strokes on
+    // black-and-white ones.
+    ink(c, PBL_IF_COLOR_ELSE(g->stage == 3 ? GColorLightGray : GColorGreen, GColorWhite));
+    for (int k = 0; k < g->d[PLANTS + i]; k++)
+      plant(c, x + 4 + (k % 3) * 8, y + 8 + (k / 3) * 12, PBL_IF_BW_ELSE(g->stage == 3, false));
+#else
     ink(c, g->stage == 3 ? GColorLightGray : GColorGreen);
     graphics_context_set_stroke_width(c, 2);
-#else
-    // Winter plants are dormant: thin strokes stand in for the grey tint.
-    ink(c, GColorWhite);
-    graphics_context_set_stroke_width(c, g->stage == 3 ? 1 : 2);
-#endif
     for (int k = 0; k < g->d[PLANTS + i]; k++)
       sprout(c, x + 4 + (k % 3) * 8, y + 8 + (k / 3) * 12);
     graphics_context_set_stroke_width(c, 1);
+#endif
   }
   for (int i = 0; i < SLOTS; i++) {
     int b = ANIMALS + i * 5;
