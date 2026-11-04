@@ -1,11 +1,12 @@
 # Pocket Arcade for Pebble
 
-Six native games by Luke Steuber for Pebble Time 2 and Pebble Round 2. Each is a
-separate app with buttons, touch, a pause menu, and saved progress. Pocket
-Artillery and Space Salvage 0.4.0 also run on Pebble Time, Pebble 2, Pebble 2
-Duo and Pebble Time Round, with layouts drawn for 144×168 rectangles and the
-180×180 round screen and black-and-white cues; that release is staged, not
-published.
+Six native games by Luke Steuber for every Pebble with a native build: Pebble
+Time 2 and Round 2, Pebble Time and Time Steel, Pebble 2, Pebble 2 Duo and
+Pebble Time Round. Each is a separate app with buttons, touch on Time 2 and
+Round 2, a pause menu, and saved progress. Version 0.4.0 draws each game for
+144×168 rectangles and the 180×180 round screen and adds black-and-white cues.
+Pocket Artillery and Space Salvage 0.4.0 are published; the other four are
+staged.
 
 [![Get the games](https://img.shields.io/badge/Pebble-Games-2563eb?style=flat-square)](store/0.3.1/README.md) [![MIT code license](https://img.shields.io/badge/Code-MIT-181717?style=flat-square)](LICENSE) [![Ambient Time collection](https://img.shields.io/badge/Ambient_Time-Collection-181717?style=flat-square)](https://ambient-time.com/watch/pebble/)
 
@@ -24,10 +25,10 @@ published.
 ## Installation and saves
 
 Open a PBW with the Pebble phone app to install it on the connected watch. The
-0.3.1 packages support Time 2 (Emery) and Round 2 (Gabbro); the staged 0.4.0
-Pocket Artillery and Space Salvage packages add Basalt, Chalk, Diorite and Flint.
-Touch requires firmware 4.33.2 or later on Time 2 and Round 2; buttons remain
-available everywhere.
+0.3.1 packages support Time 2 (Emery) and Round 2 (Gabbro); every 0.4.0 package
+adds Basalt, Chalk, Diorite and Flint. Touch requires firmware 4.33.2 or later on
+Time 2 and Round 2; buttons work everywhere, and each game's native suite
+finishes a round with buttons alone on the watches without touch.
 
 Back pauses and opens Resume, Restart, How to play, About, and Save and exit. Restart
 asks before replacing an unfinished game. Finished rounds show their outcome
