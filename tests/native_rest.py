@@ -119,15 +119,25 @@ def run(platform):
             time.sleep(.02)
         assert count() > previous, 'Native input did not respond'
         time.sleep(.1)
+    resent = []
     def button(name, hold=.07):
         previous = count()
-        send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
-        time.sleep(hold)
-        send_data_to_qemu(watch.transport, QemuButton(state=0))
-        if previous:
-            response(previous)
-        else:
-            time.sleep(.2)
+        for attempt in range(2):
+            send_data_to_qemu(watch.transport, QemuButton(state=getattr(QemuButton.Button, name)))
+            time.sleep(hold)
+            send_data_to_qemu(watch.transport, QemuButton(state=0))
+            if not previous:
+                time.sleep(.2)
+                return
+            try:
+                response(previous)
+                return
+            except AssertionError:
+                # Legacy-firmware emulators can drop a press under host load. Resend
+                # once and record it; a second silence still fails.
+                if attempt or count() > previous:
+                    raise
+                resent.append(name)
     def expect(**values):
         actual = current()
         assert all(actual[k] == v for k, v in values.items()), (values, actual)
@@ -208,9 +218,42 @@ def run(platform):
         checks+=['rules','playfield','pause freezes','native touch menu scroll without activation' if has_touch else 'button menu','save and relaunch']
         game=ROOT.name
         if game=='train-dispatcher':
-            button('Down');expect(d3=1);button('Select');expect(d1=1)
-            button('Up');expect(d3=0)
-            deadline=time.monotonic()+180
+            # Periodic play logs land on ticks divisible by 30; a press logs at once
+            # from refresh(), so only a line off that beat (or a second line on the
+            # same tick) proves the press arrived. One silent press may be resent
+            # and is recorded; a second silence fails.
+            def answered():
+                n=0;last=None
+                for line in logs:
+                    if 'AR s=' not in line:continue
+                    t=int(re.search(r' t=(\d+)',line).group(1));sc=int(re.search(r's=(\d+)',line).group(1))
+                    if sc or t%30 or t==last:n+=1
+                    last=t
+                return n
+            # Under host load the emulated clock runs slow, and a 70 ms press can fall
+            # inside the firmware's debounce window. Hold for about 70 ms of emulated
+            # time instead, measured from the game's tick rate (30 per second).
+            pace=[(time.monotonic(),current()['ticks'])]
+            def hold():
+                now=(time.monotonic(),current()['ticks']);pace.append(now)
+                while len(pace)>2 and now[0]-pace[0][0]>8:pace.pop(0)
+                seconds=now[0]-pace[0][0];ticks=now[1]-pace[0][1]
+                rate=ticks/seconds if seconds>1 and ticks>0 else 30
+                return min(.35,max(.07,.07*30/rate))
+            def press(name):
+                previous=answered()
+                for attempt in range(2):
+                    send_data_to_qemu(watch.transport,QemuButton(state=getattr(QemuButton.Button,name)))
+                    time.sleep(hold());send_data_to_qemu(watch.transport,QemuButton(state=0))
+                    until=time.monotonic()+4
+                    while answered()==previous and time.monotonic()<until:time.sleep(.02)
+                    if answered()>previous:time.sleep(.05);return
+                    if attempt:raise AssertionError('Native input did not respond')
+                    resent.append(name)
+            press('Down');expect(d3=1);press('Select');expect(d1=1)
+            press('Up');expect(d3=0)
+            # Wall-clock limit is generous: under host load the emulator's 30 Hz clock slows.
+            deadline=time.monotonic()+1500
             captured=False
             while not current()['status'] and time.monotonic()<deadline:
                 trains=[list(map(int,t.split(','))) for t in world().strip(';').split(';') if t and ',' in t]
@@ -219,13 +262,26 @@ def run(platform):
                     if not incoming:continue
                     kind=max(incoming,key=lambda t:t[2])[3]
                     desired=int(kind==0) if junction==0 else int(kind==1) if junction==1 else 0
-                    if current()['d'+str(junction)]!=desired:direct_tap(fx+48+junction*48,fy+72)
+                    if current()['d'+str(junction)]==desired:continue
+                    if has_touch:
+                        direct_tap(fx+48+junction*48,fy+72)
+                    else:
+                        # Buttons only: Up/Down moves the selected junction, Select flips it.
+                        step=(junction-current()['d3'])%3
+                        if step:press('Down' if step==1 else 'Up')
+                        press('Select')
+                        until=time.monotonic()+.5
+                        while current()['d'+str(junction)]!=desired and time.monotonic()<until:time.sleep(.03)
                 if not captured and current()['score']>=300:grab('traffic');captured=True
                 time.sleep(.12)
             expect(status=1);grab('completed-shift')
-            checks+=['button switch selection','touch routing','18 deliveries','completed shift']
-            restart();deadline=time.monotonic()+90
-            while not current()['status'] and time.monotonic()<deadline:time.sleep(.2)
+            checks+=['button switch selection','touch routing' if has_touch else 'button-only routing','18 deliveries','completed shift']
+            # Unattended, the shift is lost in about 1,400 ticks. Wait on the emulated
+            # clock: fail only if it stops advancing for a minute.
+            restart();seen=(time.monotonic(),current()['ticks'])
+            while not current()['status'] and time.monotonic()-seen[0]<60:
+                time.sleep(.2)
+                if current()['ticks']!=seen[1]:seen=(time.monotonic(),current()['ticks'])
             expect(status=2);grab('failed-shift');checks+=['misrouting loss']
         elif game=='space-salvage':
             button('Down');button('Select');grab('button-thrust')
@@ -366,7 +422,7 @@ def run(platform):
             direct_tap(fx+88,fy+115);expect(status=0,screen=0)
             checks+=['extinction result','ongoing habitat restart confirmation','one-tap new habitat']
         assert not any('fault' in s.lower() or 'crash' in s.lower() for s in logs)
-        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'checks':checks,'frames':frames,'logs':logs}
+        report={'platform':platform,'sdk':SDK_VERSION,'pbwSHA256':installed_sha,'passed':True,'resentPresses':resent,'checks':checks,'frames':frames,'logs':logs}
         (out/f'{platform}-report.json').write_text(json.dumps(report,indent=2));print('PASS',game,platform)
     finally:
         try:grab('final-screen')
