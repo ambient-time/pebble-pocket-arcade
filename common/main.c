@@ -226,7 +226,7 @@ static void draw(Layer *l, GContext *c) {
   if (screen == 2) {
     if (UI_COMPACT) {
       int y = top + PBL_IF_ROUND_ELSE(10, 0);
-      text_in(c, game_name, y, 30, UI_FONT_BODY);
+      text_in(c, GAME_NAME_COMPACT, y, 30, UI_FONT_BODY);
       text_in(c, GAME_RULES_COMPACT, y + 30, view_h - y - 30, UI_FONT_SMALL);
       caption(c, "SELECT: play", view_h - PBL_IF_ROUND_ELSE(36, 23));
       return;
@@ -282,7 +282,11 @@ static void draw(Layer *l, GContext *c) {
   caption(c, ended() ? "BACK: menu" : b, below);
   if (ended() && UI_COMPACT) {
     char title[32], detail[64];
+#ifdef GAME_RESULT_COMPACT
+    game_result_compact(&g, title, sizeof title, detail, sizeof detail);
+#else
     game_result(&g, title, sizeof title, detail, sizeof detail);
+#endif
     GRect k = card(), button = replay_button();
     ink(c, GColorBlack);
     graphics_fill_rect(c, k, 0, GCornerNone);

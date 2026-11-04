@@ -14,3 +14,7 @@ void large_label(GContext *, const char *, int, int, int);
 // Shorter HUD lines for 144x168 and the Time Round.
 void game_hud_compact(const Game *, char *, size_t, char *, size_t);
 #endif
+#ifdef GAME_RESULT_COMPACT
+// A shorter result title for the 132 px card on 144x168 and the Time Round.
+void game_result_compact(const Game *, char *, size_t, char *, size_t);
+#endif

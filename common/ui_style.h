@@ -61,3 +61,8 @@
 #ifndef GAME_RULES_COMPACT
 #define GAME_RULES_COMPACT game_rules
 #endif
+// Optional title for the compact How to play screen (for example, with a line
+// break where the name is wider than the Time Round's chord).
+#ifndef GAME_NAME_COMPACT
+#define GAME_NAME_COMPACT game_name
+#endif
