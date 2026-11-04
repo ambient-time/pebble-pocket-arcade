@@ -53,12 +53,15 @@ void game_draw(const Game *g, GContext *c) {
     line(c, 92, 10, 92, 34);
     line(c, 99, 10, 99, 34);
   } else {
+#if UI_COMPACT
+    // 144x168 and the Time Round: the 18 px B stays inside the gate and the
+    // boss's hits left sit under it as separate bars, clear of the gate. On
+    // black and white the B is black inside the solid white block.
 #ifdef PBL_BW
-    // A black B inside the white block, with the boss's hits left as bars
-    // under it, clear of the block.
     ink(c, GColorBlack);
+#endif
     label(c, "B", 76, 8, 24);
-    ink(c, GColorWhite);
+    ink(c, PBL_IF_COLOR_ELSE(GColorMagenta, GColorWhite));
     for (int i = 0; i < g->d[BOSS]; i++)
       box(c, 78 + i * 7, 37, 4, 3, true);
 #else

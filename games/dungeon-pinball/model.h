@@ -10,6 +10,12 @@
 // 7 px inside the rim) and leaves room above and below it where the circle is
 // still wide enough for the chamber line and a 105 px status line.
 #define UI_CHALK_SCALE 78
+// Time Round: two pixels above centre, so the status line under the table
+// clears the rim (its outer letters otherwise touch the circle) while the top
+// rail still sits below the chamber line.
+#ifdef PBL_PLATFORM_CHALK
+#define UI_ROUND_FIELD_Y(h) (((h) - FIELD_H * UI_CHALK_SCALE / 100) / 2 - 2)
+#endif
 #define GAME_HUD_COMPACT 1
 #define GAME_RULES_COMPACT                                                     \
   "Clear 3 chambers.\nSkulls unlock boss.\nHit boss 3 times.\nUP/DOWN: flippers\nSELECT launches."
