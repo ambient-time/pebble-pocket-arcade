@@ -1,6 +1,6 @@
 # Pocket Arcade for Pebble
 
-Six native games by Luke Steuber for every Pebble with a native build: Pebble
+Six native games for every Pebble with a native build: Pebble
 Time 2 and Round 2, Pebble Time and Time Steel, Pebble 2, Pebble 2 Duo and
 Pebble Time Round. Each is a separate app with buttons, touch on Time 2 and
 Round 2, a pause menu, and saved progress. Version 0.4.0 draws each game for
@@ -42,7 +42,7 @@ if a write is interrupted.
 
 ## About and game choice
 
-About shows Luke Steuber’s portrait and the installed app version. Tap, Select,
+About shows a small portrait of the author and the installed app version. Tap, Select,
 or Back returns to the same pause-menu row. Gameplay stays paused.
 
 Pocket Artillery is the preferred artillery game in this collection. Crosswind
@@ -79,17 +79,16 @@ reports, and checksum manifests. `release/validation/` holds core results,
 randomized invariant results, and independent source rebuild reports.
 `PLAN.md` records the acceptance checklist.
 
-Emulator checks do not replace physical-watch testing. All six games are public
-at version 0.3.1. Each Store download matches the frozen release PBW; both watch
-media panels contain a native gameplay GIF, four current stills and a banner.
-See the [Store receipts](store/0.3.1/publication.json) and
-[public game links](store/0.3.1/README.md). Earlier drafts and packages are retained.
+Emulator checks do not replace physical-watch testing.
+[Pocket Artillery](https://apps.repebble.com/f3f15b3aa8e84a9ba94799c2) and
+[Space Salvage](https://apps.repebble.com/68aa4add5dd34617aa03fab8) are in the
+Pebble Appstore; the other four install from the PBW files in `release/`. Store media and listing records
+are in [store/](store/). Earlier drafts and packages are retained.
 
-MIT license. Original code and launcher art by Luke Steuber.
+Code is MIT licensed; see [LICENSE](LICENSE).
 
 ## Around here
 
 [Luke Steuber](https://github.com/lukeslp) · [Data Poems](https://github.com/data-poems) · [Ambient Time](https://github.com/ambient-time) · [Actually Useful AI](https://github.com/actually-useful-ai) · [One Impossible Thing](https://github.com/one-impossible-thing)
 
-Made by [Luke Steuber](https://lukesteuber.com). Questions or collaboration:
-[luke@lukesteuber.com](mailto:luke@lukesteuber.com).
+Questions or collaboration: [luke@lukesteuber.com](mailto:luke@lukesteuber.com).

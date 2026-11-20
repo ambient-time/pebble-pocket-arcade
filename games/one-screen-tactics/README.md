@@ -29,7 +29,7 @@ every ten seconds), at important transitions, and when leaving the app. An
 unexpected interruption may lose the last few seconds. Time does not pass while
 the app is closed or paused.
 
-About shows Luke Steuber’s portrait and this app’s version. Tap, Select, or
+About shows a small portrait of the author and this app’s version. Tap, Select, or
 Back returns to the same menu row without advancing the game.
 
 ## Readability
@@ -69,6 +69,6 @@ The source ZIP is a standalone Pebble project. Extract it, enter its directory,
 and run `pebble build` with SDK 4.33.1 and pebble-tool installed. It has no runtime
 network service or phone-side JavaScript dependency.
 
-Version 0.4.0. Created by Luke Steuber. MIT license.
+Version 0.4.0. MIT license.
 Native emulator evidence covers all six targets; physical-watch validation
 is still separate. This package does not imply a Pebble Store release.
