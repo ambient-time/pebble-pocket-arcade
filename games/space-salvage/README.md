@@ -39,16 +39,31 @@ The playfield and pieces fill more of the watch. Text uses bold fonts with an
 a white fill and black text, and important markers retain outlines or shapes
 in addition to color. Touch and button controls are unchanged.
 
+## Screens and shapes
+
+Open space has no horizon, so the whole flight field fits each screen: full
+width on rectangles, and on round screens with its corners at the rim. On
+144×168 screens the field spans the full width and the bottom line is shorter
+("SELECT: thrust", "Return to DOCK", "Fly to EXIT"); the Time Round's top line
+drops the word "crates" to fit inside the circle.
+
+On black-and-white Pebbles the closed exit is a dotted ring and the open exit a
+solid double ring, rocks are solid with dark pits, crates stay hollow squares,
+and the tug stays an outlined triangle. Watches without touch drop the touch
+hints.
+
 ## Install and build
 
 Open the included `.pbw` with the Pebble phone app and install it on the connected
-watch. This app targets Pebble Time 2 (emery) and Pebble Round 2 (gabbro).
-Touch requires firmware 4.33.2 or later; buttons remain available.
+watch. Version 0.4.0 runs on every Pebble with a native build: Pebble Time 2
+(emery), Pebble Round 2 (gabbro), Pebble Time and Time Steel (basalt), Pebble 2
+(diorite), Pebble 2 Duo (flint) and Pebble Time Round (chalk). Touch works on
+Time 2 and Round 2 with firmware 4.33.2 or later; buttons work everywhere.
 
 The source ZIP is a standalone Pebble project. Extract it, enter its directory,
 and run `pebble build` with SDK 4.33.1 and pebble-tool installed. It has no runtime
 network service or phone-side JavaScript dependency.
 
-Version 0.3.1. Created by Luke Steuber. MIT license.
-Native emulator evidence covers both watch shapes; physical-watch validation
+Version 0.4.0. Created by Luke Steuber. MIT license.
+Native emulator evidence covers all six targets; physical-watch validation
 is still separate. This package does not imply a Pebble Store release.

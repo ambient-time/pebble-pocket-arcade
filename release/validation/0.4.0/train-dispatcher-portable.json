@@ -1,0 +1,14 @@
+{
+  "game": "train-dispatcher",
+  "passed": true,
+  "checks": [
+    "all release checksums",
+    "standalone source extraction",
+    "standalone SDK build",
+    "every native target and its resources"
+  ],
+  "releasePBWSHA256": "882a13508956e0e3f0d328bd65e7305c77a6f77bf015ac7d36d48a1cb521d0ad",
+  "sourceZIPSHA256": "e52dbb64a2d7c92844f37ca102b9dd34081dc3ed146070ad897b5bc89e273e77",
+  "rebuiltPBWSHA256": "fc4f03ea56b2117a498e8e460851185b6ebc3aeb47311b7c4aa148cfcdfe4e13",
+  "note": "SDK rebuild metadata may change binary hashes; native gameplay reports cover the release PBW."
+}

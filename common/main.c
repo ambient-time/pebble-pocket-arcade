@@ -16,6 +16,9 @@ static int screen = 2, view_w, view_h;
 static bool menu_visible, config_set;
 static int config_kind = -1; // 0 play, 1 pause, 2 rules, 3 restart confirmation
 int field_x, field_y;
+// The result card keeps the centred field origin even when a game moves its
+// field (Pocket Artillery's round horizon), so the card stays inside the rim.
+static int card_y;
 static const SaveIO io = {persist_read_data, persist_write_data};
 static const char *rows[] = {"Resume game", "Restart game", "How to play",
                              "About", "Save and exit"};
@@ -47,9 +50,14 @@ void circle(GContext *c, int x, int y, int r, bool fill) {
     graphics_draw_circle(c, GPoint(field_x + scale(x), field_y + scale(y)), scale(r));
 }
 static void field_text(GContext *c, const char *s, int x, int y, int width, bool large) {
+  GRect r = GRect(field_x + scale(x), field_y + scale(y), scale(width), 32);
+  if (UI_COMPACT && r.size.w < 48) { // Keep short board labels whole when scaled down.
+    r.origin.x -= (48 - r.size.w) / 2;
+    r.size.w = 48;
+    if (r.origin.x < 0) r.origin.x = 0;
+  }
   graphics_draw_text(c, s, fonts_get_system_font(large ? UI_FONT_BODY : UI_FONT_SMALL),
-                     GRect(field_x + scale(x), field_y + scale(y), scale(width), 32),
-                     GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter,
+                     r, GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter,
                      NULL);
 }
 void label(GContext *c, const char *s, int x, int y, int width) {
@@ -58,16 +66,35 @@ void label(GContext *c, const char *s, int x, int y, int width) {
 void large_label(GContext *c, const char *s, int x, int y, int width) {
   field_text(c, s, x, y, width, true);
 }
-static void text(GContext *c, const char *s, int y, int height, bool large) {
+static void text_in(GContext *c, const char *s, int y, int height, const char *font) {
   ink(c, GColorWhite);
-  graphics_draw_text(c, s,
-                     fonts_get_system_font(large ? UI_FONT_TITLE : UI_FONT_BODY),
-                     GRect(10, y, view_w - 20, height),
+  int margin = UI_COMPACT ? 4 : 10;
+  graphics_draw_text(c, s, fonts_get_system_font(font),
+                     GRect(margin, y, view_w - 2 * margin, height),
                      GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
+}
+static void text(GContext *c, const char *s, int y, int height, bool large) {
+  text_in(c, s, y, height, large ? UI_FONT_TITLE : UI_FONT_BODY);
+}
+// Usable width at height y: the full width on rectangles, the chord on round.
+static int chord(int y) {
+#ifdef PBL_ROUND
+  int r = view_w / 2, d = y - view_h / 2, room = r * r - d * d, x = r;
+  if (room <= 0) return 0;
+  while (x * x > room) x--;
+  return 2 * x;
+#else
+  (void)y;
+  return view_w;
+#endif
 }
 static void caption(GContext *c, const char *s, int y) {
   ink(c, GColorWhite);
   int width = PBL_IF_ROUND_ELSE(186, 190);
+  if (UI_COMPACT) {
+    width = chord(y + 12) - 8;
+    if (width > view_w - 4) width = view_w - 4;
+  }
   graphics_draw_text(c, s, fonts_get_system_font(UI_FONT_SMALL),
                      GRect((view_w - width) / 2, y, width, 24),
                      GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
@@ -125,8 +152,22 @@ static void clicks(void *);
 static bool ended(void) {
   return g.status && !(game_continuous && g.status == 1);
 }
+#define CARD_W 132
+#define CARD_H 112
+static GRect card(void) {
+  return GRect((view_w - CARD_W) / 2, (view_h - CARD_H) / 2, CARD_W, CARD_H);
+}
+static GRect replay_button(void) {
+  GRect k = card();
+  return GRect(k.origin.x + 10, k.origin.y + 76, k.size.w - 20, 30);
+}
 static bool replay_hit(int x, int y) {
-  x = world_x(x); y = world_y(y);
+  if (UI_COMPACT) {
+    GRect b = replay_button();
+    GPoint p = GPoint(x, y);
+    return grect_contains_point(&b, &p);
+  }
+  x = world_x(x); y = (y - card_y) * 100 / UI_FIELD_SCALE;
   return x >= 22 && x < 154 && y >= 100 && y < 134;
 }
 static void ready_to_replay(void *context) {
@@ -168,26 +209,54 @@ static void refresh(void) {
 static void draw(Layer *l, GContext *c) {
   ink(c, GColorBlack);
   graphics_fill_rect(c, layer_get_bounds(l), 0, GCornerNone);
-  int top = PBL_IF_ROUND_ELSE(22, 6);
+  int top = UI_TOP;
   graphics_context_set_antialiased(c, false);
   if (save_error) {
+    if (UI_COMPACT) {
+      text_in(c, "Save paused", top + 20, 30, UI_FONT_BODY);
+      text_in(c, "Progress is still here.\nSELECT retries saving.", top + 54, 70,
+              UI_FONT_SMALL);
+      return;
+    }
     text(c, "Save paused", top + 18, 35, true);
     text(c, "Progress is still here.\nSELECT retries saving.", top + 60, 100,
          false);
     return;
   }
   if (screen == 2) {
+    if (UI_COMPACT) {
+      int y = top + PBL_IF_ROUND_ELSE(10, 0);
+      text_in(c, game_name, y, 30, UI_FONT_BODY);
+      text_in(c, GAME_RULES_COMPACT, y + 30, view_h - y - 30, UI_FONT_SMALL);
+      caption(c, "SELECT: play", view_h - PBL_IF_ROUND_ELSE(36, 23));
+      return;
+    }
     text(c, game_name, top, 32, false);
     text(c, game_rules, top + 36, 146, false);
     caption(c, "SELECT / tap: play", view_h - PBL_IF_ROUND_ELSE(39, 27));
     return;
   }
   if (screen == 3) {
+    if (UI_COMPACT) {
+      text_in(c, "Restart game?", top + PBL_IF_ROUND_ELSE(30, 26), 30, UI_FONT_BODY);
+      text_in(c, "SELECT: start fresh\nBACK: keep game", top + PBL_IF_ROUND_ELSE(68, 64),
+              50, UI_FONT_SMALL);
+      return;
+    }
     text(c, "Restart game?", top + 28, 36, true);
     text(c, "SELECT: start fresh\nBACK: keep game", top + 90, 65, false);
     return;
   }
   if (screen == 4) {
+    if (UI_COMPACT) { // 72 px portrait: title, portrait, name and version fit 168 px.
+      text_in(c, "ABOUT", top, 28, UI_FONT_BODY);
+      if (portrait)
+        graphics_draw_bitmap_in_rect(c, portrait, GRect((view_w - 72) / 2, top + 27, 72, 72));
+      text_in(c, "Luke Steuber", top + 96, 28, UI_FONT_BODY);
+      caption(c, "Version " UI_APP_VERSION, top + 121);
+      caption(c, "Select / Back", top + 139);
+      return;
+    }
     text(c, "ABOUT", 14, 32, true);
     if (portrait)
       graphics_draw_bitmap_in_rect(c, portrait, GRect((view_w - 96) / 2, 47, 96, 96));
@@ -198,13 +267,48 @@ static void draw(Layer *l, GContext *c) {
   }
   if (screen == 1) return; // The native list owns the complete pause surface.
   char a[64], b[64];
+#if UI_COMPACT && defined(GAME_HUD_COMPACT)
+  game_hud_compact(&g, a, sizeof a, b, sizeof b);
+#else
   game_hud(&g, a, sizeof a, b, sizeof b);
-  caption(c, a, top);
+#endif
+  caption(c, a, UI_HUD_TOP);
   game_draw(&g, c);
-  caption(c, ended() ? "BACK: menu" : b, field_y + scale(FIELD_H) + 1);
-  if (ended()) {
+  int below = field_y + scale(FIELD_H) + 1;
+  if (ended()) { // Keep "BACK: menu" visible under the result card.
+    int under_card = UI_COMPACT ? card().origin.y + CARD_H + 1 : card_y + scale(136) + 1;
+    if (under_card > below) below = under_card;
+  }
+  caption(c, ended() ? "BACK: menu" : b, below);
+  if (ended() && UI_COMPACT) {
     char title[32], detail[64];
     game_result(&g, title, sizeof title, detail, sizeof detail);
+    GRect k = card(), button = replay_button();
+    ink(c, GColorBlack);
+    graphics_fill_rect(c, k, 0, GCornerNone);
+    ink(c, PBL_IF_COLOR_ELSE(g.status == 1 ? GColorCyan : GColorWhite, GColorWhite));
+    graphics_draw_rect(c, k);
+    graphics_draw_text(c, title, fonts_get_system_font(UI_FONT_BODY),
+                       GRect(k.origin.x + 2, k.origin.y + 1, k.size.w - 4, 30),
+                       GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
+    ink(c, GColorWhite);
+    graphics_draw_text(c, detail, fonts_get_system_font(UI_FONT_SMALL),
+                       GRect(k.origin.x + 4, k.origin.y + 31, k.size.w - 8, 44),
+                       GTextOverflowModeWordWrap, GTextAlignmentCenter, NULL);
+    // Ready: solid white button. Not yet ready: outline only, readable on every screen.
+    if (replay_ready) {
+      graphics_fill_rect(c, button, 0, GCornerNone);
+      ink(c, GColorBlack);
+    } else
+      graphics_draw_rect(c, button);
+    graphics_draw_text(c, "Play again", fonts_get_system_font(UI_FONT_BODY),
+                       GRect(button.origin.x, button.origin.y - 3, button.size.w, 30),
+                       GTextOverflowModeTrailingEllipsis, GTextAlignmentCenter, NULL);
+  } else if (ended()) {
+    char title[32], detail[64];
+    game_result(&g, title, sizeof title, detail, sizeof detail);
+    int keep = field_y;
+    field_y = card_y;
     ink(c, GColorBlack);
     box(c, 6, 20, 164, 116, true);
     ink(c, g.status == 1 ? GColorCyan : GColorWhite);
@@ -220,6 +324,7 @@ static void draw(Layer *l, GContext *c) {
     box(c, 22, 100, 132, 34, true);
     ink(c, GColorBlack);
     large_label(c, "Play again", 24, 102, 128);
+    field_y = keep;
   }
 }
 static void tick(void *x) {
@@ -471,19 +576,27 @@ static void init(void) {
   view_w = bounds.size.w;
   view_h = bounds.size.h;
   field_x = (view_w - scale(FIELD_W)) / 2;
-  field_y = (view_h - scale(FIELD_H)) / 2;
+  card_y = (view_h - scale(FIELD_H)) / 2;
+  field_y = PBL_IF_ROUND_ELSE(UI_ROUND_FIELD_Y(view_h), card_y);
   canvas = layer_create(bounds);
   layer_set_update_proc(canvas, draw);
   layer_add_child(window_get_root_layer(win), canvas);
+#if UI_COMPACT
+  // Four 38 px rows on 144x168; on the Time Round the selected row stays centred.
+  menu = menu_layer_create(GRect(PBL_IF_ROUND_ELSE(12, 2), PBL_IF_ROUND_ELSE(14, 6),
+                                 view_w - PBL_IF_ROUND_ELSE(24, 4),
+                                 view_h - PBL_IF_ROUND_ELSE(28, 12)));
+#else
   menu = menu_layer_create(GRect(
       PBL_IF_ROUND_ELSE(25, 8), PBL_IF_ROUND_ELSE(30, 20),
       view_w - PBL_IF_ROUND_ELSE(50, 16), view_h - PBL_IF_ROUND_ELSE(60, 40)));
+#endif
   menu_layer_set_callbacks(menu, NULL,
                            (MenuLayerCallbacks){.get_num_rows = row_count,
                                                 .get_cell_height = row_height,
                                                 .draw_row = draw_row,
                                                 .select_click = menu_select});
-  menu_layer_set_center_focused(menu, false);
+  menu_layer_set_center_focused(menu, UI_COMPACT && PBL_IF_ROUND_ELSE(true, false));
   layer_set_hidden(menu_layer_get_layer(menu), true);
   menu_layer_set_normal_colors(menu, GColorBlack, GColorWhite);
   menu_layer_set_highlight_colors(menu, GColorWhite, GColorBlack);

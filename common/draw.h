@@ -10,3 +10,7 @@ void box(GContext *, int, int, int, int, bool);
 void circle(GContext *, int, int, int, bool);
 void label(GContext *, const char *, int, int, int);
 void large_label(GContext *, const char *, int, int, int);
+#ifdef GAME_HUD_COMPACT
+// Shorter HUD lines for 144x168 and the Time Round.
+void game_hud_compact(const Game *, char *, size_t, char *, size_t);
+#endif

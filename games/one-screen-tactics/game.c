@@ -2,7 +2,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-const char *game_name = "One-Screen Tactics";
+// 144x168 and the Time Round: the title takes two lines (the rules start a
+// line lower to make room), and the result card is 128 px wide inside, too
+// narrow for the long result titles in Gothic 24.
+#if defined(PBL_PLATFORM_BASALT) || defined(PBL_PLATFORM_CHALK) ||            \
+    defined(PBL_PLATFORM_DIORITE) || defined(PBL_PLATFORM_FLINT)
+#define TITLE "One-Screen\nTactics"
+#define RESULT_WON "Beacon held"
+#define RESULT_BEACON "Beacon lost"
+#else
+#define TITLE "One-Screen Tactics"
+#define RESULT_WON "Beacon defended"
+#define RESULT_BEACON "Beacon destroyed"
+#endif
+const char *game_name = TITLE;
 const char *game_rules =
     "Guard B for 5 turns.\nShove foes into X.\nUP/DOWN: move\nSELECT: act\nOr tap a neighbor.";
 static const int dx[] = {0, 1, 0, -1, 0}, dy[] = {-1, 0, 1, 0, 0};
@@ -177,8 +190,8 @@ void game_debug(const Game *g, char *out, size_t n) {
 
 void game_result(const Game *g, char *title, size_t n, char *detail, size_t m) {
   snprintf(title, n, "%s",
-           g->status == 1         ? "Beacon defended"
-           : g->d[INTEGRITY] <= 0 ? "Beacon destroyed"
+           g->status == 1         ? RESULT_WON
+           : g->d[INTEGRITY] <= 0 ? RESULT_BEACON
                                   : "Defender lost");
   snprintf(detail, m, "%ld/5 turns\n%lu points", (long)g->d[ROUND],
            (unsigned long)g->score);
