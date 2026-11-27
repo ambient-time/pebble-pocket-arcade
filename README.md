@@ -87,8 +87,6 @@ are in [store/](store/). Earlier drafts and packages are retained.
 
 Code is MIT licensed; see [LICENSE](LICENSE).
 
-## Around here
+## Related
 
-[Luke Steuber](https://github.com/lukeslp) · [Data Poems](https://github.com/data-poems) · [Ambient Time](https://github.com/ambient-time) · [Actually Useful AI](https://github.com/actually-useful-ai) · [One Impossible Thing](https://github.com/one-impossible-thing)
-
-Questions or collaboration: [luke@lukesteuber.com](mailto:luke@lukesteuber.com).
+- [Pebble collection](https://ambient-time.com/watch/pebble/)
